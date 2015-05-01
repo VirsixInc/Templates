@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+	<Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+	<Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+	<ProductVersion>10.0.20506</ProductVersion>
+	<SchemaVersion>2.0</SchemaVersion>
+	<ProjectGuid>{816B87A5-787A-E97E-D67B-74E56B352BF8}</ProjectGuid>
+	<OutputType>Library</OutputType>
+	<AppDesignerFolder>Properties</AppDesignerFolder>
+	<RootNamespace></RootNamespace>
+	<AssemblyName>Assembly-CSharp</AssemblyName>
+	<TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+	<FileAlignment>512</FileAlignment>
+	<BaseDirectory>Assets</BaseDirectory>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+	<DebugSymbols>true</DebugSymbols>
+	<DebugType>full</DebugType>
+	<Optimize>false</Optimize>
+	<OutputPath>Temp\bin\Debug\</OutputPath>
+	<DefineConstants>DEBUG;TRACE;UNITY_5_0_1;UNITY_5_0;UNITY_5;ENABLE_LICENSE_RENAME;ENABLE_NEW_BUGREPORTER;ENABLE_2D_PHYSICS;ENABLE_4_6_FEATURES;ENABLE_AUDIO;ENABLE_CACHING;ENABLE_CLOTH;ENABLE_FRAME_DEBUGGER;ENABLE_GENERICS;ENABLE_HOME_SCREEN;ENABLE_IMAGEEFFECTS;ENABLE_LIGHT_PROBES_LEGACY;ENABLE_MICROPHONE;ENABLE_MULTIPLE_DISPLAYS;ENABLE_NEW_HIERARCHY;ENABLE_PHYSICS;ENABLE_PHYSICS_PHYSX3;ENABLE_PLUGIN_INSPECTOR;ENABLE_SHADOWS;ENABLE_SINGLE_INSTANCE_BUILD_SETTING;ENABLE_SPRITES;ENABLE_TERRAIN;ENABLE_UNITYEVENTS;ENABLE_WEBCAM;ENABLE_WWW;ENABLE_AUDIOMIXER_SUSPEND;ENABLE_NONPRO;INCLUDE_DYNAMIC_GI;INCLUDE_GI;INCLUDE_IL2CPP;PLATFORM_SUPPORTS_MONO;RENDER_SOFTWARE_CURSOR;UNITY_ANDROID;UNITY_ANDROID_API;ENABLE_SUBSTANCE;ENABLE_TEXTUREID_MAP;ENABLE_EGL;ENABLE_NETWORK;ENABLE_RUNTIME_GI;ENABLE_MONO;ENABLE_PROFILER;UNITY_EDITOR;UNITY_EDITOR_32;UNITY_EDITOR_WIN;UNITY_TEAM_LICENSE;UNITY_PRO_LICENSE</DefineConstants>
+	<ErrorReport>prompt</ErrorReport>
+	<WarningLevel>4</WarningLevel>
+	<NoWarn>0169</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+	<DebugType>pdbonly</DebugType>
+	<Optimize>true</Optimize>
+	<OutputPath>Temp\bin\Release\</OutputPath>
+	<DefineConstants>TRACE</DefineConstants>
+	<ErrorReport>prompt</ErrorReport>
+	<WarningLevel>4</WarningLevel>
+	<NoWarn>0169</NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+	<Reference Include="System" />
+    <Reference Include="System.XML" />
+	<Reference Include="System.Core" />
+	<Reference Include="System.Xml.Linq" />
+	<Reference Include="UnityEngine">
+	  <HintPath>C:/Program Files/Unity/Editor/Data/Managed/UnityEngine.dll</HintPath>
+	</Reference>
+	<Reference Include="UnityEditor">
+	  <HintPath>C:/Program Files/Unity/Editor/Data/Managed/UnityEditor.dll</HintPath>
+	</Reference>
+  </ItemGroup>
+  <ItemGroup>
+     <Compile Include="Assets\Art\StandAlones\CircleTimer\BindCircleForImage.cs" />
+     <Compile Include="Assets\Art\StandAlones\CircleTimer\BindCircleForShader.cs" />
+     <Compile Include="Assets\Scripts\AppManager.cs" />
+     <Compile Include="Assets\Scripts\Assignment.cs" />
+     <Compile Include="Assets\Scripts\AssignmentGUI.cs" />
+     <Compile Include="Assets\Scripts\AssignmentManager.cs" />
+     <Compile Include="Assets\Scripts\AssignmentStartButton.cs" />
+     <Compile Include="Assets\Scripts\CSVParser.cs" />
+     <Compile Include="Assets\Scripts\Card.cs" />
+     <Compile Include="Assets\Scripts\CardAssets.cs" />
+     <Compile Include="Assets\Scripts\CardManager.cs" />
+     <Compile Include="Assets\Scripts\CheckMarkKiller.cs" />
+     <Compile Include="Assets\Scripts\ClickHandler.cs" />
+     <Compile Include="Assets\Scripts\ContentDownloader.cs" />
+     <Compile Include="Assets\Scripts\Deck.cs" />
+     <Compile Include="Assets\Scripts\DeckMaker.cs" />
+     <Compile Include="Assets\Scripts\DeckManager.cs" />
+     <Compile Include="Assets\Scripts\DeckSelect.cs" />
+     <Compile Include="Assets\Scripts\DraggableCircle.cs" />
+     <Compile Include="Assets\Scripts\DraggableGUI.cs" />
+     <Compile Include="Assets\Scripts\FadeIn.cs" />
+     <Compile Include="Assets\Scripts\FadeIn1.cs" />
+     <Compile Include="Assets\Scripts\FadeOut.cs" />
+     <Compile Include="Assets\Scripts\GameManager.cs" />
+     <Compile Include="Assets\Scripts\HotspotsManager.cs" />
+     <Compile Include="Assets\Scripts\JSONObject.cs" />
+     <Compile Include="Assets\Scripts\JSONTemplates.cs" />
+     <Compile Include="Assets\Scripts\Main.cs" />
+     <Compile Include="Assets\Scripts\MasteryAnimator.cs" />
+     <Compile Include="Assets\Scripts\MasteryText.cs" />
+     <Compile Include="Assets\Scripts\MatchingCard.cs" />
+     <Compile Include="Assets\Scripts\MatchingManager.cs" />
+     <Compile Include="Assets\Scripts\MenuManager.cs" />
+     <Compile Include="Assets\Scripts\MenuMasteryMeter.cs" />
+     <Compile Include="Assets\Scripts\PopUpGraphic.cs" />
+     <Compile Include="Assets\Scripts\Resetter.cs" />
+     <Compile Include="Assets\Scripts\ReturnToMenu.cs" />
+     <Compile Include="Assets\Scripts\ReviewManager.cs" />
+     <Compile Include="Assets\Scripts\ScollerMovement.cs" />
+     <Compile Include="Assets\Scripts\Sequence.cs" />
+     <Compile Include="Assets\Scripts\SequencingGame.cs" />
+     <Compile Include="Assets\Scripts\SignInButton.cs" />
+     <Compile Include="Assets\Scripts\SndManager.cs" />
+     <Compile Include="Assets\Scripts\SoundManager.cs" />
+     <Compile Include="Assets\Scripts\State.cs" />
+     <Compile Include="Assets\Scripts\TargetGUI.cs" />
+     <Compile Include="Assets\Scripts\TextPopUpChild.cs" />
+     <Compile Include="Assets\Scripts\Timer.cs" />
+     <Compile Include="Assets\Scripts\Timer1.cs" />
+     <Compile Include="Assets\Scripts\WordplayManager.cs" />
+     <None Include="Assets\Resources\Cards-Cell-Parts-and-Functions.csv.txt" />
+     <None Include="Assets\CSVs\partsOfSpeech.txt" />
+     <None Include="Assets\CSVs\Buckets-Sentence-or-Fragment.csv.txt" />
+     <None Include="Assets\CSVs\Buckets-Comparing-Insurance-Types.csv.txt" />
+     <None Include="Assets\Art\CircleShader.shader" />
+ <Reference Include="UnityEngine.UI">
+ <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
+ </Reference>
+ <Reference Include="UnityEditor.iOS.Extensions.Xcode">
+ <HintPath>C:/Program Files/Unity/Editor/Data/PlaybackEngines/iossupport/UnityEditor.iOS.Extensions.Xcode.dll</HintPath>
+ </Reference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+	   Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  
+</Project>

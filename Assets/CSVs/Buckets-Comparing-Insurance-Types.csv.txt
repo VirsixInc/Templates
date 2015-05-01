@@ -1,0 +1,11 @@
+Liability Insurance,Collision Insurance,Comprehensive Insurance,Personal Injury Protection,Uninsured and Underinsured Motorist Protection
+Accidents resulting from your actions are covered by this insurance.,Liability Insurance
+Most states require a minimum of this type of insurance.,Liability Insurance
+Covers the cost of property damage and medical bills.,Liability Insurance
+Covers the cost of car repairs only.,Collision Insurance
+Required if you have a lienholder.,Collision Insurance
+Covers repairs due to weather or environmental damage,Comprehensive Insurance
+Covers the cost of replacing a stolen car.,Comprehensive Insurance
+Installing anti-theft devices on your car will reduce the cost of this type of insurance.,Comprehensive Insurance
+This insurance pays medical bills of everyone involved in an accident| no matter who is at fault.,Personal Injury Protection
+This coverage is not available in many states.,Personal Injury Protection

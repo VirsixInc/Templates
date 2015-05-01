@@ -1,0 +1,20 @@
+Complete Sentence,Sentence Fragment
+My sister plays piano.,Complete Sentence
+Mrs. Smith teaches third grade.,Complete Sentence
+We support the local soup kitchen.,Complete Sentence
+I volunteer as a tutor at the library.,Complete Sentence
+My backpack broke on the walk to school.,Complete Sentence
+I need to sit in the front of class.,Complete Sentence
+I want to become a computer engineer.,Complete Sentence
+She likes to build sand castles.,Complete Sentence
+My favorite food is pizza.,Complete Sentence
+Cooked pizza.,Sentence Fragment
+Sand castles in the sane.,Sentence Fragment
+Trees swaying in the wind.,Sentence Fragment
+Dog barking over there last night.,Sentence Fragment
+On the other side| across the street.,Sentence Fragment
+Last night|before I went to sleep.,Sentence Fragment
+Borrowed books from the library.,Sentence Fragment
+Food in the cafeteria.,Sentence Fragment
+My teacher is.,Sentence Fragment
+Throwing at the goal.,Sentence Fragment
