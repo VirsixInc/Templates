@@ -9,7 +9,7 @@ public class AssignmentManager : MonoBehaviour {
 
 	public GameObject masteredHeader, assignmentsHeader;
 	public GameObject assignmentGUIPrefab;
-	float prefabHeight = 100f, initPrefabYPos = -50f, leftPos = -150f, rightPos = 150f, dividerHeight = 75f, spaceBetweenAssignments = 35f;
+	float prefabHeight = 200f, initPrefabYPos = -50f, leftPos = -300f, rightPos = 300f, dividerHeight = 225f, spaceBetweenAssignments = 100f;
 	public float upperBound; //for clamping scroll
 	public static AssignmentManager s_instance;
 
@@ -102,7 +102,7 @@ public class AssignmentManager : MonoBehaviour {
 			masteredHeader.transform.localPosition = new Vector3 (0, completedAssignmentOffset + 125, 0);
 		else
 			masteredHeader.gameObject.SetActive (false);
-		assignmentsHeader.transform.localPosition = new Vector3 (0, 125f, 0);
+		assignmentsHeader.transform.localPosition = new Vector3 (0, initPrefabYPos + 350f, 0);
 	}
 
 }
