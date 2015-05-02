@@ -5,7 +5,7 @@
 	<Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
 	<ProductVersion>10.0.20506</ProductVersion>
 	<SchemaVersion>2.0</SchemaVersion>
-	<ProjectGuid>{AE86C0C8-1858-ECBF-1692-0473C5D0C656}</ProjectGuid>
+	<ProjectGuid>{D6BACE88-DB0C-C91C-B13A-8BE582887855}</ProjectGuid>
 	<OutputType>Library</OutputType>
 	<AppDesignerFolder>Properties</AppDesignerFolder>
 	<RootNamespace></RootNamespace>
@@ -47,7 +47,6 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Editor\ExportAssetBundles.cs" />
-     <Compile Include="Assets\Scripts\Editor\CardAssetsEditor.cs" />
      <None Include="Assets\Resources\Cards-Cell-Parts-and-Functions.csv.txt" />
      <None Include="Assets\CSVs\partsOfSpeech.txt" />
      <None Include="Assets\CSVs\Buckets-Sentence-or-Fragment.csv.txt" />
@@ -95,7 +94,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="Assembly-CSharp.csproj">
-      <Project>{816B87A5-787A-E97E-D67B-74E56B352BF8}</Project>      <Name>Assembly-CSharp</Name>    </ProjectReference>
+      <Project>{77B728F8-EBE7-531E-21EF-EF4D70ED754B}</Project>      <Name>Assembly-CSharp</Name>    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
