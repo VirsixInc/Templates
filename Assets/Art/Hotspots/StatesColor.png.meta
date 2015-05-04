@@ -1,0 +1,198 @@
+fileFormatVersion: 2
+guid: 2f3f415c7c323e24f977dc434c3d1f3b
+timeCreated: 1430763180
+licenseType: Pro
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: StatesColor_0
+    21300002: StatesColor_1
+    21300004: StatesColor_2
+    21300006: StatesColor_3
+    21300008: StatesColor_4
+    21300010: StatesColor_5
+    21300012: StatesColor_6
+    21300014: StatesColor_7
+    21300016: StatesColor_8
+    21300018: StatesColor_9
+    21300020: StatesColor_10
+    21300022: StatesColor_11
+    21300024: StatesColor_12
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 1
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: .25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  cubemapConvolution: 0
+  cubemapConvolutionSteps: 8
+  cubemapConvolutionExponent: 1.5
+  seamlessCubemap: 0
+  textureFormat: -1
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: -1
+    aniso: 16
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  rGBM: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: .5, y: .5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: StatesColor_0
+      rect:
+        serializedVersion: 2
+        x: 1549
+        y: 4861
+        width: 1318
+        height: 879
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: StatesColor_1
+      rect:
+        serializedVersion: 2
+        x: 2911
+        y: 4347
+        width: 834
+        height: 1191
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: StatesColor_2
+      rect:
+        serializedVersion: 2
+        x: 2755
+        y: 3387
+        width: 1049
+        height: 878
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: StatesColor_3
+      rect:
+        serializedVersion: 2
+        x: 1750
+        y: 3908
+        width: 946
+        height: 767
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: StatesColor_4
+      rect:
+        serializedVersion: 2
+        x: 634
+        y: 3858
+        width: 1072
+        height: 876
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 82, y: 0, z: 0, w: 0}
+    - name: StatesColor_5
+      rect:
+        serializedVersion: 2
+        x: 119
+        y: 2207
+        width: 1009
+        height: 1744
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 127, z: 0, w: 7}
+    - name: StatesColor_6
+      rect:
+        serializedVersion: 2
+        x: 1184
+        y: 1837
+        width: 702
+        height: 968
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: StatesColor_7
+      rect:
+        serializedVersion: 2
+        x: 1714
+        y: 2610
+        width: 810
+        height: 1237
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: StatesColor_8
+      rect:
+        serializedVersion: 2
+        x: 2640
+        y: 2566
+        width: 911
+        height: 743
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: StatesColor_9
+      rect:
+        serializedVersion: 2
+        x: 2958
+        y: 1378
+        width: 982
+        height: 967
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: StatesColor_10
+      rect:
+        serializedVersion: 2
+        x: 1942
+        y: 1385
+        width: 848
+        height: 949
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: StatesColor_11
+      rect:
+        serializedVersion: 2
+        x: 493
+        y: 252
+        width: 1540
+        height: 1126
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: StatesColor_12
+      rect:
+        serializedVersion: 2
+        x: 2107
+        y: 348
+        width: 985
+        height: 674
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
