@@ -8,7 +8,9 @@ public class TargetGUI : MonoBehaviour {
 	public bool isOccupied = false;
 	public GameObject occupier;
 	void Start () {
-		GetComponentInChildren<Text> ().text = "";
+		if (transform.childCount > 0) {
+			GetComponentInChildren<Text> ().text = "";
+		}
 	}
 
 
@@ -19,6 +21,11 @@ public class TargetGUI : MonoBehaviour {
 			isOccupied = false;
 			occupier = null;
 		}
+	}
+
+	public void Reset() {
+		isOccupied = false;
+		occupier = null;
 	}
 
 

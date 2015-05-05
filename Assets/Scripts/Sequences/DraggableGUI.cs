@@ -45,7 +45,7 @@ public class DraggableGUI : MonoBehaviour {
 	public void OnPointerDown () {
 		isDragging = true;
 		if (isSnapped) {
-		currentTarget.GetComponent<TargetGUI> ().isOccupied = false;
+			currentTarget.GetComponent<TargetGUI> ().isOccupied = false;
 			isSnapped = false;
 		}
 	}
