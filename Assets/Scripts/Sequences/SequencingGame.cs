@@ -29,6 +29,7 @@ public class SequencingGame : MonoBehaviour {
 	public TextAsset csvText, csvPics;
 	GameType gameType = GameType.Text;
 	GameState gameState = GameState.Config;
+	bool areDistractorTerms;
 	int currentRow = 0; //currentRow is the iterator that goes through the remaining sequences
 	int xRandomRange, yRandomRange;
 	List<string> currentSequence;
@@ -53,7 +54,7 @@ public class SequencingGame : MonoBehaviour {
 		switch (gameState) {
 		case GameState.Config :
 			ConfigureAssignment();
-			print (Screen.width + " " + Screen.height);
+			//check JSON to see if it is ReqIMG or not, if is set GameType to GameType.Image
 			gameState = GameState.SetRound;
 			break;
 		
