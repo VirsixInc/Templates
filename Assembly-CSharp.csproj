@@ -61,9 +61,6 @@
      <Compile Include="Assets\Scripts\General\MenuMasteryMeter.cs" />
      <Compile Include="Assets\Scripts\General\ReturnToMenu.cs" />
      <Compile Include="Assets\Scripts\General\SoundManager.cs" />
-     <Compile Include="Assets\Scripts\HotSpots\GameManager.cs" />
-     <Compile Include="Assets\Scripts\HotSpots\State.cs" />
-     <Compile Include="Assets\Scripts\HotSpots\Timer.cs" />
      <Compile Include="Assets\Scripts\MultipleChoiceGame.cs" />
      <Compile Include="Assets\Scripts\Sequences\CheckMarkKiller.cs" />
      <Compile Include="Assets\Scripts\Sequences\DraggableGUI.cs" />
