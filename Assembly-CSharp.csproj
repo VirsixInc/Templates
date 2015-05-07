@@ -77,6 +77,7 @@
      <Compile Include="Assets\Scripts\ThirdParty\JSONObject.cs" />
      <Compile Include="Assets\Scripts\ThirdParty\JSONTemplates.cs" />
      <Compile Include="Assets\Scripts\Timer1.cs" />
+     <Compile Include="Assets\Templates\Cards\cardManager.cs" />
      <None Include="Assets\Resources\Cards-Cell-Parts-and-Functions.csv.txt" />
      <None Include="Assets\CSVs\partsOfSpeech.txt" />
      <None Include="Assets\CSVs\Buckets-Sentence-or-Fragment.csv.txt" />
