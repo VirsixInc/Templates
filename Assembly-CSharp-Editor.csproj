@@ -47,11 +47,11 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Editor\ExportAssetBundles.cs" />
-     <None Include="Assets\Resources\Cards-Cell-Parts-and-Functions.csv.txt" />
+     <None Include="Assets\CSVs\Cards-Cell-Parts-and-Functions.csv.txt" />
      <None Include="Assets\CSVs\partsOfSpeech.txt" />
+     <None Include="Assets\Art\TimerCircleMaterials\CircleShader.shader" />
      <None Include="Assets\CSVs\Buckets-Sentence-or-Fragment.csv.txt" />
      <None Include="Assets\CSVs\Buckets-Comparing-Insurance-Types.csv.txt" />
-     <None Include="Assets\Art\CircleShader.shader" />
  <Reference Include="UnityEngine.UI">
  <HintPath>/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>
