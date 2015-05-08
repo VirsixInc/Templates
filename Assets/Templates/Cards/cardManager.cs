@@ -70,6 +70,7 @@ public class cardManager : MonoBehaviour {
         totalMastery = unmasteredTerms.Count*requiredMastery;
         break;
       case GameState.Reset:
+        Timer1.s_instance.Reset(15f);
         amtOfCards = (int)(3*currentDifficulty);
         foreach(Card currCard in allCards){
           currCard.objAssoc.SetActive(false);
