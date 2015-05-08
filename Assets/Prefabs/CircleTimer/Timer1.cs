@@ -44,4 +44,11 @@ public class Timer1 : MonoBehaviour {
     pause = false;
     timesUp = false;
 	}
+
+  public void Pause(){
+    pause = true;
+  }
+  public void Unpause(){
+    pause = false;
+  }
 }
