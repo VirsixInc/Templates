@@ -19,6 +19,7 @@ public class HotSpotsGame : MonoBehaviour {
 	
 		switch (curState) {
 		case HotSpotGameState.Config : 
+      /*
 			individualElements = GameObject.FindGameObjectsWithTag("elements");
 			groups = GameObject.FindGameObjectsWithTag("groups");
 			foreach (GameObject go in individualElements){
@@ -31,6 +32,7 @@ public class HotSpotsGame : MonoBehaviour {
 				phaseThreeObjs.Add(item);
 			}
 
+      */
 			break;
 		}
 	}
@@ -52,6 +54,7 @@ public class HotSpotsGame : MonoBehaviour {
 //	public Image H, Li, Na, K, Pb, I, Ca, Mg, Be, He, Ne, F, O, N, C, Al, Si, P, S, Cl, Cr, Fe, Ni, Cu, Zn, Br, Ag, Sn, Au, Hg, U;
 //
 // NOTE:THIS IS A HORRIBLE MISTAKE NEVER TO BE REPEATED
+// NOTE: PABLO YOU ARE A FUCKING IDIOT. IF YOU EVER LET THIS SHIT HAPPEN AGAIN I SWEAR TO FUCKING GOD THAT YOU ARE GOING TO BE GETTING THOROUGHLY BRUTALIZED EVERY NIGHT YOU FUCKING SHITFACE.
 //
 //
 //	// Use this for initialization
