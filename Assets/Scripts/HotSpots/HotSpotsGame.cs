@@ -8,6 +8,7 @@ public enum HotSpotGameState {Config, Display, Playing, AnswerSelected, CheckMas
 
 public class HotSpotsGame : MonoBehaviour {
 
+	public Text promptText;
 
 	HotSpotPhase curPhase = HotSpotPhase.Elements;
 	HotSpotGameState curState = HotSpotGameState.Config;
