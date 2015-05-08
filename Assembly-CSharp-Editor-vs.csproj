@@ -49,7 +49,7 @@
      <Compile Include="Assets\Editor\ExportAssetBundles.cs" />
      <None Include="Assets\CSVs\Cards-Cell-Parts-and-Functions.csv.txt" />
      <None Include="Assets\CSVs\partsOfSpeech.txt" />
-     <None Include="Assets\Art\TimerCircleMaterials\CircleShader.shader" />
+     <None Include="Assets\Prefabs\CircleTimer\CircleShader.shader" />
      <None Include="Assets\CSVs\Buckets-Sentence-or-Fragment.csv.txt" />
      <None Include="Assets\CSVs\Buckets-Comparing-Insurance-Types.csv.txt" />
  <Reference Include="UnityEngine.UI">
