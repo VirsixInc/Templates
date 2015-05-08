@@ -22,8 +22,15 @@ public class HotSpotsGame : MonoBehaviour {
 			individualElements = GameObject.FindGameObjectsWithTag("elements");
 			groups = GameObject.FindGameObjectsWithTag("groups");
 			foreach (GameObject go in individualElements){
-
+				ItemToBeMastered item = new ItemToBeMastered(go, 0);
+				phaseOneObjs.Add(item);
+				phaseTwoObjs.Add (item);
 			}
+			foreach (GameObject go in groups){
+				ItemToBeMastered item = new ItemToBeMastered(go, 0);
+				phaseThreeObjs.Add(item);
+			}
+
 			break;
 		}
 	}
