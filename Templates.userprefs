@@ -1,17 +1,8 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/MultipleChoiceGame.cs">
-    <Files>
-      <File FileName="Assets/Scripts/Sequences/TargetGUI.cs" Line="11" Column="1" />
-      <File FileName="Assets/Scripts/MultipleChoiceGame.cs" Line="180" Column="1" />
-      <File FileName="Assets/CSVs/Devry Multiple Choice - Sheet1.csv" Line="1" Column="1" />
-    </Files>
-  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.Workspace />
+  <MonoDevelop.Ide.Workbench />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore>
-      <Breakpoint file="/Users/Pablo/Templates/Assets/Scripts/MultipleChoiceGame.cs" line="210" />
-      <Breakpoint file="/Users/Pablo/Templates/Assets/Scripts/MultipleChoiceGame.cs" line="180" />
-    </BreakpointStore>
+    <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
 </Properties>

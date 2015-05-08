@@ -1,0 +1,220 @@
+fileFormatVersion: 2
+guid: e1a625d9378514a7b989f8fb401505e7
+timeCreated: 1431026808
+licenseType: Pro
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: Chemicals-03_0
+    21300002: Chemicals-03_1
+    21300004: Chemicals-03_2
+    21300006: Chemicals-03_3
+    21300008: Chemicals-03_4
+    21300010: Chemicals-03_5
+    21300012: Chemicals-03_6
+    21300014: Chemicals-03_7
+    21300016: Chemicals-03_8
+    21300018: Chemicals-03_9
+    21300020: Chemicals-03_10
+    21300022: Chemicals-03_11
+    21300024: Chemicals-03_12
+    21300026: Chemicals-03_13
+    21300028: Chemicals-03_14
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 1
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: .25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  cubemapConvolution: 0
+  cubemapConvolutionSteps: 8
+  cubemapConvolutionExponent: 1.5
+  seamlessCubemap: 0
+  textureFormat: -1
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: -1
+    aniso: 16
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  rGBM: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: .5, y: .5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: Chemicals-03_0
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 466
+        width: 65
+        height: 48
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Chemicals-03_1
+      rect:
+        serializedVersion: 2
+        x: 38
+        y: 169
+        width: 49
+        height: 295
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Chemicals-03_2
+      rect:
+        serializedVersion: 2
+        x: 88
+        y: 171
+        width: 47
+        height: 291
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Chemicals-03_3
+      rect:
+        serializedVersion: 2
+        x: 137
+        y: 166
+        width: 489
+        height: 201
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Chemicals-03_4
+      rect:
+        serializedVersion: 2
+        x: 107
+        y: 43
+        width: 754
+        height: 106
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Chemicals-03_5
+      rect:
+        serializedVersion: 2
+        x: 872
+        y: 217
+        width: 61
+        height: 309
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Chemicals-03_6
+      rect:
+        serializedVersion: 2
+        x: 723
+        y: 315
+        width: 150
+        height: 158
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 7, y: 0, z: 0, w: 0}
+    - name: Chemicals-03_7
+      rect:
+        serializedVersion: 2
+        x: 629
+        y: 217
+        width: 145
+        height: 99
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Chemicals-03_8
+      rect:
+        serializedVersion: 2
+        x: 629
+        y: 317
+        width: 97
+        height: 49
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Chemicals-03_9
+      rect:
+        serializedVersion: 2
+        x: 624
+        y: 367
+        width: 52
+        height: 46
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Chemicals-03_10
+      rect:
+        serializedVersion: 2
+        x: 776
+        y: 218
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Chemicals-03_11
+      rect:
+        serializedVersion: 2
+        x: 676
+        y: 367
+        width: 50
+        height: 101
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Chemicals-03_12
+      rect:
+        serializedVersion: 2
+        x: 622
+        y: 415
+        width: 55
+        height: 49
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Chemicals-03_13
+      rect:
+        serializedVersion: 2
+        x: 775
+        y: 268
+        width: 96
+        height: 49
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Chemicals-03_14
+      rect:
+        serializedVersion: 2
+        x: 826
+        y: 217
+        width: 46
+        height: 50
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
