@@ -1,8 +1,15 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/HotSpots/HotSpotsGame.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/General/AppManager.cs">
     <Files>
-      <File FileName="Assets/Scripts/HotSpots/HotSpotsGame.cs" Line="24" Column="4" />
+      <File FileName="Assets/Scripts/HotSpots/HotSpotsGame.cs" Line="56" Column="3" />
+      <File FileName="Assets/Scripts/General/ItemToBeMastered.cs" Line="10" Column="34" />
+      <File FileName="Assets/Scripts/Sequences/Sequence.cs" Line="9" Column="30" />
+      <File FileName="Assets/Scripts/Sequences/SequencingGame.cs" Line="180" Column="3" />
+      <File FileName="Assets/Scripts/General/MainMenu/AssignmentManager.cs" Line="26" Column="51" />
+      <File FileName="Assets/Scripts/General/MainMenu/AssignmentGUI.cs" Line="7" Column="1" />
+      <File FileName="Assets/Scripts/General/Assignment.cs" Line="8" Column="1" />
+      <File FileName="Assets/Scripts/General/AppManager.cs" Line="12" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

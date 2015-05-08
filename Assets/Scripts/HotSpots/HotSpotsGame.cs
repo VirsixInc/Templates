@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
+using System.Linq;
 
 public enum HotSpotPhase {Elements,Typing,Groups};
 public enum HotSpotGameState {Config, Display, Playing, AnswerSelected, CheckMastery, NextQuestion, Win}
@@ -13,7 +14,8 @@ public class HotSpotsGame : MonoBehaviour {
 	HotSpotPhase curPhase = HotSpotPhase.Elements;
 	HotSpotGameState curState = HotSpotGameState.Config;
 	GameObject[] individualElements, groups;
-	List<ItemToBeMastered> phaseOneObjs, phaseTwoObjs, phaseThreeObjs;
+	List<ItemToBeMastered> phaseOneObjs, phaseTwoObjs, phaseThreeObjs, currentPhase;
+	int currentIndex;
 	// Update is called once per frame
 	void Update () {
 	
@@ -24,16 +26,59 @@ public class HotSpotsGame : MonoBehaviour {
 			foreach (GameObject go in individualElements){
 				ItemToBeMastered item = new ItemToBeMastered(go, 0);
 				phaseOneObjs.Add(item);
-				phaseTwoObjs.Add (item);
+				phaseTwoObjs.Add(item);
 			}
 			foreach (GameObject go in groups){
 				ItemToBeMastered item = new ItemToBeMastered(go, 0);
 				phaseThreeObjs.Add(item);
 			}
 
+			//sort all the lists alphabetically
+			List<ItemToBeMastered> tempList = new List<ItemToBeMastered>();
+			tempList = phaseOneObjs.OrderBy(item => item.itemGameObject.name).ToList();
+			phaseOneObjs = new List<ItemToBeMastered>(tempList);
+
+			List<ItemToBeMastered> tempList2 = new List<ItemToBeMastered>();
+			tempList2 = phaseTwoObjs.OrderBy(item => item.itemGameObject.name).ToList();
+			phaseTwoObjs = new List<ItemToBeMastered>(tempList2);
+
+			List<ItemToBeMastered> tempList3 = new List<ItemToBeMastered>();
+			tempList3 = phaseThreeObjs.OrderBy(item => item.itemGameObject.name).ToList();
+			phaseThreeObjs = new List<ItemToBeMastered>(tempList3);
+
+//			tempList.Clear (); //professional memory management, prob unnecessary but good to know
+//			tempList2.Clear ();
+//			tempList3.Clear ();
+//
+//			tempList.TrimExcess();
+//			tempList2.TrimExcess();
+//			tempList3.TrimExcess();
+
 			break;
 		}
 	}
+
+
+
+	void CheckForMastery() {
+		if (currentIndex >= currentPhase.Count)
+			currentIndex = 0; //loop around to beginning of list
+		while (currentPhase[currentIndex].sequenceMastery==1f && currentPhase.Count != 0) { //skip over completed 
+			currentPhase.Remove(currentPhase[currentIndex]);
+			if (currentPhase.Count > currentIndex+1) {
+				currentIndex++;
+			}
+			else 
+				currentIndex = 0;
+		}
+	}
+	void SetPhase() {
+
+		//clear curList
+		//copy other list
+
+	}
+
 }
 
 
