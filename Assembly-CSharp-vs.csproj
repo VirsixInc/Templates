@@ -52,6 +52,7 @@
      <Compile Include="Assets\Scripts\General\Assignment.cs" />
      <Compile Include="Assets\Scripts\General\CSVParser.cs" />
      <Compile Include="Assets\Scripts\General\FadeOut.cs" />
+     <Compile Include="Assets\Scripts\General\ItemToBeMastered.cs" />
      <Compile Include="Assets\Scripts\General\MainMenu\AssignmentGUI.cs" />
      <Compile Include="Assets\Scripts\General\MainMenu\AssignmentManager.cs" />
      <Compile Include="Assets\Scripts\General\MainMenu\AssignmentStartButton.cs" />
