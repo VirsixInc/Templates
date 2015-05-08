@@ -3,24 +3,28 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
 
-public enum HotSpotPhase {One,Two,Three};
+public enum HotSpotPhase {Elements,Typing,Groups};
 public enum HotSpotGameState {Config, Display, Playing, AnswerSelected, CheckMastery, NextQuestion, Win}
 
 public class HotSpotsGame : MonoBehaviour {
 
 
-	HotSpotPhase curPhase = HotSpotPhase.One;
+	HotSpotPhase curPhase = HotSpotPhase.Elements;
 	HotSpotGameState curState = HotSpotGameState.Config;
-	List<GameObject> individualElements;
+	List<GameObject> individualElements, groups;
 
 	// Update is called once per frame
 	void Update () {
 	
-		switch (curPhase) {
-		}
+		switch (curState) {
+//		case HotSpotGameState.Config : 
+//
+//
+//			break;
+//		}
 	}
 }
-
+}
 
 
 
