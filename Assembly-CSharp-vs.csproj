@@ -48,10 +48,10 @@
   <ItemGroup>
      <Compile Include="Assets\Art\StandAlones\CircleTimer\BindCircleForImage.cs" />
      <Compile Include="Assets\Art\StandAlones\CircleTimer\BindCircleForShader.cs" />
-     <Compile Include="Assets\Scripts\CSVParser.cs" />
-     <Compile Include="Assets\Scripts\FadeOut.cs" />
      <Compile Include="Assets\Scripts\General\AppManager.cs" />
      <Compile Include="Assets\Scripts\General\Assignment.cs" />
+     <Compile Include="Assets\Scripts\General\CSVParser.cs" />
+     <Compile Include="Assets\Scripts\General\FadeOut.cs" />
      <Compile Include="Assets\Scripts\General\MainMenu\AssignmentGUI.cs" />
      <Compile Include="Assets\Scripts\General\MainMenu\AssignmentManager.cs" />
      <Compile Include="Assets\Scripts\General\MainMenu\AssignmentStartButton.cs" />
@@ -61,26 +61,25 @@
      <Compile Include="Assets\Scripts\General\MenuMasteryMeter.cs" />
      <Compile Include="Assets\Scripts\General\ReturnToMenu.cs" />
      <Compile Include="Assets\Scripts\General\SoundManager.cs" />
+     <Compile Include="Assets\Scripts\General\TextPopUpChild.cs" />
      <Compile Include="Assets\Scripts\HotSpots\HotSpotsGame.cs" />
-     <Compile Include="Assets\Scripts\MultipleChoiceGame.cs" />
+     <Compile Include="Assets\Scripts\MainMenu\SignInButton.cs" />
+     <Compile Include="Assets\Scripts\MultipleChoiceGame\MultipleChoiceGame.cs" />
      <Compile Include="Assets\Scripts\Sequences\CheckMarkKiller.cs" />
      <Compile Include="Assets\Scripts\Sequences\DraggableGUI.cs" />
      <Compile Include="Assets\Scripts\Sequences\PopUpGraphic.cs" />
      <Compile Include="Assets\Scripts\Sequences\Sequence.cs" />
      <Compile Include="Assets\Scripts\Sequences\SequencingGame.cs" />
      <Compile Include="Assets\Scripts\Sequences\TargetGUI.cs" />
-     <Compile Include="Assets\Scripts\SignInButton.cs" />
-     <Compile Include="Assets\Scripts\TextPopUpChild.cs" />
      <Compile Include="Assets\Scripts\ThirdParty\JSONObject.cs" />
      <Compile Include="Assets\Scripts\ThirdParty\JSONTemplates.cs" />
-     <Compile Include="Assets\Scripts\Timer1.cs" />
      <Compile Include="Assets\Templates\Cards\cardManager.cs" />
      <Compile Include="Assets\Templates\Cards\indiCard.cs" />
-     <None Include="Assets\Resources\Cards-Cell-Parts-and-Functions.csv.txt" />
+     <None Include="Assets\CSVs\Cards-Cell-Parts-and-Functions.csv.txt" />
      <None Include="Assets\CSVs\partsOfSpeech.txt" />
+     <None Include="Assets\Art\TimerCircleMaterials\CircleShader.shader" />
      <None Include="Assets\CSVs\Buckets-Sentence-or-Fragment.csv.txt" />
      <None Include="Assets\CSVs\Buckets-Comparing-Insurance-Types.csv.txt" />
-     <None Include="Assets\Art\CircleShader.shader" />
  <Reference Include="UnityEngine.UI">
  <HintPath>/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>
