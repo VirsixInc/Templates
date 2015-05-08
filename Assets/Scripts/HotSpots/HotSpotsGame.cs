@@ -21,39 +21,12 @@ public class HotSpotsGame : MonoBehaviour {
 	
 		switch (curState) {
 		case HotSpotGameState.Config : 
-			individualElements = GameObject.FindGameObjectsWithTag("elements");
-			groups = GameObject.FindGameObjectsWithTag("groups");
-			foreach (GameObject go in individualElements){
-				ItemToBeMastered item = new ItemToBeMastered(0f, go);
-				phaseOneObjs.Add(item);
-				phaseTwoObjs.Add(item);
-			}
-			foreach (GameObject go in groups){
-				ItemToBeMastered item = new ItemToBeMastered(0f, go);
-				phaseThreeObjs.Add(item);
-			}
-
-			//sort all the lists alphabetically
-			List<ItemToBeMastered> tempList = new List<ItemToBeMastered>();
-			tempList = phaseOneObjs.OrderBy(item => item.itemGameObject.name).ToList();
-			phaseOneObjs = new List<ItemToBeMastered>(tempList);
-
-			List<ItemToBeMastered> tempList2 = new List<ItemToBeMastered>();
-			tempList2 = phaseTwoObjs.OrderBy(item => item.itemGameObject.name).ToList();
-			phaseTwoObjs = new List<ItemToBeMastered>(tempList2);
-
-			List<ItemToBeMastered> tempList3 = new List<ItemToBeMastered>();
-			tempList3 = phaseThreeObjs.OrderBy(item => item.itemGameObject.name).ToList();
-			phaseThreeObjs = new List<ItemToBeMastered>(tempList3);
-
-//			tempList.Clear (); //professional memory management, prob unnecessary but good to know
-//			tempList2.Clear ();
-//			tempList3.Clear ();
-//
-//			tempList.TrimExcess();
-//			tempList2.TrimExcess();
-//			tempList3.TrimExcess();
-
+			ConfigGameData();
+			curState = HotSpotGameState.Display;
+			break;
+		case HotSpotGameState.Display : 
+			DisplayQuestion();
+			curState = HotSpotGameState.Playing;
 			break;
 		}
 	}
@@ -79,6 +52,45 @@ public class HotSpotsGame : MonoBehaviour {
 
 	}
 
+	void ConfigGameData() {
+		individualElements = GameObject.FindGameObjectsWithTag("elements");
+		groups = GameObject.FindGameObjectsWithTag("groups");
+		foreach (GameObject go in individualElements){
+			ItemToBeMastered item = new ItemToBeMastered(0f, go);
+			phaseOneObjs.Add(item);
+			phaseTwoObjs.Add(item);
+		}
+		foreach (GameObject go in groups){
+			ItemToBeMastered item = new ItemToBeMastered(0f, go);
+			phaseThreeObjs.Add(item);
+		}
+		
+		//sort all the lists alphabetically
+		List<ItemToBeMastered> tempList = new List<ItemToBeMastered>();
+		tempList = phaseOneObjs.OrderBy(item => item.itemGameObject.name).ToList();
+		phaseOneObjs = new List<ItemToBeMastered>(tempList);
+		
+		List<ItemToBeMastered> tempList2 = new List<ItemToBeMastered>();
+		tempList2 = phaseTwoObjs.OrderBy(item => item.itemGameObject.name).ToList();
+		phaseTwoObjs = new List<ItemToBeMastered>(tempList2);
+		
+		List<ItemToBeMastered> tempList3 = new List<ItemToBeMastered>();
+		tempList3 = phaseThreeObjs.OrderBy(item => item.itemGameObject.name).ToList();
+		phaseThreeObjs = new List<ItemToBeMastered>(tempList3);
+		
+		//			tempList.Clear (); //professional memory management, prob unnecessary but good to know
+		//			tempList2.Clear ();
+		//			tempList3.Clear ();
+		//
+		//			tempList.TrimExcess();
+		//			tempList2.TrimExcess();
+		//			tempList3.TrimExcess();
+		
+	}
+
+	void DisplayQuestion(){
+
+	}
 }
 
 
