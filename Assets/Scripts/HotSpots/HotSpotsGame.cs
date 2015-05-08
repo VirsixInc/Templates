@@ -11,20 +11,21 @@ public class HotSpotsGame : MonoBehaviour {
 
 	HotSpotPhase curPhase = HotSpotPhase.Elements;
 	HotSpotGameState curState = HotSpotGameState.Config;
-	List<GameObject> individualElements, groups;
+	GameObject[] individualElements, groups;
 
 	// Update is called once per frame
 	void Update () {
 	
 		switch (curState) {
-//		case HotSpotGameState.Config : 
-//
-//
-//			break;
-//		}
+		case HotSpotGameState.Config : 
+			individualElements = GameObject.FindGameObjectsWithTag("elements");
+			groups = GameObject.FindGameObjectsWithTag("groups");
+
+			break;
+		}
 	}
 }
-}
+
 
 
 
