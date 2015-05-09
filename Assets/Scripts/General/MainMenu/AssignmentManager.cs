@@ -24,7 +24,6 @@ public class AssignmentManager : MonoBehaviour {
 	loop through and instantiate each 
 
 	instantiate each even prefab on the left at -150 
-	
 
 	*/
 
