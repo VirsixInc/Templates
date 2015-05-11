@@ -16,6 +16,7 @@ public class HotSpotsGame : MonoBehaviour {
 	GameObject[] individualElements, groups;
 	List<ItemToBeMastered> phaseOneObjs, phaseTwoObjs, phaseThreeObjs, currentPhase;
 	int currentIndex;
+	string currentCorrectAnswer;
 	// Update is called once per frame
 	void Update () {
 	
@@ -89,8 +90,40 @@ public class HotSpotsGame : MonoBehaviour {
 	}
 
 	void DisplayQuestion(){
+		switch (curPhase) {
+		case HotSpotPhase.Elements :
+			currentCorrectAnswer = phaseOneObjs[currentIndex].itemGameObject.name;
+
+			break;
+		case HotSpotPhase.Groups :
+			currentCorrectAnswer = phaseTwoObjs[currentIndex].itemGameObject.name;
+
+			break;
+				
+		case HotSpotPhase.Typing :
+			currentCorrectAnswer = phaseThreeObjs[currentIndex].itemGameObject.name;
+
+
+			break;
+
+		
+		}
+	}
+
+	public void SubmitAnswer (string answer) {
+		if (answer == currentCorrectAnswer) {
+			AnswerCorrect();
+		}
+
+		else {
+			AnswerWrong();
+		}
 
 	}
+
+	void AnswerCorrect(){}
+
+	void AnswerWrong(){}
 }
 
 
