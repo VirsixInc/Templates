@@ -48,13 +48,13 @@ public class cardManager : MonoBehaviour {
   public List<Term> unmasteredTerms = new List<Term>();
   public TextAsset csvToUse;
   public Text questDisplay;
-  public Text keyboardText;
+  public InputField keyboardText;
   public GameObject cardsView;
   public GameObject keyboardView;
 
   private bool handleCardPress, firstPress, handleKeyboardSubmit, firstSubmit;
 
-  private float currentDifficulty;
+  private int currentDifficulty;
 
   private float timeBetweenCorrAnswers;
 
@@ -63,7 +63,7 @@ public class cardManager : MonoBehaviour {
   private int correctTermIndex;
 
   private int totalMastery;
-  private int requiredMastery = 1;
+  private int requiredMastery = 8;
 
   private int currentPhase;
 	
@@ -72,7 +72,7 @@ public class cardManager : MonoBehaviour {
       case GameState.ConfigCards:
         keyboardView.SetActive(false);
         cardsView.SetActive(true);
-        currentDifficulty = 1f;
+        currentDifficulty = 1;
         GameObject[] cardObjs = GameObject.FindGameObjectsWithTag("card");
         cardObjs = cardObjs.OrderBy(c=>c.name).ToArray();
         foreach(GameObject card in cardObjs){
@@ -87,10 +87,11 @@ public class cardManager : MonoBehaviour {
         break;
       case GameState.ResetCards:
         Timer1.s_instance.Reset(15f);
-        amtOfCards = (int)(3*currentDifficulty);
         foreach(Card currCard in allCards){
           currCard.objAssoc.SetActive(false);
         }
+        currentDifficulty = Mathf.Clamp(unmasteredTerms[correctTermIndex].mastery/2, 0, requiredMastery/2); 
+        amtOfCards = (int)(3*currentDifficulty);
         List<int> uniqueIndexes = generateUniqueRandomNum(amtOfCards, unmasteredTerms.Count);
         for(int i = 0; i<uniqueIndexes.Count;i++){
           allCards[i].setCard(unmasteredTerms[uniqueIndexes[i]]);
@@ -140,11 +141,12 @@ public class cardManager : MonoBehaviour {
         break;
       case GameState.PlayingKeyboard:
         if(handleKeyboardSubmit){
-          if(keyboardText.text == unmasteredTerms[correctTermIndex].answer){
+          if(keyboardText.text.ToLower() == unmasteredTerms[correctTermIndex].answer){
             currentState = GameState.ResetKeyboard;
           }
           firstSubmit = false;
           handleKeyboardSubmit = false;
+          keyboardText.text = "";
         }
         break;
       case GameState.End:
@@ -160,6 +162,7 @@ public class cardManager : MonoBehaviour {
   }
 
   public void keyboardHandler(){
+    print("HERE");
     handleKeyboardSubmit = true;
   }
 
@@ -206,6 +209,7 @@ public class cardManager : MonoBehaviour {
       if(currLine.Length > 0){
         for(int j = 0;j<currLine.Length;j++){
           currLine[j] = currLine[j].Replace('\\',',');
+          currLine[j] = currLine[j].ToLower();
         }
         listToReturn.Add(currLine);
       }
