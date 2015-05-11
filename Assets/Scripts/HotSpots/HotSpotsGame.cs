@@ -99,13 +99,15 @@ public class HotSpotsGame : MonoBehaviour {
 	}
 
 	void DisplayQuestion(){
+		currentCorrectAnswer = phaseOneObjs[currentIndex].itemGameObject.name; //correct answer is gameobject name at index in list of items
+		promptText.text = currentCorrectAnswer;
 		List<int> randIndexList = new List<int>(); //to avoid duplicates
 		currentlyActivatedImages = new List<Image> (); //to clear at end
 
 		switch (curPhase) {
 		case HotSpotPhase.Elements :
 			currentlyActivatedImages.Add (phaseOneObjs[currentIndex].itemGameObject.GetComponent<Image>()); // add correct answer image to list
-			currentCorrectAnswer = phaseOneObjs[currentIndex].itemGameObject.name; //correct answer is gameobject name at index in list of items
+
 			for (int i = 0; i < phaseOneObjs.Count; i++){
 				randIndexList.Add (i); //generate a list of numbers
 			}
@@ -147,7 +149,7 @@ public class HotSpotsGame : MonoBehaviour {
 	}
 
 	public void SubmitAnswer (string answer) {
-		print ("SUBMIT ANSWER");
+		print (answer);
 		if (answer == currentCorrectAnswer) {
 			AnswerCorrect();
 		}
