@@ -48,6 +48,7 @@
   <ItemGroup>
      <Compile Include="Assets\Art\StandAlones\CircleTimer\BindCircleForImage.cs" />
      <Compile Include="Assets\Art\StandAlones\CircleTimer\BindCircleForShader.cs" />
+     <Compile Include="Assets\HotSpotClick.cs" />
      <Compile Include="Assets\Prefabs\CircleTimer\Timer1.cs" />
      <Compile Include="Assets\Scripts\General\AppManager.cs" />
      <Compile Include="Assets\Scripts\General\Assignment.cs" />
