@@ -66,6 +66,8 @@ public class cardManager : MonoBehaviour {
   private int requiredMastery = 8;
 
   private int currentPhase;
+
+  private Vector3 questDispStart, questDispEnd;
 	
 	void Update () {
     switch(currentState){
@@ -75,6 +77,10 @@ public class cardManager : MonoBehaviour {
         currentDifficulty = 1;
         GameObject[] cardObjs = GameObject.FindGameObjectsWithTag("card");
         cardObjs = cardObjs.OrderBy(c=>c.name).ToArray();
+        questDispStart = questDisplay.gameObject.transform.parent.transform.localPosition;
+        questDispEnd = questDisplay.gameObject.transform.parent.transform.localPosition;
+        questDispEnd.y = questDispEnd.y*-1;
+        print(questDispEnd.y);
         foreach(GameObject card in cardObjs){
           Card newCard = new Card(card, card.transform.GetChild(0).GetComponent<Text>());
           allCards.Add(newCard);
@@ -102,6 +108,11 @@ public class cardManager : MonoBehaviour {
         currentState = GameState.PlayingCards;
         break;
       case GameState.PlayingCards:
+        questDisplay.gameObject.transform.parent.transform.localPosition = Vector3.Lerp(
+            questDispEnd,
+            questDispStart,
+            Timer1.s_instance.normTime
+            );
         if(handleCardPress){
           if(firstPress && allCards[currIndex].answer == unmasteredTerms[correctTermIndex].answer){
             unmasteredTerms[correctTermIndex].mastery++;
