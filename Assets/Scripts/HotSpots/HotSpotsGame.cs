@@ -17,7 +17,7 @@ public class HotSpotsGame : MonoBehaviour {
 	List<ItemToBeMastered> phaseOneObjs, phaseTwoObjs, phaseThreeObjs, currentPhase;
 	int currentIndex;
 	string currentCorrectAnswer;
-	List<Image> currentlyActivatedImages;
+	public List<Image> currentlyActivatedImages;
 
 	void Awake () {
 		s_instance = this;
@@ -115,14 +115,14 @@ public class HotSpotsGame : MonoBehaviour {
 				for (int i = 0; i < 2; i++) { //choose 2 additional items to be dispayed as wrong answers
 					int randomInt = Random.Range(0, randIndexList.Count);
 					currentlyActivatedImages.Add (phaseOneObjs[randIndexList[randomInt]].itemGameObject.GetComponent<Image>()); //add in random wrong answer
-					randIndexList.Remove(randomInt); //make sure it doesnt get added twice
+					randIndexList.Remove(randIndexList[randomInt]); //make sure it doesnt get added twice
 				}
 			}
 			else {
 				for (int i = 0; i < 4; i++) { //choose 4 additional items to be dispayed as wrong answer
 					int randomInt = Random.Range(0, randIndexList.Count);
 					currentlyActivatedImages.Add (phaseOneObjs[randIndexList[randomInt]].itemGameObject.GetComponent<Image>()); //add in random wrong answer
-					randIndexList.Remove(randomInt); //make sure it doesnt get added twice
+					randIndexList.Remove(randIndexList[randomInt]); //make sure it doesnt get added twice
 				}
 			}
 
