@@ -20,7 +20,7 @@ public class HotSpotsGame : MonoBehaviour {
 	List<Image> currentlyActivatedImages;
 
 	void Awake () {
-	
+		s_instance = this;
 	}	
 
 	void Update () {
