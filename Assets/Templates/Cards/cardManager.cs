@@ -43,15 +43,17 @@ public class cardManager : MonoBehaviour {
     PlayingKeyboard,
     End};
   public GameState currentState; //public for debug purposes 
-  public List<Card> allCards = new List<Card>();
-  public List<Term> allTerms = new List<Term>();
-  public List<Term> unmasteredTerms = new List<Term>();
+  public GameObject instPartFab;
+
   public TextAsset csvToUse;
   public Text questDisplay;
   public InputField keyboardText;
   public GameObject cardsView;
   public GameObject keyboardView;
 
+  public List<Card> allCards = new List<Card>();
+  public List<Term> allTerms = new List<Term>();
+  public List<Term> unmasteredTerms = new List<Term>();
   private bool handleCardPress, firstPress, handleKeyboardSubmit, firstSubmit;
 
   private int currentDifficulty;
