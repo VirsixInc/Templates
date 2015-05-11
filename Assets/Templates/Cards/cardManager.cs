@@ -44,6 +44,7 @@ public class cardManager : MonoBehaviour {
     End};
   public GameState currentState; //public for debug purposes 
   public GameObject instPartFab;
+  public GameObject circGraphic;
 
   public TextAsset csvToUse;
   public Text questDisplay;
@@ -104,6 +105,8 @@ public class cardManager : MonoBehaviour {
         List<int> uniqueIndexes = generateUniqueRandomNum(amtOfCards, unmasteredTerms.Count, correctTermIndex);
         for(int i = 0; i<uniqueIndexes.Count;i++){
           allCards[i].setCard(unmasteredTerms[uniqueIndexes[i]]);
+          Instantiate(instPartFab, allCards[i].objAssoc.transform.position+new Vector3(0f,0f,-10f), Quaternion.identity); 
+
         }
         questDisplay.text = unmasteredTerms[correctTermIndex].question;
         firstPress = true;
@@ -117,6 +120,7 @@ public class cardManager : MonoBehaviour {
             );
         if(handleCardPress){
           if(firstPress && allCards[currIndex].answer == unmasteredTerms[correctTermIndex].answer){
+            circGraphic.SendMessage("result", true);
             unmasteredTerms[correctTermIndex].mastery++;
             currentState = GameState.ResetCards;
             if(unmasteredTerms[correctTermIndex].mastery == requiredMastery*.75f){
@@ -129,8 +133,10 @@ public class cardManager : MonoBehaviour {
             unmasteredTerms[correctTermIndex].mastery--;
             currentState = GameState.ResetCards;
           }else{
+            print(currIndex);
             allCards[currIndex].objAssoc.SendMessage("incorrectAnswer");
           }
+          circGraphic.SendMessage("result", false);
           Timer1.s_instance.Pause();
           firstPress = false;
           handleCardPress = false;

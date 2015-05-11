@@ -25,13 +25,16 @@ struct Input
 
 void surf (Input IN, inout SurfaceOutput o)
 {
+//	tc2.x += (sin(_Time+tc2.x*10)* 0.01f * ((fmod(_Time,2.0f)) - 1.0f));
+//	tc2.y -= (cos(_Time+tc2.y*10)* 0.01f  * ((fmod(_Time,2.0f)) - 1.0f)); 	
+	
 	float2 tc2 = IN.uv_WiggleTex;
 	tc2.x -= _SinTime;
 	tc2.y += _CosTime;
 	float4 wiggle = tex2D(_WiggleTex, tc2);
 	
 	IN.uv_MainTex.x -= wiggle.r * _WiggleStrength;
-	IN.uv_MainTex.y += wiggle.b * _WiggleStrength*1.5;
+	IN.uv_MainTex.y += wiggle.b * _WiggleStrength*1.5f;
 	
 	fixed4 c = tex2D(_MainTex, IN.uv_MainTex) * _Color;
 	o.Albedo = c.rgb;
