@@ -122,6 +122,10 @@ public class cardManager : MonoBehaviour {
           firstPress = false;
           handleCardPress = false;
         }
+        if(Timer1.s_instance.timesUp && !Timer1.s_instance.pause){
+          Timer1.s_instance.Pause();
+          unmasteredTerms[correctTermIndex].mastery -=2;
+        }
         break;
       case GameState.ConfigKeyboard:
         keyboardView.SetActive(true);
@@ -142,14 +146,24 @@ public class cardManager : MonoBehaviour {
       case GameState.PlayingKeyboard:
         if(handleKeyboardSubmit){
           if(keyboardText.text.ToLower() == unmasteredTerms[correctTermIndex].answer){
+            if(firstSubmit){
+              unmasteredTerms[correctTermIndex].mastery++;
+            }
             currentState = GameState.ResetKeyboard;
             if(unmasteredTerms[correctTermIndex].mastery == requiredMastery*.25f){
               unmasteredTerms.RemoveAt(correctTermIndex);
             }
+          }else if(firstSubmit){
+            unmasteredTerms[correctTermIndex].mastery -= 2;
           }
+          Timer1.s_instance.Pause();
           firstSubmit = false;
           handleKeyboardSubmit = false;
           keyboardText.text = "";
+        }
+        if(Timer1.s_instance.timesUp && !Timer1.s_instance.pause){
+          Timer1.s_instance.Pause();
+          unmasteredTerms[correctTermIndex].mastery -=2;
         }
         break;
       case GameState.End:
