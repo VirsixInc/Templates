@@ -43,18 +43,20 @@ public class cardManager : MonoBehaviour {
     PlayingKeyboard,
     End};
   public GameState currentState; //public for debug purposes 
-  public List<Card> allCards = new List<Card>();
-  public List<Term> allTerms = new List<Term>();
-  public List<Term> unmasteredTerms = new List<Term>();
+  public GameObject instPartFab;
+
   public TextAsset csvToUse;
   public Text questDisplay;
-  public Text keyboardText;
+  public InputField keyboardText;
   public GameObject cardsView;
   public GameObject keyboardView;
 
+  public List<Card> allCards = new List<Card>();
+  public List<Term> allTerms = new List<Term>();
+  public List<Term> unmasteredTerms = new List<Term>();
   private bool handleCardPress, firstPress, handleKeyboardSubmit, firstSubmit;
 
-  private float currentDifficulty;
+  private int currentDifficulty;
 
   private float timeBetweenCorrAnswers;
 
@@ -63,18 +65,24 @@ public class cardManager : MonoBehaviour {
   private int correctTermIndex;
 
   private int totalMastery;
-  private int requiredMastery = 1;
+  private int requiredMastery = 8;
 
   private int currentPhase;
+
+  private Vector3 questDispStart, questDispEnd;
 	
 	void Update () {
     switch(currentState){
       case GameState.ConfigCards:
         keyboardView.SetActive(false);
         cardsView.SetActive(true);
-        currentDifficulty = 1f;
+        currentDifficulty = 1;
         GameObject[] cardObjs = GameObject.FindGameObjectsWithTag("card");
         cardObjs = cardObjs.OrderBy(c=>c.name).ToArray();
+        questDispStart = questDisplay.gameObject.transform.parent.transform.localPosition;
+        questDispEnd = questDisplay.gameObject.transform.parent.transform.localPosition;
+        questDispEnd.y = questDispEnd.y*-1;
+        print(questDispEnd.y);
         foreach(GameObject card in cardObjs){
           Card newCard = new Card(card, card.transform.GetChild(0).GetComponent<Text>());
           allCards.Add(newCard);
@@ -87,27 +95,33 @@ public class cardManager : MonoBehaviour {
         break;
       case GameState.ResetCards:
         Timer1.s_instance.Reset(15f);
-        amtOfCards = (int)(3*currentDifficulty);
         foreach(Card currCard in allCards){
           currCard.objAssoc.SetActive(false);
         }
-        List<int> uniqueIndexes = generateUniqueRandomNum(amtOfCards, unmasteredTerms.Count);
+        correctTermIndex = Random.Range(0,unmasteredTerms.Count);
+        currentDifficulty = Mathf.Clamp(unmasteredTerms[correctTermIndex].mastery/2, 1, requiredMastery/2); 
+        amtOfCards = (int)(3*currentDifficulty);
+        List<int> uniqueIndexes = generateUniqueRandomNum(amtOfCards, unmasteredTerms.Count, correctTermIndex);
         for(int i = 0; i<uniqueIndexes.Count;i++){
           allCards[i].setCard(unmasteredTerms[uniqueIndexes[i]]);
         }
-        correctTermIndex = uniqueIndexes[Random.Range(0,uniqueIndexes.Count)];
         questDisplay.text = unmasteredTerms[correctTermIndex].question;
         firstPress = true;
         currentState = GameState.PlayingCards;
         break;
       case GameState.PlayingCards:
+        questDisplay.gameObject.transform.parent.transform.localPosition = Vector3.Lerp(
+            questDispEnd,
+            questDispStart,
+            Timer1.s_instance.normTime
+            );
         if(handleCardPress){
           if(firstPress && allCards[currIndex].answer == unmasteredTerms[correctTermIndex].answer){
             unmasteredTerms[correctTermIndex].mastery++;
             currentState = GameState.ResetCards;
-            if(unmasteredTerms[correctTermIndex].mastery == requiredMastery){
+            if(unmasteredTerms[correctTermIndex].mastery == requiredMastery*.75f){
               unmasteredTerms.RemoveAt(correctTermIndex);
-              if(checkForNewPhase()){
+              if(unmasteredTerms.Count == 0){//checkForNewPhase()){
                 currentState = GameState.ConfigKeyboard;
               }
             }
@@ -120,6 +134,10 @@ public class cardManager : MonoBehaviour {
           Timer1.s_instance.Pause();
           firstPress = false;
           handleCardPress = false;
+        }
+        if(Timer1.s_instance.timesUp && !Timer1.s_instance.pause){
+          Timer1.s_instance.Pause();
+          unmasteredTerms[correctTermIndex].mastery -=2;
         }
         break;
       case GameState.ConfigKeyboard:
@@ -140,11 +158,25 @@ public class cardManager : MonoBehaviour {
         break;
       case GameState.PlayingKeyboard:
         if(handleKeyboardSubmit){
-          if(keyboardText.text == unmasteredTerms[correctTermIndex].answer){
+          if(keyboardText.text.ToLower() == unmasteredTerms[correctTermIndex].answer){
+            if(firstSubmit){
+              unmasteredTerms[correctTermIndex].mastery++;
+            }
             currentState = GameState.ResetKeyboard;
+            if(unmasteredTerms[correctTermIndex].mastery == requiredMastery*.25f){
+              unmasteredTerms.RemoveAt(correctTermIndex);
+            }
+          }else if(firstSubmit){
+            unmasteredTerms[correctTermIndex].mastery -= 2;
           }
+          Timer1.s_instance.Pause();
           firstSubmit = false;
           handleKeyboardSubmit = false;
+          keyboardText.text = "";
+        }
+        if(Timer1.s_instance.timesUp && !Timer1.s_instance.pause){
+          Timer1.s_instance.Pause();
+          unmasteredTerms[correctTermIndex].mastery -=2;
         }
         break;
       case GameState.End:
@@ -160,12 +192,14 @@ public class cardManager : MonoBehaviour {
   }
 
   public void keyboardHandler(){
+    print("HERE");
     handleKeyboardSubmit = true;
   }
 
   public void switchState(int newState){
     currentState = (GameState)newState;
   }
+
   bool checkForNewPhase(){
     bool newPhase = false;
     int amtOfMasteredTerms = allTerms.Count-unmasteredTerms.Count;
@@ -182,8 +216,11 @@ public class cardManager : MonoBehaviour {
     return newPhase;
   }
 
-  List<int> generateUniqueRandomNum(int amt, int randRange){
+  List<int> generateUniqueRandomNum(int amt, int randRange, int noThisNum = -1){
     List<int> listToReturn = new List<int>();
+    if(noThisNum != -1){
+      listToReturn.Add(noThisNum);
+    }
     if(amt > randRange){
       amt = randRange;
       print("RANGE CANNOT BE MORE THAN AMT");
@@ -195,6 +232,7 @@ public class cardManager : MonoBehaviour {
       }while(listToReturn.Contains(newVal));
       listToReturn.Add(newVal);
     }
+    listToReturn = listToReturn.OrderBy(x=>Random.Range(0,listToReturn.Count)).ToList();
     return listToReturn;
   }
 
@@ -206,6 +244,7 @@ public class cardManager : MonoBehaviour {
       if(currLine.Length > 0){
         for(int j = 0;j<currLine.Length;j++){
           currLine[j] = currLine[j].Replace('\\',',');
+          currLine[j] = currLine[j].ToLower();
         }
         listToReturn.Add(currLine);
       }

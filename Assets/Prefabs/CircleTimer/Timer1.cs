@@ -9,6 +9,7 @@ public class Timer1 : MonoBehaviour {
   public float timeLeft;
   public bool pause;
   public bool timesUp;
+  public float normTime;
   public Color[] colorsToLerp = new Color[2];
 
 
@@ -29,9 +30,10 @@ public class Timer1 : MonoBehaviour {
     if(pause || timesUp){    
     }else{
       timeLeft = totalTime-Time.time;
-      timerMat.SetFloat("_Angle", Mathf.Lerp(-3.14f, 3.14f, (float)(timeLeft/amtOfSeconds)));
+      normTime = (float)(timeLeft/amtOfSeconds);
+      timerMat.SetFloat("_Angle", Mathf.Lerp(-3.14f, 3.14f, normTime));
       timerMat.SetColor("_Color", Color.Lerp(colorsToLerp[1], colorsToLerp[0], (float)(timeLeft/amtOfSeconds)));
-      thisText.text = ((int)(timeLeft)).ToString();
+      thisText.text = ((int)(timeLeft+1)).ToString();
       if(timeLeft < 0f){
         timesUp = true;
       } 
