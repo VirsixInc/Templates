@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using System.Linq;
 
 public enum HotSpotPhase {Elements,Typing,Groups};
-public enum HotSpotGameState {Config, Display, Playing, AnswerSelected, CheckMastery, NextQuestion, Win}
+public enum HotSpotGameState {Config, SetPhase, Display, Playing, CheckAnswer, CheckMastery, NextQuestion, Win}
 
 public class HotSpotsGame : MonoBehaviour {
 
@@ -14,10 +14,11 @@ public class HotSpotsGame : MonoBehaviour {
 	HotSpotPhase curPhase = HotSpotPhase.Elements;
 	HotSpotGameState curState = HotSpotGameState.Config;
 	GameObject[] individualElements, groups;
-	List<ItemToBeMastered> phaseOneObjs, phaseTwoObjs, phaseThreeObjs, currentPhase;
+	List<ItemToBeMastered> phaseOneObjs, phaseTwoObjs, phaseThreeObjs, unmasteredItems;
 	int currentIndex;
 	string currentCorrectAnswer;
-	public List<Image> currentlyActivatedImages;
+	List<Image> currentlyActivatedImages;
+	bool hasAnswered = false;
 
 	void Awake () {
 		s_instance = this;
@@ -28,11 +29,30 @@ public class HotSpotsGame : MonoBehaviour {
 		switch (curState) {
 		case HotSpotGameState.Config : 
 			ConfigGameData();
+			curState = HotSpotGameState.SetPhase;
+			break;
+
+			//set phase should be set at the beginning of each phase, so at the beginning and each time the unmasteredItem count is 0
+		case HotSpotGameState.SetPhase :
+			SetPhase();
 			curState = HotSpotGameState.Display;
 			break;
+
 		case HotSpotGameState.Display : 
 			DisplayQuestion();
 			curState = HotSpotGameState.Playing;
+			break;
+		case HotSpotGameState.Playing :
+			if (hasAnswered){
+				hasAnswered = false;
+				curState = HotSpotGameState.CheckAnswer;
+			}
+
+			break;
+		case HotSpotGameState.CheckAnswer :
+			//if answer correct, checkmastery else goback to playing
+			
+
 			break;
 		}
 	}
@@ -40,11 +60,11 @@ public class HotSpotsGame : MonoBehaviour {
 
 
 	void CheckForMastery() {
-		if (currentIndex >= currentPhase.Count)
+		if (currentIndex >= unmasteredItems.Count)
 			currentIndex = 0; //loop around to beginning of list
-		while (currentPhase[currentIndex].sequenceMastery==1f && currentPhase.Count != 0) { //skip over completed 
-			currentPhase.Remove(currentPhase[currentIndex]);
-			if (currentPhase.Count > currentIndex+1) {
+		while (unmasteredItems[currentIndex].sequenceMastery==1f && unmasteredItems.Count != 0) { //skip over completed 
+			unmasteredItems.Remove(unmasteredItems[currentIndex]);
+			if (unmasteredItems.Count > currentIndex+1) {
 				currentIndex++;
 			}
 			else 
@@ -52,7 +72,22 @@ public class HotSpotsGame : MonoBehaviour {
 		}
 	}
 	void SetPhase() {
+		switch (curPhase) {
+		case HotSpotPhase.Elements :
+			unmasteredItems.Clear();
+			unmasteredItems = new List<ItemToBeMastered>(phaseOneObjs);
+			break;
+		case HotSpotPhase.Typing :
+			unmasteredItems.Clear();
+			unmasteredItems = new List<ItemToBeMastered>(phaseTwoObjs);
+			break;
 
+		case HotSpotPhase.Groups :
+			unmasteredItems.Clear();
+			unmasteredItems = new List<ItemToBeMastered>(phaseThreeObjs);
+			break;
+
+		}
 		//clear curList
 		//copy other list
 
@@ -62,7 +97,7 @@ public class HotSpotsGame : MonoBehaviour {
 		phaseOneObjs = new List<ItemToBeMastered> ();
 		phaseTwoObjs = new List<ItemToBeMastered> ();
 		phaseThreeObjs = new List<ItemToBeMastered> ();
-		currentPhase = new List<ItemToBeMastered> ();
+		unmasteredItems = new List<ItemToBeMastered> ();
 		individualElements = GameObject.FindGameObjectsWithTag("elements");
 		groups = GameObject.FindGameObjectsWithTag("groups");
 		foreach (GameObject go in individualElements){
@@ -106,15 +141,15 @@ public class HotSpotsGame : MonoBehaviour {
 
 		switch (curPhase) {
 		case HotSpotPhase.Elements :
-			currentlyActivatedImages.Add (phaseOneObjs[currentIndex].itemGameObject.GetComponent<Image>()); // add correct answer image to list
+			currentlyActivatedImages.Add (unmasteredItems[currentIndex].itemGameObject.GetComponent<Image>()); // add correct answer image to list
 
 			for (int i = 0; i < phaseOneObjs.Count; i++){
 				randIndexList.Add (i); //generate a list of numbers
 			}
 			randIndexList.Remove(currentIndex);//remove that int so it cant be chosen again
 
-			if (phaseOneObjs[currentIndex].sequenceMastery < 0.5f){
-				for (int i = 0; i < 2; i++) { //choose 2 additional items to be dispayed as wrong answers
+			if (unmasteredItems[currentIndex].sequenceMastery < 0.5f){
+				for (int i = 0; i < 2; i++) { //choose 2 additional items to be displayed as wrong answers
 					int randomInt = Random.Range(0, randIndexList.Count);
 					currentlyActivatedImages.Add (phaseOneObjs[randIndexList[randomInt]].itemGameObject.GetComponent<Image>()); //add in random wrong answer
 					randIndexList.Remove(randIndexList[randomInt]); //make sure it doesnt get added twice
@@ -128,28 +163,35 @@ public class HotSpotsGame : MonoBehaviour {
 				}
 			}
 
+			//display elements that can be clicked on
 			foreach (Image image in currentlyActivatedImages) {
 				image.enabled = true;
 			}
 
 			break;
+		
+		//TYPING
+			
+		case HotSpotPhase.Typing :
+			currentCorrectAnswer = phaseThreeObjs[currentIndex].itemGameObject.name;
+			
+			
+			break;
+
+		//GROUPS
+		
 		case HotSpotPhase.Groups :
 			currentCorrectAnswer = phaseTwoObjs[currentIndex].itemGameObject.name;
 
 			break;
-				
-		case HotSpotPhase.Typing :
-			currentCorrectAnswer = phaseThreeObjs[currentIndex].itemGameObject.name;
-
-
-			break;
+		
+		
 
 		
 		}
 	}
 
 	public void SubmitAnswer (string answer) {
-		print (answer);
 		if (answer == currentCorrectAnswer) {
 			AnswerCorrect();
 		}
@@ -160,7 +202,19 @@ public class HotSpotsGame : MonoBehaviour {
 
 	}
 
-	void AnswerCorrect(){}
+	void AnswerCorrect(){
+		unmasteredItems [currentIndex].sequenceMastery += .5f;
+		ClearGUIObjects ();
+		hasAnswered = true;
+
+	}
 
 	void AnswerWrong(){}
+
+	void ClearGUIObjects() {
+		foreach (Image x in currentlyActivatedImages) {
+			x.enabled = false;
+		}
+		currentlyActivatedImages.Clear ();
+	}
 }
