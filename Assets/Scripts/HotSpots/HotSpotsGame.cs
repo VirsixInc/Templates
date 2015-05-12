@@ -10,14 +10,19 @@ public enum HotSpotGameState {Config, Display, Playing, AnswerSelected, CheckMas
 public class HotSpotsGame : MonoBehaviour {
 
 	public Text promptText;
-
+	public static HotSpotsGame s_instance;
 	HotSpotPhase curPhase = HotSpotPhase.Elements;
 	HotSpotGameState curState = HotSpotGameState.Config;
 	GameObject[] individualElements, groups;
 	List<ItemToBeMastered> phaseOneObjs, phaseTwoObjs, phaseThreeObjs, currentPhase;
 	int currentIndex;
 	string currentCorrectAnswer;
-	// Update is called once per frame
+	public List<Image> currentlyActivatedImages;
+
+	void Awake () {
+		s_instance = this;
+	}	
+
 	void Update () {
 	
 		switch (curState) {
@@ -54,6 +59,10 @@ public class HotSpotsGame : MonoBehaviour {
 	}
 
 	void ConfigGameData() {
+		phaseOneObjs = new List<ItemToBeMastered> ();
+		phaseTwoObjs = new List<ItemToBeMastered> ();
+		phaseThreeObjs = new List<ItemToBeMastered> ();
+		currentPhase = new List<ItemToBeMastered> ();
 		individualElements = GameObject.FindGameObjectsWithTag("elements");
 		groups = GameObject.FindGameObjectsWithTag("groups");
 		foreach (GameObject go in individualElements){
@@ -90,9 +99,38 @@ public class HotSpotsGame : MonoBehaviour {
 	}
 
 	void DisplayQuestion(){
+		currentCorrectAnswer = phaseOneObjs[currentIndex].itemGameObject.name; //correct answer is gameobject name at index in list of items
+		promptText.text = currentCorrectAnswer;
+		List<int> randIndexList = new List<int>(); //to avoid duplicates
+		currentlyActivatedImages = new List<Image> (); //to clear at end
+
 		switch (curPhase) {
 		case HotSpotPhase.Elements :
-			currentCorrectAnswer = phaseOneObjs[currentIndex].itemGameObject.name;
+			currentlyActivatedImages.Add (phaseOneObjs[currentIndex].itemGameObject.GetComponent<Image>()); // add correct answer image to list
+
+			for (int i = 0; i < phaseOneObjs.Count; i++){
+				randIndexList.Add (i); //generate a list of numbers
+			}
+			randIndexList.Remove(currentIndex);//remove that int so it cant be chosen again
+
+			if (phaseOneObjs[currentIndex].sequenceMastery < 0.5f){
+				for (int i = 0; i < 2; i++) { //choose 2 additional items to be dispayed as wrong answers
+					int randomInt = Random.Range(0, randIndexList.Count);
+					currentlyActivatedImages.Add (phaseOneObjs[randIndexList[randomInt]].itemGameObject.GetComponent<Image>()); //add in random wrong answer
+					randIndexList.Remove(randIndexList[randomInt]); //make sure it doesnt get added twice
+				}
+			}
+			else {
+				for (int i = 0; i < 4; i++) { //choose 4 additional items to be dispayed as wrong answer
+					int randomInt = Random.Range(0, randIndexList.Count);
+					currentlyActivatedImages.Add (phaseOneObjs[randIndexList[randomInt]].itemGameObject.GetComponent<Image>()); //add in random wrong answer
+					randIndexList.Remove(randIndexList[randomInt]); //make sure it doesnt get added twice
+				}
+			}
+
+			foreach (Image image in currentlyActivatedImages) {
+				image.enabled = true;
+			}
 
 			break;
 		case HotSpotPhase.Groups :
@@ -111,6 +149,7 @@ public class HotSpotsGame : MonoBehaviour {
 	}
 
 	public void SubmitAnswer (string answer) {
+		print (answer);
 		if (answer == currentCorrectAnswer) {
 			AnswerCorrect();
 		}
@@ -125,56 +164,3 @@ public class HotSpotsGame : MonoBehaviour {
 
 	void AnswerWrong(){}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//	public Image H, Li, Na, K, Pb, I, Ca, Mg, Be, He, Ne, F, O, N, C, Al, Si, P, S, Cl, Cr, Fe, Ni, Cu, Zn, Br, Ag, Sn, Au, Hg, U;
-//
-// NOTE:THIS IS A HORRIBLE MISTAKE NEVER TO BE REPEATED
-//
-//
-//	// Use this for initialization
-//	void Start () {
-//		H = GameObject.Find ("H").GetComponent<Image> ();
-//		Li = GameObject.Find ("Li").GetComponent<Image> ();
-//		Na = GameObject.Find ("Na").GetComponent<Image> ();
-//		K = GameObject.Find ("K").GetComponent<Image> ();
-//		Pb = GameObject.Find ("Pb").GetComponent<Image> ();
-//		I = GameObject.Find ("I").GetComponent<Image> ();
-//		Ca = GameObject.Find ("Ca").GetComponent<Image> ();
-//		Mg = GameObject.Find ("Mg").GetComponent<Image> ();
-//		Be = GameObject.Find ("Be").GetComponent<Image> ();
-//		He = GameObject.Find ("He").GetComponent<Image> ();
-//		Ne = GameObject.Find ("Ne").GetComponent<Image> ();
-//		F = GameObject.Find ("F").GetComponent<Image> ();
-//		O = GameObject.Find ("O").GetComponent<Image> ();
-//		N = GameObject.Find ("N").GetComponent<Image> ();
-//		C = GameObject.Find ("C").GetComponent<Image> ();
-//		Al = GameObject.Find ("Al").GetComponent<Image> ();
-//		Si = GameObject.Find ("Si").GetComponent<Image> ();
-//		P = GameObject.Find ("P").GetComponent<Image> ();
-//		S = GameObject.Find ("S").GetComponent<Image> ();
-//		Cl = GameObject.Find ("Cl").GetComponent<Image> ();
-//		Cr = GameObject.Find ("Cr").GetComponent<Image> ();
-//		Fe = GameObject.Find ("Fe").GetComponent<Image> ();
-//		Ni = GameObject.Find ("Ni").GetComponent<Image> ();
-//		Cu = GameObject.Find ("Cu").GetComponent<Image> ();
-//		Zn = GameObject.Find ("Zn").GetComponent<Image> ();
-//		Br = GameObject.Find ("Br").GetComponent<Image> ();
-//		Ag = GameObject.Find ("Ag").GetComponent<Image> ();
-//		Sn = GameObject.Find ("Sn").GetComponent<Image> ();
-//		Au = GameObject.Find ("Au").GetComponent<Image> ();
-//		Hg = GameObject.Find ("Hg").GetComponent<Image> ();
-//		U = GameObject.Find ("U").GetComponent<Image> ();
-//	}
