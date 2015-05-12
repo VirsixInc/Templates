@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using System.Linq;
 
 public enum HotSpotPhase {Elements,Typing,Groups};
-public enum HotSpotGameState {Config, SetPhase, Display, Playing, CheckAnswer, CheckMastery, NextQuestion, Win}
+public enum HotSpotGameState {Config, SetPhase, Display, Playing, CheckMastery, NextQuestion, Win}
 
 public class HotSpotsGame : MonoBehaviour {
 
@@ -18,8 +18,7 @@ public class HotSpotsGame : MonoBehaviour {
 	int currentIndex;
 	string currentCorrectAnswer;
 	List<Image> currentlyActivatedImages;
-	bool hasAnswered = false;
-
+	bool hasAnsweredCorrect = false, masteryChecked = false;
 	void Awake () {
 		s_instance = this;
 	}	
@@ -43,15 +42,17 @@ public class HotSpotsGame : MonoBehaviour {
 			curState = HotSpotGameState.Playing;
 			break;
 		case HotSpotGameState.Playing :
-			if (hasAnswered){
-				hasAnswered = false;
-				curState = HotSpotGameState.CheckAnswer;
+			if (hasAnsweredCorrect){
+				hasAnsweredCorrect = false;
+				curState = HotSpotGameState.CheckMastery;
 			}
 
 			break;
-		case HotSpotGameState.CheckAnswer :
-			//if answer correct, checkmastery else goback to playing
-			
+		case HotSpotGameState.CheckMastery :
+			//if there are no more 
+			if (CheckForMastery()) {
+
+			}
 
 			break;
 		}
@@ -59,7 +60,7 @@ public class HotSpotsGame : MonoBehaviour {
 
 
 
-	void CheckForMastery() {
+	bool CheckForMastery() {
 		if (currentIndex >= unmasteredItems.Count)
 			currentIndex = 0; //loop around to beginning of list
 		while (unmasteredItems[currentIndex].sequenceMastery==1f && unmasteredItems.Count != 0) { //skip over completed 
@@ -69,6 +70,11 @@ public class HotSpotsGame : MonoBehaviour {
 			}
 			else 
 				currentIndex = 0;
+		}
+		if (unmasteredItems.Count == 0) {
+			return true; //phase complete
+		} else {
+			return false;
 		}
 	}
 	void SetPhase() {
@@ -205,7 +211,7 @@ public class HotSpotsGame : MonoBehaviour {
 	void AnswerCorrect(){
 		unmasteredItems [currentIndex].sequenceMastery += .5f;
 		ClearGUIObjects ();
-		hasAnswered = true;
+		hasAnsweredCorrect = true;
 
 	}
 
