@@ -49,11 +49,17 @@ public class HotSpotsGame : MonoBehaviour {
 
 			break;
 		case HotSpotGameState.CheckMastery :
-			//if there are no more 
-			if (CheckForMastery()) {
-
+			//if CheckForM returns true, 
+			if (CheckForMastery() && curPhase!=HotSpotPhase.Groups) {
+				curPhase++;
+				curState = HotSpotGameState.SetPhase;
 			}
-
+			else if (CheckForMastery() && curPhase==HotSpotPhase.Groups){
+				//win
+			}
+			else {
+				curState = HotSpotGameState.Playing;
+			}
 			break;
 		}
 	}
@@ -128,15 +134,6 @@ public class HotSpotsGame : MonoBehaviour {
 		List<ItemToBeMastered> tempList3 = new List<ItemToBeMastered>();
 		tempList3 = phaseThreeObjs.OrderBy(item => item.itemGameObject.name).ToList();
 		phaseThreeObjs = new List<ItemToBeMastered>(tempList3);
-		
-		//			tempList.Clear (); //professional memory management, prob unnecessary but good to know
-		//			tempList2.Clear ();
-		//			tempList3.Clear ();
-		//
-		//			tempList.TrimExcess();
-		//			tempList2.TrimExcess();
-		//			tempList3.TrimExcess();
-		
 	}
 
 	void DisplayQuestion(){
