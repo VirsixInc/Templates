@@ -24,12 +24,12 @@ public class HotSpotsGame : MonoBehaviour {
 	HotSpotGameState curState = HotSpotGameState.Config;
 	GameObject[] individualElements, groups;
 																//unmasterItems is the copy of each of the phaseObjs depending on curPhase
-	List<ItemToBeMastered> phaseOneObjs, phaseTwoObjs, phaseThreeObjs, unmasteredItems;
+	public List<ItemToBeMastered> phaseOneObjs, phaseTwoObjs, phaseThreeObjs, unmasteredItems;
 	int currentIndex;
 	string currentCorrectAnswer;
 	List<Image> currentlyActivatedImages;
 	bool hasAnsweredCorrect = false, masteryChecked = false;
-	float totalTerms;
+	float totalTerms, completedTerms;
 	//Keyboard members
 	private bool handleCardPress, firstPress, handleKeyboardSubmit, firstSubmit;
 	public InputField keyboardText;
@@ -40,7 +40,7 @@ public class HotSpotsGame : MonoBehaviour {
 	}	
 
 	void Update () {
-	
+		print (curState);
 		switch (curState) {
 		case HotSpotGameState.Config : 
 			ConfigGameData();
@@ -79,16 +79,20 @@ public class HotSpotsGame : MonoBehaviour {
 
 			break;
 		case HotSpotGameState.CheckMastery :
+			print ("in check mastery");
 			//if CheckForM returns true, 
-			if (CheckForMastery() && curPhase!=HotSpotPhase.Groups) {
-				curPhase++;
-				curState = HotSpotGameState.SetPhase;
+			if (CheckForMastery()) {
+				if (curPhase!=HotSpotPhase.Groups){
+					curPhase++;
+					curState = HotSpotGameState.SetPhase;
+				}
+				if (curPhase==HotSpotPhase.Groups){
+					//win
+				}
 			}
-			else if (CheckForMastery() && curPhase==HotSpotPhase.Groups){
-				//win
-			}
+
 			else {
-				curState = HotSpotGameState.Playing;
+				curState = HotSpotGameState.Display;
 			}
 			break;
 		}
@@ -100,16 +104,22 @@ public class HotSpotsGame : MonoBehaviour {
 		if (currentIndex >= unmasteredItems.Count)
 			currentIndex = 0; //loop around to beginning of list
 		while (unmasteredItems[currentIndex].sequenceMastery==1f && unmasteredItems.Count != 0) { //skip over completed 
+			completedTerms++;
 			unmasteredItems.Remove(unmasteredItems[currentIndex]);
 			if (unmasteredItems.Count > currentIndex+1) {
+				print ("currentIndex++");
 				currentIndex++;
 			}
-			else 
+			else  {
+				print ("current Index = 0");
 				currentIndex = 0;
+			}
 		}
 		if (unmasteredItems.Count == 0) {
+			print(unmasteredItems.Count);
 			return true; //phase complete
 		} else {
+			print ("mastery return false");
 			return false;
 		}
 	}
@@ -184,6 +194,7 @@ public class HotSpotsGame : MonoBehaviour {
 			randIndexList.Remove(currentIndex);//remove that int so it cant be chosen again
 
 			if (unmasteredItems[currentIndex].sequenceMastery < 0.5f){
+				print ("level one difficulty");
 				for (int i = 0; i < 2; i++) { //choose 2 additional items to be displayed as wrong answers
 					int randomInt = Random.Range(0, randIndexList.Count);
 					currentlyActivatedImages.Add (phaseOneObjs[randIndexList[randomInt]].itemGameObject.GetComponent<Image>()); //add in random wrong answer
@@ -191,6 +202,7 @@ public class HotSpotsGame : MonoBehaviour {
 				}
 			}
 			else {
+				print ("level TWO difficulty");
 				for (int i = 0; i < 4; i++) { //choose 4 additional items to be dispayed as wrong answer
 					int randomInt = Random.Range(0, randIndexList.Count);
 					currentlyActivatedImages.Add (phaseOneObjs[randIndexList[randomInt]].itemGameObject.GetComponent<Image>()); //add in random wrong answer
@@ -243,6 +255,7 @@ public class HotSpotsGame : MonoBehaviour {
 	}
 
 	public void SubmitAnswer (string answer) {
+
 		if (answer == currentCorrectAnswer) {
 			AnswerCorrect();
 		}
@@ -253,16 +266,36 @@ public class HotSpotsGame : MonoBehaviour {
 
 	}
 
+	void AdjustMastery (bool isCorrect) {
+		if (isCorrect) {
+			unmasteredItems [currentIndex].sequenceMastery += .5f;
+		} else {
+			if (unmasteredItems [currentIndex].sequenceMastery > 0) {
+				unmasteredItems [currentIndex].sequenceMastery -= .5f;
+			}
+		}
+		float totalMastery = 0f;
+		foreach (ItemToBeMastered x in unmasteredItems) {
+			totalMastery+=x.sequenceMastery;
+		}
+		totalMastery += completedTerms;
+
+		masteryMeter.value = totalMastery/totalTerms;
+	}
+
 	void AnswerCorrect(){
-		unmasteredItems [currentIndex].sequenceMastery += .5f;
 		ClearGUIObjects ();
 		hasAnsweredCorrect = true;
 		BackgroundFlash.s_instance.FadeGreen ();
+		AdjustMastery (true);
+		currentIndex++;
+
 
 	}
 
 	void AnswerWrong(){
 		BackgroundFlash.s_instance.FadeRed ();
+		AdjustMastery (false);
 
 	}
 
