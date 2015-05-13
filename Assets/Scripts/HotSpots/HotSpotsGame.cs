@@ -5,7 +5,15 @@ using UnityEngine.UI;
 using System.Linq;
 
 public enum HotSpotPhase {Elements,Typing,Groups};
-public enum HotSpotGameState {Config, SetPhase, Display, Playing, CheckMastery, NextQuestion, Win}
+public enum HotSpotGameState {Config,
+							SetPhase,
+							ConfigKeyboard,
+							ConfigGroups,
+							Display,
+							Playing,
+							CheckMastery,
+							NextQuestion,
+							Win};
 
 public class HotSpotsGame : MonoBehaviour {
 
@@ -14,11 +22,18 @@ public class HotSpotsGame : MonoBehaviour {
 	HotSpotPhase curPhase = HotSpotPhase.Elements;
 	HotSpotGameState curState = HotSpotGameState.Config;
 	GameObject[] individualElements, groups;
+																//unmasterItems is the copy of each of the phaseObjs depending on curPhase
 	List<ItemToBeMastered> phaseOneObjs, phaseTwoObjs, phaseThreeObjs, unmasteredItems;
 	int currentIndex;
 	string currentCorrectAnswer;
 	List<Image> currentlyActivatedImages;
 	bool hasAnsweredCorrect = false, masteryChecked = false;
+
+	//Keyboard members
+	private bool handleCardPress, firstPress, handleKeyboardSubmit, firstSubmit;
+	public InputField keyboardText;
+
+
 	void Awake () {
 		s_instance = this;
 	}	
@@ -31,9 +46,23 @@ public class HotSpotsGame : MonoBehaviour {
 			curState = HotSpotGameState.SetPhase;
 			break;
 
-			//set phase should be set at the beginning of each phase, so at the beginning and each time the unmasteredItem count is 0
+		case HotSpotGameState.ConfigKeyboard : 
+			ConfigKeyboard();
+			curState = HotSpotGameState.Display;
+			break;
+
+		case HotSpotGameState.ConfigGroups :
+			ConfigGroups();
+			curState = HotSpotGameState.Display;
+			break;
 		case HotSpotGameState.SetPhase :
 			SetPhase();
+			if (curPhase == HotSpotPhase.Typing){
+				curState = HotSpotGameState.ConfigKeyboard;
+			}
+			else if (curPhase == HotSpotPhase.Groups){
+				curState = HotSpotGameState.ConfigGroups;
+			}
 			curState = HotSpotGameState.Display;
 			break;
 
@@ -137,7 +166,7 @@ public class HotSpotsGame : MonoBehaviour {
 	}
 
 	void DisplayQuestion(){
-		currentCorrectAnswer = phaseOneObjs[currentIndex].itemGameObject.name; //correct answer is gameobject name at index in list of items
+		currentCorrectAnswer = unmasteredItems[currentIndex].itemGameObject.name; //correct answer is gameobject name at index in list of items
 		promptText.text = currentCorrectAnswer;
 		List<int> randIndexList = new List<int>(); //to avoid duplicates
 		currentlyActivatedImages = new List<Image> (); //to clear at end
@@ -176,7 +205,7 @@ public class HotSpotsGame : MonoBehaviour {
 		//TYPING
 			
 		case HotSpotPhase.Typing :
-			currentCorrectAnswer = phaseThreeObjs[currentIndex].itemGameObject.name;
+			currentCorrectAnswer = unmasteredItems[currentIndex].itemGameObject.name;
 			
 			
 			break;
@@ -184,7 +213,7 @@ public class HotSpotsGame : MonoBehaviour {
 		//GROUPS
 		
 		case HotSpotPhase.Groups :
-			currentCorrectAnswer = phaseTwoObjs[currentIndex].itemGameObject.name;
+			currentCorrectAnswer = unmasteredItems[currentIndex].itemGameObject.name;
 
 			break;
 		
@@ -192,6 +221,22 @@ public class HotSpotsGame : MonoBehaviour {
 
 		
 		}
+	}
+
+	void ConfigGroups () {
+		
+	}
+
+	void ConfigKeyboard () {
+		keyboardText.enabled = true;
+	}
+
+	public void KeyboardSubmitHandler() {
+		if (keyboardText.text.ToLower () == unmasteredItems [currentIndex].itemGameObject.name.ToLower()) {
+		
+		}
+		keyboardText.text = "";
+
 	}
 
 	public void SubmitAnswer (string answer) {
