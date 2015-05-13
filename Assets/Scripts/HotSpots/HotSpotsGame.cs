@@ -17,6 +17,7 @@ public enum HotSpotGameState {Config,
 
 public class HotSpotsGame : MonoBehaviour {
 
+	public Slider masteryMeter;
 	public Text promptText;
 	public static HotSpotsGame s_instance;
 	HotSpotPhase curPhase = HotSpotPhase.Elements;
@@ -28,7 +29,7 @@ public class HotSpotsGame : MonoBehaviour {
 	string currentCorrectAnswer;
 	List<Image> currentlyActivatedImages;
 	bool hasAnsweredCorrect = false, masteryChecked = false;
-
+	float totalTerms;
 	//Keyboard members
 	private bool handleCardPress, firstPress, handleKeyboardSubmit, firstSubmit;
 	public InputField keyboardText;
@@ -163,6 +164,8 @@ public class HotSpotsGame : MonoBehaviour {
 		List<ItemToBeMastered> tempList3 = new List<ItemToBeMastered>();
 		tempList3 = phaseThreeObjs.OrderBy(item => item.itemGameObject.name).ToList();
 		phaseThreeObjs = new List<ItemToBeMastered>(tempList3);
+
+		totalTerms = phaseOneObjs.Count + phaseTwoObjs.Count + phaseThreeObjs.Count;
 	}
 
 	void DisplayQuestion(){
@@ -254,10 +257,14 @@ public class HotSpotsGame : MonoBehaviour {
 		unmasteredItems [currentIndex].sequenceMastery += .5f;
 		ClearGUIObjects ();
 		hasAnsweredCorrect = true;
+		BackgroundFlash.s_instance.FadeGreen ();
 
 	}
 
-	void AnswerWrong(){}
+	void AnswerWrong(){
+		BackgroundFlash.s_instance.FadeRed ();
+
+	}
 
 	void ClearGUIObjects() {
 		foreach (Image x in currentlyActivatedImages) {
