@@ -138,8 +138,12 @@ public class HotSpotsGame : MonoBehaviour {
 		foreach (GameObject go in individualElements){
 			ItemToBeMastered item = new ItemToBeMastered(0f, go);
 			phaseOneObjs.Add(item);
+		}
+		foreach (GameObject go in elementsShorthand) {
+			ItemToBeMastered item = new ItemToBeMastered(0f, go);
 			phaseTwoObjs.Add(item);
 		}
+
 		foreach (GameObject go in groups){
 			ItemToBeMastered item = new ItemToBeMastered(0f, go);
 			phaseThreeObjs.Add(item);
@@ -162,6 +166,7 @@ public class HotSpotsGame : MonoBehaviour {
 	}
 
 	void DisplayQuestion(){
+		//TODO add prompts to these sections
 		currentCorrectAnswer = unmasteredItems[currentIndex].itemGameObject.name; //correct answer is gameobject name at index in list of items
 		promptText.text = currentCorrectAnswer;
 		List<int> randIndexList = new List<int>(); //to avoid duplicates
@@ -201,7 +206,7 @@ public class HotSpotsGame : MonoBehaviour {
 		//TYPING
 			
 		case HotSpotPhase.Typing :
-			currentCorrectAnswer = unmasteredItems[currentIndex].itemGameObject.name;
+			currentCorrectAnswer = unmasteredItems[currentIndex].itemGameObject.transform.GetChild(0).name;
 			
 			
 			break;
@@ -229,16 +234,16 @@ public class HotSpotsGame : MonoBehaviour {
 	}
 
 	public void KeyboardSubmitHandler() {
-		if (keyboardText.text.ToLower () == unmasteredItems [currentIndex].itemGameObject.name.ToLower()) {
-		
-		}
+		SubmitAnswer (keyboardText.text.ToLower ());
+			
+
 		keyboardText.text = "";
 
 	}
 
 	public void SubmitAnswer (string answer) {
 
-		if (answer == currentCorrectAnswer) {
+		if (answer.ToLower () == currentCorrectAnswer.ToLower()) {
 			AnswerCorrect();
 		}
 
@@ -259,21 +264,18 @@ public class HotSpotsGame : MonoBehaviour {
 			if (currentIndex >= unmasteredItems.Count){
 				break;
 			}
-//			else if (unmasteredItems.Count > currentIndex + 1) { //if we can check the next item in the list
-//				continue;
-//			} else {
-//				currentIndex = 0;
-//			}
 		}
+		IterateToNextItem ();
+		return false;	
+	}
 
+	void IterateToNextItem() {
 		if (currentIndex >= unmasteredItems.Count-1) {
 			currentIndex = 0; //loop around to beginning of list
 		}
 		else {
 			currentIndex++;
 		}
-		return false;
-		
 	}
 
 	void AdjustMastery (bool isCorrect) {
@@ -306,9 +308,13 @@ public class HotSpotsGame : MonoBehaviour {
 	}
 
 	void AnswerWrong(){
+		ClearGUIObjects ();
+
 		BackgroundFlash.s_instance.FadeRed ();
 		AdjustMastery (false);
-
+		IterateToNextItem ();
+		ClearGUIObjects();
+		curState = HotSpotGameState.Display;
 	}
 
 	void ClearGUIObjects() {
