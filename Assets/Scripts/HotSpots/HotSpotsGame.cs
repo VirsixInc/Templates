@@ -40,7 +40,7 @@ public class HotSpotsGame : MonoBehaviour {
 	}	
 
 	void Update () {
-		print (curState);
+		print (curPhase);
 		switch (curState) {
 		case HotSpotGameState.Config : 
 			ConfigGameData();
@@ -68,6 +68,7 @@ public class HotSpotsGame : MonoBehaviour {
 			break;
 
 		case HotSpotGameState.Display : 
+			print (unmasteredItems.Count);
 			DisplayQuestion();
 			curState = HotSpotGameState.Playing;
 			break;
@@ -79,10 +80,11 @@ public class HotSpotsGame : MonoBehaviour {
 
 			break;
 		case HotSpotGameState.CheckMastery :
-			print ("in check mastery");
 			//if CheckForM returns true, 
+
 			if (CheckForMastery()) {
 				if (curPhase!=HotSpotPhase.Groups){
+					print ("next phase");
 					curPhase++;
 					curState = HotSpotGameState.SetPhase;
 				}
@@ -100,29 +102,7 @@ public class HotSpotsGame : MonoBehaviour {
 
 
 
-	bool CheckForMastery() {
-		if (currentIndex >= unmasteredItems.Count)
-			currentIndex = 0; //loop around to beginning of list
-		while (unmasteredItems[currentIndex].sequenceMastery==1f && unmasteredItems.Count != 0) { //skip over completed 
-			completedTerms++;
-			unmasteredItems.Remove(unmasteredItems[currentIndex]);
-			if (unmasteredItems.Count > currentIndex+1) {
-				print ("currentIndex++");
-				currentIndex++;
-			}
-			else  {
-				print ("current Index = 0");
-				currentIndex = 0;
-			}
-		}
-		if (unmasteredItems.Count == 0) {
-			print(unmasteredItems.Count);
-			return true; //phase complete
-		} else {
-			print ("mastery return false");
-			return false;
-		}
-	}
+
 	void SetPhase() {
 		switch (curPhase) {
 		case HotSpotPhase.Elements :
@@ -194,7 +174,6 @@ public class HotSpotsGame : MonoBehaviour {
 			randIndexList.Remove(currentIndex);//remove that int so it cant be chosen again
 
 			if (unmasteredItems[currentIndex].sequenceMastery < 0.5f){
-				print ("level one difficulty");
 				for (int i = 0; i < 2; i++) { //choose 2 additional items to be displayed as wrong answers
 					int randomInt = Random.Range(0, randIndexList.Count);
 					currentlyActivatedImages.Add (phaseOneObjs[randIndexList[randomInt]].itemGameObject.GetComponent<Image>()); //add in random wrong answer
@@ -202,7 +181,6 @@ public class HotSpotsGame : MonoBehaviour {
 				}
 			}
 			else {
-				print ("level TWO difficulty");
 				for (int i = 0; i < 4; i++) { //choose 4 additional items to be dispayed as wrong answer
 					int randomInt = Random.Range(0, randIndexList.Count);
 					currentlyActivatedImages.Add (phaseOneObjs[randIndexList[randomInt]].itemGameObject.GetComponent<Image>()); //add in random wrong answer
@@ -266,6 +244,31 @@ public class HotSpotsGame : MonoBehaviour {
 
 	}
 
+	bool CheckForMastery() { //triggered when hasAnsweredCorrect is called
+		while (unmasteredItems[currentIndex].sequenceMastery==1f && unmasteredItems.Count != 0) { //skip over completed 
+			completedTerms++;
+			unmasteredItems.Remove (unmasteredItems [currentIndex]);
+			print ("REMOVE");
+			if (unmasteredItems.Count > currentIndex + 1) {
+				continue;
+			} else {
+				currentIndex = 0;
+			}
+		}
+		if (unmasteredItems.Count == 0) {
+			print ("return true");
+			return true; //phase complete
+		}
+		else if (currentIndex >= unmasteredItems.Count-1) {
+			currentIndex = 0; //loop around to beginning of list
+		}
+		else {
+			currentIndex++;
+		}
+		return false;
+		
+	}
+
 	void AdjustMastery (bool isCorrect) {
 		if (isCorrect) {
 			unmasteredItems [currentIndex].sequenceMastery += .5f;
@@ -285,10 +288,10 @@ public class HotSpotsGame : MonoBehaviour {
 
 	void AnswerCorrect(){
 		ClearGUIObjects ();
-		hasAnsweredCorrect = true;
 		BackgroundFlash.s_instance.FadeGreen ();
 		AdjustMastery (true);
-		currentIndex++;
+		hasAnsweredCorrect = true;
+
 
 
 	}
