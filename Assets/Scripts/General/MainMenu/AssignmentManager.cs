@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 
 public class AssignmentManager : MonoBehaviour {
-	public List<Assignment> completedAssignments, incompleteAssignments;
+	public List<GameObject> completedAssignments, incompleteAssignments;
 	public Assignment assignment;
 	public GameObject masteredHeader, assignmentsHeader;
 	public GameObject assignmentGUIPrefab;
@@ -27,6 +27,11 @@ public class AssignmentManager : MonoBehaviour {
 
 	*/
 
+
+	void Awake () {
+		s_instance = this;
+	}
+
 	void LoadAssignment() {
 		//	foldername.csv, foldername.json, foldername.spritesheet
 		// 
@@ -37,10 +42,14 @@ public class AssignmentManager : MonoBehaviour {
 	public void LoadAllAssignments(Assignment[] arrayOfAssignments){
 		s_instance = this;
 		foreach (Assignment assignment in arrayOfAssignments) {
-			if (assignment.isCompleted)
-				completedAssignments.Add(assignment); //this is currently being called when it should not
-			else
-				incompleteAssignments.Add(assignment);
+			if (assignment.isCompleted) {
+				completedAssignments.Add(assignment.associatedGUIObject); //this is currently being called when it should not
+				assignment.associatedGUIObject.transform.parent = assignmentsHeader.transform;
+			}
+			else {
+				incompleteAssignments.Add(assignment.associatedGUIObject);
+				assignment.associatedGUIObject.transform.parent = masteredHeader.transform;
+			}
 		}
 
 		//calculate upper bound based off amount of assignments
@@ -48,11 +57,11 @@ public class AssignmentManager : MonoBehaviour {
 			upperBound = AppManager.s_instance.userAssignments.Count * (prefabHeight + 2 * spaceBetweenAssignments + dividerHeight) / 2;
 		else if (incompleteAssignments.Count%2 != 0 || completedAssignments.Count%2 != 0)
 			upperBound = (AppManager.s_instance.userAssignments.Count + 2) * (prefabHeight + 2 * spaceBetweenAssignments + dividerHeight) / 2;
-		InstantiateTemplates ();
+		PlaceAssignments ();
 
 	}
 
-	void InstantiateTemplates() {
+	void PlaceAssignments() {
 		//sets layout of GUI assignment objects
 		Vector3 assignmentPosition;
 
@@ -66,11 +75,8 @@ public class AssignmentManager : MonoBehaviour {
 				assignmentPosition = new Vector3(rightPos, initPrefabYPos - (i - 1) * (spaceBetweenAssignments + prefabHeight), 0);
 			}
 
-			GameObject tempGUIPrefab = Instantiate(assignmentGUIPrefab) as GameObject;
-			tempGUIPrefab.transform.SetParent(GameObject.Find("scrollerHolder").transform);
-			tempGUIPrefab.transform.localScale = new Vector3(1,1,1); 
-			tempGUIPrefab.transform.localPosition = assignmentPosition;
-			tempGUIPrefab.GetComponent<Assignment>().SetAssignment(incompleteAssignments[i]);
+			incompleteAssignments[i].transform.localScale = new Vector3(1,1,1); 
+			incompleteAssignments[i].transform.localPosition = assignmentPosition;
 		}
 
 		float completedAssignmentOffset;
@@ -82,16 +88,13 @@ public class AssignmentManager : MonoBehaviour {
 		for (int i = 0; i < completedAssignments.Count; i++) {
 			//if i is even, put it in left column
 			if (i%2 == 0){
-				assignmentPosition = new Vector3(leftPos, initPrefabYPos - i * (spaceBetweenAssignments + prefabHeight) + completedAssignmentOffset,0);
+				assignmentPosition = new Vector3(leftPos, initPrefabYPos - i * (spaceBetweenAssignments + prefabHeight),0);
 			}
 			else{
-				assignmentPosition = new Vector3(rightPos, initPrefabYPos - (i - 1) * (spaceBetweenAssignments + prefabHeight) + completedAssignmentOffset); //i -1 because we want it to be next to the prefab on the left not below
+				assignmentPosition = new Vector3(rightPos, initPrefabYPos - (i - 1) * (spaceBetweenAssignments + prefabHeight)); //i -1 because we want it to be next to the prefab on the left not below
 			}
-			GameObject tempGUIPrefab = Instantiate(assignmentGUIPrefab) as GameObject;
-			tempGUIPrefab.transform.SetParent(GameObject.Find("scrollerHolder").transform, false);
-			tempGUIPrefab.transform.localScale = new Vector3(1,1,1); 
-			tempGUIPrefab.transform.localPosition = assignmentPosition; //local scale selects canvas space instead of w space
-			tempGUIPrefab.GetComponent<Assignment>().SetAssignment(completedAssignments[i]);
+			completedAssignments[i].transform.localScale = new Vector3(1,1,1); 
+			completedAssignments[i].transform.localPosition = assignmentPosition; //local scale selects canvas space instead of w space
 		}
 
 		//set divider position for the second 

@@ -23,6 +23,7 @@ public class Assignment {
 	public int version = 0;
 	public bool isCompleted = false;
 	public int month = 11, year = 1111, day = 11;
+	public GameObject associatedGUIObject;
 
 	public void init() {
 		day = int.Parse (dueDate.Substring (0, 2));
@@ -40,6 +41,8 @@ public class Assignment {
 		templateType = newAssignment.templateType;
 		version = newAssignment.version;
 		isCompleted = newAssignment.isCompleted;
+		associatedGUIObject = newAssignment.associatedGUIObject;
+
 	}
 }
 
