@@ -30,17 +30,20 @@ public class AssignmentManager : MonoBehaviour {
 	
 	// Use this for initialization
 	public void LoadAllAssignments(List<Assignment> arrayOfAssignments){
-		s_instance = this;
 
 		//parse associatedGameObjects into either mastered or unmastered
-		foreach (Assignment assignment in arrayOfAssignments) {
-			if (assignment.isCompleted) {
-				completedAssignments.Add(assignment.associatedGUIObject);
-				assignment.associatedGUIObject.transform.parent = unmasteredHeader.transform;
+		for (int i = 0; i < arrayOfAssignments.Count; i++) {
+			arrayOfAssignments[i].associatedGUIObject.transform.parent = masteredHeader.transform;
+			arrayOfAssignments[i].associatedGUIObject.GetComponent<AssignmentGUI>().title.text = arrayOfAssignments[i].assignmentTitle;
+			arrayOfAssignments[i].associatedGUIObject.GetComponent<AssignmentGUI>().assignmentIndex = i;
+
+			if (arrayOfAssignments[i].isCompleted) {
+				completedAssignments.Add(arrayOfAssignments[i].associatedGUIObject);
 			}
 			else {
-				incompleteAssignments.Add(assignment.associatedGUIObject);
-				assignment.associatedGUIObject.transform.parent = masteredHeader.transform;
+				incompleteAssignments.Add(arrayOfAssignments[i].associatedGUIObject);
+
+
 			}
 		}
 		//calculate upper bound based off amount of assignments
