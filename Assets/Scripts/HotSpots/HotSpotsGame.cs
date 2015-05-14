@@ -20,7 +20,7 @@ public class HotSpotsGame : MonoBehaviour {
 	public Slider masteryMeter;
 	public Text promptText;
 	public static HotSpotsGame s_instance;
-	HotSpotPhase curPhase = HotSpotPhase.Typing;
+	HotSpotPhase curPhase = HotSpotPhase.Elements;
 	HotSpotGameState curState = HotSpotGameState.Config;
 	GameObject[] individualElements, groups, elementsShorthand;
 																			//unmasterItems is the copy of each of the phaseObjs depending on curPhase
@@ -207,15 +207,12 @@ public class HotSpotsGame : MonoBehaviour {
 			
 		case HotSpotPhase.Typing :
 			currentCorrectAnswer = unmasteredItems[currentIndex].itemGameObject.transform.GetChild(0).name;
-			
-			
 			break;
 
 		//GROUPS
 		
 		case HotSpotPhase.Groups :
-			currentCorrectAnswer = unmasteredItems[currentIndex].itemGameObject.name;
-
+	
 			break;
 		
 		
@@ -302,14 +299,10 @@ public class HotSpotsGame : MonoBehaviour {
 		AdjustMastery (true);
 		print ("checkmastery from bool");
 		hasAnsweredCorrect = true;
-
-
-
 	}
 
 	void AnswerWrong(){
 		ClearGUIObjects ();
-
 		BackgroundFlash.s_instance.FadeRed ();
 		AdjustMastery (false);
 		IterateToNextItem ();

@@ -5,8 +5,8 @@ using UnityEngine.UI;
 
 
 public class AssignmentManager : MonoBehaviour {
-	public List<GameObject> completedAssignments, incompleteAssignments;
-
+	public List<Assignment> completedAssignments, incompleteAssignments;
+	public Assignment assignment;
 	public GameObject masteredHeader, assignmentsHeader;
 	public GameObject assignmentGUIPrefab;
 	float prefabHeight = 200f, initPrefabYPos = -50f, leftPos = -300f, rightPos = 300f, dividerHeight = 225f, spaceBetweenAssignments = 100f;
@@ -34,12 +34,10 @@ public class AssignmentManager : MonoBehaviour {
 
 
 	// Use this for initialization
-	void Start () {
+	public void LoadAllAssignments(Assignment[] arrayOfAssignments){
 		s_instance = this;
-		masteredHeader = GameObject.Find ("masteredHeader");
-		assignmentsHeader = GameObject.Find ("assignmentsHeader");
-		foreach (GameObject assignment in AppManager.s_instance.userAssignments) {
-			if (assignment.GetComponent<Assignment>().isCompleted)
+		foreach (Assignment assignment in arrayOfAssignments) {
+			if (assignment.isCompleted)
 				completedAssignments.Add(assignment); //this is currently being called when it should not
 			else
 				incompleteAssignments.Add(assignment);
@@ -68,11 +66,11 @@ public class AssignmentManager : MonoBehaviour {
 				assignmentPosition = new Vector3(rightPos, initPrefabYPos - (i - 1) * (spaceBetweenAssignments + prefabHeight), 0);
 			}
 
-			GameObject tempGUIPrefab = Instantiate(incompleteAssignments[i]) as GameObject;
+			GameObject tempGUIPrefab = Instantiate(assignmentGUIPrefab) as GameObject;
 			tempGUIPrefab.transform.SetParent(GameObject.Find("scrollerHolder").transform);
 			tempGUIPrefab.transform.localScale = new Vector3(1,1,1); 
 			tempGUIPrefab.transform.localPosition = assignmentPosition;
-//			tempGUIPrefab.GetComponent<Assignment>().SetAssignment(incompleteAssignments[i]);
+			tempGUIPrefab.GetComponent<Assignment>().SetAssignment(incompleteAssignments[i]);
 		}
 
 		float completedAssignmentOffset;
@@ -89,11 +87,11 @@ public class AssignmentManager : MonoBehaviour {
 			else{
 				assignmentPosition = new Vector3(rightPos, initPrefabYPos - (i - 1) * (spaceBetweenAssignments + prefabHeight) + completedAssignmentOffset); //i -1 because we want it to be next to the prefab on the left not below
 			}
-			GameObject tempGUIPrefab = Instantiate(completedAssignments[i]) as GameObject;
+			GameObject tempGUIPrefab = Instantiate(assignmentGUIPrefab) as GameObject;
 			tempGUIPrefab.transform.SetParent(GameObject.Find("scrollerHolder").transform, false);
 			tempGUIPrefab.transform.localScale = new Vector3(1,1,1); 
 			tempGUIPrefab.transform.localPosition = assignmentPosition; //local scale selects canvas space instead of w space
-//			tempGUIPrefab.GetComponent<Assignment>().SetAssignment(completedAssignments[i]);
+			tempGUIPrefab.GetComponent<Assignment>().SetAssignment(completedAssignments[i]);
 		}
 
 		//set divider position for the second 
