@@ -21,6 +21,7 @@ public class Assignment {
 	public int version = 0;
 	public bool isCompleted = false;
 	public int month = 11, year = 1111, day = 11;
+<<<<<<< HEAD
   public Assignment(string assignTitle, string templateType){
     assignmentType = getAssign(templateType);
     assignmentTitle = assignTitle;
@@ -45,12 +46,32 @@ public class Assignment {
         break;
     }
   }
+=======
+	public GameObject associatedGUIObject;
+>>>>>>> 32cb6b9202f89af0b6509524717303bd99dbd563
 
 	public void init() {
 		day = int.Parse (dueDate.Substring (0, 2));
 		month = int.Parse (dueDate.Substring (2,2));
 		year = int.Parse (dueDate.Substring (4, 4));
 	}
+<<<<<<< HEAD
+=======
+	
+	public void SetAssignment(Assignment newAssignment){
+		timeToComplete = newAssignment.timeToComplete;
+		dateCompleted = newAssignment.dateCompleted;
+		dueDate = newAssignment.dueDate;
+		masteryLevel = newAssignment.masteryLevel;
+		URL = newAssignment.URL;
+		assignmentTitle = newAssignment.assignmentTitle;
+		templateType = newAssignment.templateType;
+		version = newAssignment.version;
+		isCompleted = newAssignment.isCompleted;
+		associatedGUIObject = newAssignment.associatedGUIObject;
+
+	}
+>>>>>>> 32cb6b9202f89af0b6509524717303bd99dbd563
 }
 
 public class AppManager : MonoBehaviour {
