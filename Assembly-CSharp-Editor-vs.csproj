@@ -96,6 +96,12 @@
  <Reference Include="UnityEditor.OSXStandalone.Extensions">
  <HintPath>/Applications/Unity/Unity.app/Contents/PlaybackEngines/MacStandaloneSupport/UnityEditor.OSXStandalone.Extensions.dll</HintPath>
  </Reference>
+<<<<<<< HEAD
+=======
+ <Reference Include="JMOAssets">
+ <HintPath>/Users/Pablo/Templates/Assets/JMO Assets/Editor/JMOAssets.dll</HintPath>
+ </Reference>
+>>>>>>> 55cfedd5fdd97c2c07af7e7ab8a63924ba8539a3
  <Reference Include="UnityEditor.iOS.Extensions.Xcode">
  <HintPath>/Applications/Unity/Unity.app/Contents/PlaybackEngines/iossupport/UnityEditor.iOS.Extensions.Xcode.dll</HintPath>
  </Reference>

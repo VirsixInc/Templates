@@ -48,9 +48,24 @@
   <ItemGroup>
      <Compile Include="Assets\Art\StandAlones\CircleTimer\BindCircleForImage.cs" />
      <Compile Include="Assets\Art\StandAlones\CircleTimer\BindCircleForShader.cs" />
+<<<<<<< HEAD
      <Compile Include="Assets\HotSpotClick.cs" />
      <Compile Include="Assets\IgnoreRaycast.cs" />
      <Compile Include="Assets\JMO Assets\Cartoon FX\Demo\Assets\CFX2_Demo.cs" />
+=======
+<<<<<<< HEAD
+     <Compile Include="Assets\HotSpotClick.cs" />
+     <Compile Include="Assets\IgnoreRaycast.cs" />
+=======
+<<<<<<< HEAD
+     <Compile Include="Assets\JMO Assets\Cartoon FX\Demo\Assets\CFX2_Demo.cs" />
+=======
+<<<<<<< HEAD
+     <Compile Include="Assets\HotSpotClick.cs" />
+=======
+>>>>>>> 42b3f4f54e1e60569e34111c350a169e16d3f061
+>>>>>>> db9a51371886627d7fabf1840cceff3eba4715be
+>>>>>>> 55cfedd5fdd97c2c07af7e7ab8a63924ba8539a3
      <Compile Include="Assets\JMO Assets\Cartoon FX\Demo\Assets\CFX_AutoStopLoopedEffect.cs" />
      <Compile Include="Assets\JMO Assets\Cartoon FX\Demo\Assets\CFX_Demo.cs" />
      <Compile Include="Assets\JMO Assets\Cartoon FX\Demo\Assets\CFX_Demo_New.cs" />

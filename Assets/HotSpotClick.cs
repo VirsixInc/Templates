@@ -19,7 +19,6 @@ public class HotSpotClick : MonoBehaviour {
 	
 	//HotSpotsGame.s_instance.SubmitAnswer(gameObject.name)
 	void CallGameManager () {
-		print ("ca;;ed");
 		HotSpotsGame.s_instance.SubmitAnswer(gameObject.name);
 	}
 }
