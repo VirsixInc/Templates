@@ -9,12 +9,52 @@ using UnityEngine.UI;
 
 public enum AppState {Initialize, GetURLs, DownloadAssignments, WaitForDownloads, ParseJSON, AssignmentMenu, Playing};
 
+public enum AssignmentType {Cards, Buckets, Sequencing, HotSpots};
+
+public class Assignment {
+	public AssignmentType assignmentType;
+	public float timeToComplete = 0f;
+	public string dateCompleted ="";
+	public string dueDate = "11111111";
+	public float masteryLevel = 0f;
+	public string URL = "";
+	public string assignmentTitle = "";
+	public string templateType = "";
+	public int version = 0;
+	public bool isCompleted = false;
+	public int month = 11, year = 1111, day = 11;
+//	public Text descriptionText, typeText;
+
+	// Use this for initialization
+	void Start () {
+		day = int.Parse (dueDate.Substring (0, 2));
+		month = int.Parse (dueDate.Substring (2,2));
+		year = int.Parse (dueDate.Substring (4, 4));
+//		typeText = transform.GetChild (2).GetComponent<Text> ();
+//		descriptionText = transform.GetChild (3).GetComponent<Text> ();
+	}
+	
+	// Update is called once per frame
+	public void SetAssignment(Assignment newAssignment){
+		timeToComplete = newAssignment.timeToComplete;
+		dateCompleted = newAssignment.dateCompleted;
+		dueDate = newAssignment.dueDate;
+		masteryLevel = newAssignment.masteryLevel;
+		URL = newAssignment.URL;
+		assignmentTitle = newAssignment.assignmentTitle;
+		templateType = newAssignment.templateType;
+		version = newAssignment.version;
+		isCompleted = newAssignment.isCompleted;
+//		descriptionText.text = 
+	}
+}
+
 public class AppManager : MonoBehaviour {
 	public AppState currentAppState = AppState.Initialize;
 	public static AppManager s_instance;
 	public Assignment currentAssignment;
 	public List<GameObject> userAssignments; //the main list of assignments which can be updated and sent to and fro the server
-	string serverURL = "http://192.168.1.8:8080/client", folderName;
+	string serverURL = "http://localhost:8080/client", folderName;
   string username = "Alphonse";
   string password = "blargh";
 	string[] assignmentURLs;
@@ -42,7 +82,6 @@ public class AppManager : MonoBehaviour {
         break;
       case AppState.DownloadAssignments :
         if (areURLsUpdated){
-//          DownloadNewAssignments();
           currentAppState = AppState.WaitForDownloads;
         }
         break;
@@ -80,15 +119,6 @@ public class AppManager : MonoBehaviour {
 	void CheckForNewAssignments() {
 		for (int i = 0; i < assignmentURLs.Length; i++) {
 			bool downloadRequired = true;
-			//TODO rewrite this to check local database
-
-//			foreach (GameObject x in userAssignments) { //check to see if URL has already been downloaded, could refactor to remove items from usrAss list
-//				if (assignmentURLs[i] == x.GetComponent<Assignment>().URL){
-//					downloadRequired = false;
-//					break;
-//				}
-//			}
-
 			if (downloadRequired) {
 				assignmentURLsToDownload.Add(assignmentURLs[i]); //add URL to list of URLs that need to be downloaded
 			}
@@ -110,15 +140,10 @@ public class AppManager : MonoBehaviour {
 		yield return www;
     JSONObject allAssignments = ParseToJSON(www.text);
     int assignmentAmt = countStringOccurrences(www.text, "assignmentName");
-    print(assignmentAmt);
     for(int i = 0; i<assignmentAmt;i++){
       string thisAssign = (string)(allAssignments[i].GetField("assignmentName").ToString());
       StartCoroutine(saveAssignmentInfo(thisAssign));
     }
-
-		//StartCoroutine(saveAssignmentInfo(serverURL));
-//		assignmentURLs = www.text.Split ('\n');
-//		areURLsUpdated = true;
 	}
 
   IEnumerator saveAssignment(string assignmentName){
@@ -127,14 +152,24 @@ public class AppManager : MonoBehaviour {
     yield return www;
     JSONObject thisAssignmentInfo = ParseToJSON(www.text);
     string filePath = Application.persistentDataPath + assignmentName + ".data";
-		if(File.Exists(filePath)) {
-      print("FILE EXISTS");
-		}else{
-      FileStream file = File.Create (filePath);
-      BinaryFormatter bf = new BinaryFormatter();
-      bf.Serialize (file, www.text);
-      file.Close ();
+    List<string> assignmentContent = new List<string>();
+    foreach(JSONObject allIndArgs in thisAssignmentInfo.list){
+      foreach(JSONObject indArg in allIndArgs.list){
+        if(indArg.Count>0){
+          string[] argToAdd = new string[indArg.Count];
+          int iterator = 0;
+          foreach(JSONObject arg in indArg.list){
+            argToAdd[iterator] = arg.ToString();
+            iterator++;
+          }
+          string concatString = String.Join(",",argToAdd);
+          concatString = concatString.Replace("\"", "");
+          print(concatString);
+          assignmentContent.Add(concatString);
+        }
+      }
     }
+    File.WriteAllLines(filePath, assignmentContent.ToArray());
   }
 	IEnumerator saveAssignmentInfo(string assignmentName){
     assignmentName = assignmentName.Replace("\"", "");
