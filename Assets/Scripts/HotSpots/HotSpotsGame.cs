@@ -23,7 +23,7 @@ public class HotSpotsGame : MonoBehaviour {
 	HotSpotPhase curPhase = HotSpotPhase.Elements;
 	HotSpotGameState curState = HotSpotGameState.Config;
 	GameObject[] individualElements, groups;
-																//unmasterItems is the copy of each of the phaseObjs depending on curPhase
+																			//unmasterItems is the copy of each of the phaseObjs depending on curPhase
 	public List<ItemToBeMastered> phaseOneObjs, phaseTwoObjs, phaseThreeObjs, unmasteredItems;
 	int currentIndex;
 	string currentCorrectAnswer;
@@ -248,18 +248,21 @@ public class HotSpotsGame : MonoBehaviour {
 		while (unmasteredItems[currentIndex].sequenceMastery==1f && unmasteredItems.Count != 0) { //skip over completed 
 			completedTerms++;
 			unmasteredItems.Remove (unmasteredItems [currentIndex]);
-			print ("REMOVE");
-			if (unmasteredItems.Count > currentIndex + 1) {
-				continue;
-			} else {
-				currentIndex = 0;
+			if (unmasteredItems.Count == 0) {
+				print ("return true");
+				return true; //phase complete
 			}
+			if (currentIndex >= unmasteredItems.Count){
+				break;
+			}
+//			else if (unmasteredItems.Count > currentIndex + 1) { //if we can check the next item in the list
+//				continue;
+//			} else {
+//				currentIndex = 0;
+//			}
 		}
-		if (unmasteredItems.Count == 0) {
-			print ("return true");
-			return true; //phase complete
-		}
-		else if (currentIndex >= unmasteredItems.Count-1) {
+
+		if (currentIndex >= unmasteredItems.Count-1) {
 			currentIndex = 0; //loop around to beginning of list
 		}
 		else {
@@ -284,12 +287,14 @@ public class HotSpotsGame : MonoBehaviour {
 		totalMastery += completedTerms;
 
 		masteryMeter.value = totalMastery/totalTerms;
+		print ("mastery added");
 	}
 
 	void AnswerCorrect(){
 		ClearGUIObjects ();
 		BackgroundFlash.s_instance.FadeGreen ();
 		AdjustMastery (true);
+		print ("checkmastery from bool");
 		hasAnsweredCorrect = true;
 
 
