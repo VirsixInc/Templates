@@ -1,12 +1,25 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.EventSystems;
 
 public class AssignmentStartButton : MonoBehaviour {
 
+	EventTrigger thisEventTrigger;
+	EventTrigger.Entry entry = new EventTrigger.Entry();
+	PointerEventData eventData;
+	
+	// Use this for initialization
+	void Start () {
+		thisEventTrigger = GetComponent<EventTrigger>();
+		entry.eventID = EventTriggerType.PointerDown;
+		entry.callback.AddListener( (eventData) => {OnClick(); } );
+		thisEventTrigger.delegates.Add(entry);
+	}
+
 	public void OnClick() {
 		SoundManager.s_instance.PlaySound (SoundManager.s_instance.m_start);
+		AppManager.s_instance.ClickHandler(transform.parent.gameObject.GetComponent<AssignmentGUI>().assignmentIndex);
 		//AppManager.s_instance.currentAssignment = transform.parent.GetComponent<Assignment> ();
-		AppManager.s_instance.currentAppState = AppState.Playing;
-		Application.LoadLevel (transform.parent.GetComponent<Assignment> ().assignmentTitle); //in the future this will be level type and then it will auto load the list
+//		AppManager.s_instance.currentAppState = AppState.Playing;
 	}
 }

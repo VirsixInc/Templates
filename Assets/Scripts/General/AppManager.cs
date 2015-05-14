@@ -172,4 +172,8 @@ public class AppManager : MonoBehaviour {
 		return newJSONObject;
 	}
 
+	public void ClickHandler (int index) {
+
+	}
+
 }

@@ -27,7 +27,6 @@ public class AssignmentManager : MonoBehaviour {
 	void Awake () {
 		s_instance = this;
 	}
-	
 	// Use this for initialization
 	public void LoadAllAssignments(List<Assignment> arrayOfAssignments){
 
@@ -42,8 +41,6 @@ public class AssignmentManager : MonoBehaviour {
 			}
 			else {
 				incompleteAssignments.Add(arrayOfAssignments[i].associatedGUIObject);
-
-
 			}
 		}
 		//calculate upper bound based off amount of assignments
@@ -52,7 +49,6 @@ public class AssignmentManager : MonoBehaviour {
 		else if (incompleteAssignments.Count%2 != 0 || completedAssignments.Count%2 != 0)
 			upperBound = (AppManager.s_instance.userAssignments.Count + 2) * (prefabHeight + 2 * spaceBetweenAssignments + dividerHeight) / 2;
 		PlaceAssignments ();
-
 	}
 
 	void PlaceAssignments() {
@@ -80,6 +76,8 @@ public class AssignmentManager : MonoBehaviour {
 			}
 		}
 
+		//Places headers accordingly
+		unmasteredHeader.transform.localPosition = new Vector3 (0, initPrefabYPos + 350f, 0);
 		float completedAssignmentOffset;
 		if (incompleteAssignments.Count % 2 == 0)
 			completedAssignmentOffset = -incompleteAssignments.Count * (spaceBetweenAssignments + prefabHeight) - dividerHeight;
@@ -91,7 +89,6 @@ public class AssignmentManager : MonoBehaviour {
 			masteredHeader.transform.localPosition = new Vector3 (0, completedAssignmentOffset + 125, 0);
 		else
 			masteredHeader.gameObject.SetActive (false);
-		unmasteredHeader.transform.localPosition = new Vector3 (0, initPrefabYPos + 350f, 0);
 	}
 
 }
