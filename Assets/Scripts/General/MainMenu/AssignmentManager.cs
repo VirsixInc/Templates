@@ -65,17 +65,6 @@ public class AssignmentManager : MonoBehaviour {
 			else{
 				assignmentPosition = new Vector3(rightPos, initPrefabYPos - (i - 1) * (spaceBetweenAssignments + prefabHeight), 0);
 			}
-
-<<<<<<< HEAD
-			GameObject tempGUIPrefab = Instantiate(assignmentGUIPrefab) as GameObject;
-			tempGUIPrefab.transform.SetParent(GameObject.Find("scrollerHolder").transform);
-			tempGUIPrefab.transform.localScale = new Vector3(1,1,1); 
-			tempGUIPrefab.transform.localPosition = assignmentPosition;
-			//tempGUIPrefab.GetComponent<Assignment>().SetAssignment(incompleteAssignments[i]);
-=======
-			incompleteAssignments[i].transform.localScale = new Vector3(1,1,1); 
-			incompleteAssignments[i].transform.localPosition = assignmentPosition;
->>>>>>> 32cb6b9202f89af0b6509524717303bd99dbd563
 		}
 
 		for (int i = 0; i < completedAssignments.Count; i++) {
@@ -86,16 +75,6 @@ public class AssignmentManager : MonoBehaviour {
 			else{
 				assignmentPosition = new Vector3(rightPos, initPrefabYPos - (i - 1) * (spaceBetweenAssignments + prefabHeight)); //i -1 because we want it to be next to the prefab on the left not below
 			}
-<<<<<<< HEAD
-			GameObject tempGUIPrefab = Instantiate(assignmentGUIPrefab) as GameObject;
-			tempGUIPrefab.transform.SetParent(GameObject.Find("scrollerHolder").transform, false);
-			tempGUIPrefab.transform.localScale = new Vector3(1,1,1); 
-			tempGUIPrefab.transform.localPosition = assignmentPosition; //local scale selects canvas space instead of w space
-			//tempGUIPrefab.GetComponent<Assignment>().SetAssignment(completedAssignments[i]);
-=======
-			completedAssignments[i].transform.localScale = new Vector3(1,1,1); 
-			completedAssignments[i].transform.localPosition = assignmentPosition; //local scale selects canvas space instead of w space
->>>>>>> 32cb6b9202f89af0b6509524717303bd99dbd563
 		}
 
 		float completedAssignmentOffset;
