@@ -172,6 +172,7 @@ public class AppManager : MonoBehaviour {
     File.WriteAllLines(filePath, assignmentContent.ToArray());
   }
 	IEnumerator saveAssignmentInfo(string assignmentName){
+    print("here");
     assignmentName = assignmentName.Replace("\"", "");
 		WWW www = new WWW(serverURL + "/pullAssignmentInfo?assign=" + assignmentName);
 		yield return www;
