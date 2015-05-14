@@ -22,7 +22,7 @@ public class HotSpotsGame : MonoBehaviour {
 	public static HotSpotsGame s_instance;
 	HotSpotPhase curPhase = HotSpotPhase.Typing;
 	HotSpotGameState curState = HotSpotGameState.Config;
-	GameObject[] individualElements, groups;
+	GameObject[] individualElements, groups, elementsShorthand;
 																			//unmasterItems is the copy of each of the phaseObjs depending on curPhase
 	public List<ItemToBeMastered> phaseOneObjs, phaseTwoObjs, phaseThreeObjs, unmasteredItems;
 	int currentIndex;
@@ -133,6 +133,7 @@ public class HotSpotsGame : MonoBehaviour {
 		phaseThreeObjs = new List<ItemToBeMastered> ();
 		unmasteredItems = new List<ItemToBeMastered> ();
 		individualElements = GameObject.FindGameObjectsWithTag("elements");
+		elementsShorthand = GameObject.FindGameObjectsWithTag("elementShort");
 		groups = GameObject.FindGameObjectsWithTag("groups");
 		foreach (GameObject go in individualElements){
 			ItemToBeMastered item = new ItemToBeMastered(0f, go);
