@@ -20,7 +20,7 @@ public class HotSpotsGame : MonoBehaviour {
 	public Slider masteryMeter;
 	public Text promptText;
 	public static HotSpotsGame s_instance;
-	HotSpotPhase curPhase = HotSpotPhase.Elements;
+	HotSpotPhase curPhase = HotSpotPhase.Typing;
 	HotSpotGameState curState = HotSpotGameState.Config;
 	GameObject[] individualElements, groups;
 																			//unmasterItems is the copy of each of the phaseObjs depending on curPhase
@@ -41,20 +41,11 @@ public class HotSpotsGame : MonoBehaviour {
 
 	void Update () {
 		print (curPhase);
+		print (curState);
 		switch (curState) {
 		case HotSpotGameState.Config : 
 			ConfigGameData();
 			curState = HotSpotGameState.SetPhase;
-			break;
-
-		case HotSpotGameState.ConfigKeyboard : 
-			ConfigKeyboard();
-			curState = HotSpotGameState.Display;
-			break;
-
-		case HotSpotGameState.ConfigGroups :
-			ConfigGroups();
-			curState = HotSpotGameState.Display;
 			break;
 		case HotSpotGameState.SetPhase :
 			SetPhase();
@@ -64,6 +55,17 @@ public class HotSpotsGame : MonoBehaviour {
 			else if (curPhase == HotSpotPhase.Groups){
 				curState = HotSpotGameState.ConfigGroups;
 			}
+			else {
+				curState = HotSpotGameState.Display;
+			}
+			break;
+
+		case HotSpotGameState.ConfigKeyboard : 
+			ConfigKeyboard();
+			curState = HotSpotGameState.Display;
+			break;
+		case HotSpotGameState.ConfigGroups :
+			ConfigGroups();
 			curState = HotSpotGameState.Display;
 			break;
 
@@ -221,7 +223,8 @@ public class HotSpotsGame : MonoBehaviour {
 	}
 
 	void ConfigKeyboard () {
-		keyboardText.enabled = true;
+		print ("SET KEYBOARD");
+		keyboardText.gameObject.SetActive (true);
 	}
 
 	public void KeyboardSubmitHandler() {
