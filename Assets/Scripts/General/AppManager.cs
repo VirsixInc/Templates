@@ -7,7 +7,7 @@ using System;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine.UI;
 
-public enum AppState {Initialize, GetURLs, DownloadAssignments, WaitForDownloads, ParseJSON, AssignmentMenu, Playing};
+public enum AppState {Initialize, GetURLs, DownloadAssignments, MenuConfig, AssignmentMenu, Playing};
 
 public enum AssignmentType {Cards, Buckets, Sequencing, HotSpots};
 
@@ -23,18 +23,13 @@ public class Assignment {
 	public int version = 0;
 	public bool isCompleted = false;
 	public int month = 11, year = 1111, day = 11;
-//	public Text descriptionText, typeText;
 
-	// Use this for initialization
-	void Start () {
+	public void init() {
 		day = int.Parse (dueDate.Substring (0, 2));
 		month = int.Parse (dueDate.Substring (2,2));
 		year = int.Parse (dueDate.Substring (4, 4));
-//		typeText = transform.GetChild (2).GetComponent<Text> ();
-//		descriptionText = transform.GetChild (3).GetComponent<Text> ();
 	}
 	
-	// Update is called once per frame
 	public void SetAssignment(Assignment newAssignment){
 		timeToComplete = newAssignment.timeToComplete;
 		dateCompleted = newAssignment.dateCompleted;
@@ -45,7 +40,6 @@ public class Assignment {
 		templateType = newAssignment.templateType;
 		version = newAssignment.version;
 		isCompleted = newAssignment.isCompleted;
-//		descriptionText.text = 
 	}
 }
 
@@ -59,9 +53,11 @@ public class AppManager : MonoBehaviour {
   string password = "blargh";
 	string[] assignmentURLs;
 	List<string> assignmentURLsToDownload;
-	bool areURLsUpdated;
-	bool isAssignmentDataUpdated; //all assignment class instances created and populated
 	int assignmentsDownloaded = 0;
+
+  bool urlsDownloaded;
+
+  int assignsLoaded = 0, totalAssigns;
 
 	void Awake() {
 
@@ -73,56 +69,25 @@ public class AppManager : MonoBehaviour {
 	void Update () {
 		switch (currentAppState) {
       case AppState.Initialize :
-        areURLsUpdated = false;
+        StartCoroutine (DownloadListOfURLs());
         currentAppState = AppState.GetURLs;
         break;
       case AppState.GetURLs :
-        StartCoroutine (DownloadListOfURLs());
-        currentAppState = AppState.DownloadAssignments;
-        break;
-      case AppState.DownloadAssignments :
-        if (areURLsUpdated){
-          currentAppState = AppState.WaitForDownloads;
+        if(urlsDownloaded){
+          currentAppState = AppState.DownloadAssignments;
         }
         break;
-      case AppState.WaitForDownloads :
-        if (assignmentsDownloaded == assignmentURLsToDownload.Count){
+      case AppState.DownloadAssignments :
+        if(assignsLoaded == totalAssigns){
           currentAppState = AppState.AssignmentMenu;
         }
         break;
-      
+      case AppState.MenuConfig:
+        break;
       case AppState.AssignmentMenu :
-
         break;
     }
-	}
-
-
-
-//	public void SortAssignments(){ //by due date and completion
-//
-//		for (int i = 0; i < userAssignments.Count; i++) {
-//  
-//			List<Assignment> tempList = new List<Assignment>();
-//
-//			tempList = userAssignments.OrderBy(ass => ass.year)
-//				.ThenBy(ass => ass.month)
-//					.ThenBy(ass => ass.day)
-//						.ThenBy(ass => ass.isCompleted)
-//							.Reverse ().ToList(); //reverse puts things in proper order 
-//
-//			userAssignments = new List<Assignment>(tempList);
-//		}
-//
-//	}
-
-	void CheckForNewAssignments() {
-		for (int i = 0; i < assignmentURLs.Length; i++) {
-			bool downloadRequired = true;
-			if (downloadRequired) {
-				assignmentURLsToDownload.Add(assignmentURLs[i]); //add URL to list of URLs that need to be downloaded
-			}
-		}
+    print(currentAppState);
 	}
 
   public int countStringOccurrences(string text, string pattern){
@@ -135,15 +100,18 @@ public class AppManager : MonoBehaviour {
     }
     return count;
   }
+
 	IEnumerator DownloadListOfURLs(){
 		WWW www = new WWW(serverURL + "/pullData?username=" + username + "&password=" + password);
+    urlsDownloaded = false;
 		yield return www;
     JSONObject allAssignments = ParseToJSON(www.text);
-    int assignmentAmt = countStringOccurrences(www.text, "assignmentName");
-    for(int i = 0; i<assignmentAmt;i++){
+    totalAssigns = allAssignments.Count;
+    for(int i = 0; i<totalAssigns;i++){
       string thisAssign = (string)(allAssignments[i].GetField("assignmentName").ToString());
       StartCoroutine(saveAssignmentInfo(thisAssign));
     }
+    urlsDownloaded = true;
 	}
 
   IEnumerator saveAssignment(string assignmentName){
@@ -164,15 +132,14 @@ public class AppManager : MonoBehaviour {
           }
           string concatString = String.Join(",",argToAdd);
           concatString = concatString.Replace("\"", "");
-          print(concatString);
           assignmentContent.Add(concatString);
         }
       }
     }
+    assignsLoaded++;
     File.WriteAllLines(filePath, assignmentContent.ToArray());
   }
 	IEnumerator saveAssignmentInfo(string assignmentName){
-    print("here");
     assignmentName = assignmentName.Replace("\"", "");
 		WWW www = new WWW(serverURL + "/pullAssignmentInfo?assign=" + assignmentName);
 		yield return www;
