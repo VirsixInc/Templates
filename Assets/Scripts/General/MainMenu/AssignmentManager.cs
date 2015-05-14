@@ -70,7 +70,7 @@ public class AssignmentManager : MonoBehaviour {
 			tempGUIPrefab.transform.SetParent(GameObject.Find("scrollerHolder").transform);
 			tempGUIPrefab.transform.localScale = new Vector3(1,1,1); 
 			tempGUIPrefab.transform.localPosition = assignmentPosition;
-			tempGUIPrefab.GetComponent<Assignment>().SetAssignment(incompleteAssignments[i]);
+			//tempGUIPrefab.GetComponent<Assignment>().SetAssignment(incompleteAssignments[i]);
 		}
 
 		float completedAssignmentOffset;
@@ -91,7 +91,7 @@ public class AssignmentManager : MonoBehaviour {
 			tempGUIPrefab.transform.SetParent(GameObject.Find("scrollerHolder").transform, false);
 			tempGUIPrefab.transform.localScale = new Vector3(1,1,1); 
 			tempGUIPrefab.transform.localPosition = assignmentPosition; //local scale selects canvas space instead of w space
-			tempGUIPrefab.GetComponent<Assignment>().SetAssignment(completedAssignments[i]);
+			//tempGUIPrefab.GetComponent<Assignment>().SetAssignment(completedAssignments[i]);
 		}
 
 		//set divider position for the second 

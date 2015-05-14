@@ -9,7 +9,7 @@ using UnityEngine.UI;
 
 public enum AppState {Initialize, GetURLs, DownloadAssignments, MenuConfig, AssignmentMenu, Playing};
 
-public enum AssignmentType {Cards, Buckets, Sequencing, HotSpots};
+public enum AssignmentType {Cards, Buckets, Sequencing, HotSpots, Undefined};
 
 public class Assignment {
 	public AssignmentType assignmentType;
@@ -17,36 +17,46 @@ public class Assignment {
 	public string dateCompleted ="";
 	public string dueDate = "11111111";
 	public float masteryLevel = 0f;
-	public string URL = "";
 	public string assignmentTitle = "";
-	public string templateType = "";
 	public int version = 0;
 	public bool isCompleted = false;
 	public int month = 11, year = 1111, day = 11;
+  public Assignment(string assignTitle, string templateType){
+    assignmentType = getAssign(templateType);
+    assignmentTitle = assignTitle;
+  }
+
+  AssignmentType getAssign(string tempType){
+    switch(tempType){
+      case "cards":
+        return AssignmentType.Cards;
+        break;
+      case "hotspots":
+        return AssignmentType.HotSpots;
+        break;
+      case "sequences":
+        return AssignmentType.Sequencing;
+        break;
+      case "buckets":
+        return AssignmentType.Buckets;
+        break;
+      default:
+        return AssignmentType.Undefined;
+        break;
+    }
+  }
 
 	public void init() {
 		day = int.Parse (dueDate.Substring (0, 2));
 		month = int.Parse (dueDate.Substring (2,2));
 		year = int.Parse (dueDate.Substring (4, 4));
 	}
-	
-	public void SetAssignment(Assignment newAssignment){
-		timeToComplete = newAssignment.timeToComplete;
-		dateCompleted = newAssignment.dateCompleted;
-		dueDate = newAssignment.dueDate;
-		masteryLevel = newAssignment.masteryLevel;
-		URL = newAssignment.URL;
-		assignmentTitle = newAssignment.assignmentTitle;
-		templateType = newAssignment.templateType;
-		version = newAssignment.version;
-		isCompleted = newAssignment.isCompleted;
-	}
 }
 
 public class AppManager : MonoBehaviour {
 	public AppState currentAppState = AppState.Initialize;
 	public static AppManager s_instance;
-	public Assignment currentAssignment;
+  public List<Assignment> currentAssignments = new List<Assignment>();
 	public List<GameObject> userAssignments; //the main list of assignments which can be updated and sent to and fro the server
 	string serverURL = "http://localhost:8080/client", folderName;
   string username = "Alphonse";
@@ -83,6 +93,8 @@ public class AppManager : MonoBehaviour {
         }
         break;
       case AppState.MenuConfig:
+        AssignmentManager.s_instance.LoadAllAssignments(currentAssignments);
+        currentAppState = AppState.AssignmentMenu;
         break;
       case AppState.AssignmentMenu :
         break;
@@ -109,7 +121,13 @@ public class AppManager : MonoBehaviour {
     totalAssigns = allAssignments.Count;
     for(int i = 0; i<totalAssigns;i++){
       string thisAssign = (string)(allAssignments[i].GetField("assignmentName").ToString());
-      StartCoroutine(saveAssignmentInfo(thisAssign));
+      string filePath = Application.persistentDataPath + thisAssign;
+      if(File.Exists(filePath + ".json")){
+        StartCoroutine(saveAssignmentInfo(thisAssign));
+      }
+      if(File.Exists(filePath + ".data")){
+        StartCoroutine(saveAssignment(thisAssign));
+      }
     }
     urlsDownloaded = true;
 	}
@@ -141,19 +159,17 @@ public class AppManager : MonoBehaviour {
   }
 	IEnumerator saveAssignmentInfo(string assignmentName){
     assignmentName = assignmentName.Replace("\"", "");
+    string[] assignData = assignmentName.Split('_');
+    Assignment newAssign = new Assignment(assignData[0], assignData[1]); 
+
 		WWW www = new WWW(serverURL + "/pullAssignmentInfo?assign=" + assignmentName);
 		yield return www;
     JSONObject thisAssignmentInfo = ParseToJSON(www.text);
     string filePath = Application.persistentDataPath + assignmentName + ".json";
-		if(File.Exists(filePath)) {
-      print("FILE EXISTS");
-		}else{
-      FileStream file = File.Create (filePath);
-      BinaryFormatter bf = new BinaryFormatter();
-      bf.Serialize (file, www.text);
-      file.Close ();
-    }
-    StartCoroutine(saveAssignment(assignmentName));
+    FileStream file = File.Create (filePath);
+    BinaryFormatter bf = new BinaryFormatter();
+    bf.Serialize (file, www.text);
+    file.Close ();
 	}
 
 	JSONObject ParseToJSON (string txt) {
