@@ -9,6 +9,7 @@ public class Card{
   public Text objText;
   public string answer;
   public string question;
+  public indiCard thisIndiCard;
   public Card(GameObject objRef, Text objTxtRef){
     objAssoc = objRef;
     objText = objTxtRef;
@@ -45,6 +46,7 @@ public class cardManager : MonoBehaviour {
   public GameState currentState; //public for debug purposes 
   public GameObject instPartFab;
   public GameObject circGraphic;
+  public GameObject background;
 
   public TextAsset csvToUse;
   public Text questDisplay;
@@ -66,7 +68,7 @@ public class cardManager : MonoBehaviour {
   private int correctTermIndex;
 
   private int totalMastery;
-  private int requiredMastery = 8;
+  private int requiredMastery = 4;
 
   private int currentPhase;
 
@@ -80,12 +82,12 @@ public class cardManager : MonoBehaviour {
         currentDifficulty = 1;
         GameObject[] cardObjs = GameObject.FindGameObjectsWithTag("card");
         cardObjs = cardObjs.OrderBy(c=>c.name).ToArray();
-        questDispStart = questDisplay.gameObject.transform.parent.transform.localPosition;
-        questDispEnd = questDisplay.gameObject.transform.parent.transform.localPosition;
+        questDispStart = circGraphic.transform.localPosition;
+        questDispEnd = circGraphic.transform.localPosition;
         questDispEnd.y = questDispEnd.y*-1;
-        print(questDispEnd.y);
         foreach(GameObject card in cardObjs){
           Card newCard = new Card(card, card.transform.GetChild(0).GetComponent<Text>());
+          newCard.thisIndiCard = card.GetComponent<indiCard>();
           allCards.Add(newCard);
         }
         allTerms = convertCSV(parseCSV(csvToUse));
@@ -100,12 +102,13 @@ public class cardManager : MonoBehaviour {
           currCard.objAssoc.SetActive(false);
         }
         correctTermIndex = Random.Range(0,unmasteredTerms.Count);
-        currentDifficulty = Mathf.Clamp(unmasteredTerms[correctTermIndex].mastery/2, 1, requiredMastery/2); 
+        currentDifficulty = Mathf.Clamp(currentDifficulty, unmasteredTerms[correctTermIndex].mastery,  3); 
+        print(currentDifficulty);
         amtOfCards = (int)(3*currentDifficulty);
         List<int> uniqueIndexes = generateUniqueRandomNum(amtOfCards, unmasteredTerms.Count, correctTermIndex);
         for(int i = 0; i<uniqueIndexes.Count;i++){
           allCards[i].setCard(unmasteredTerms[uniqueIndexes[i]]);
-          Instantiate(instPartFab, allCards[i].objAssoc.transform.position+new Vector3(0f,0f,-10f), Quaternion.identity); 
+          //Instantiate(instPartFab, allCards[i].objAssoc.transform.position+new Vector3(0f,0f,-10f), Quaternion.identity); 
 
         }
         questDisplay.text = unmasteredTerms[correctTermIndex].question;
@@ -113,14 +116,20 @@ public class cardManager : MonoBehaviour {
         currentState = GameState.PlayingCards;
         break;
       case GameState.PlayingCards:
-        questDisplay.gameObject.transform.parent.transform.localPosition = Vector3.Lerp(
-            questDispEnd,
-            questDispStart,
-            Timer1.s_instance.normTime
-            );
+        if(circleDrag.c_instance.tapped){
+        }else if(!circleDrag.c_instance.tapped && circleDrag.c_instance.lastCardHit != null){
+          cardHandler(int.Parse(circleDrag.c_instance.lastCardHit.gameObject.name));
+          circleDrag.c_instance.reset();
+        }else{
+          circGraphic.transform.localPosition = Vector3.Lerp(
+              questDispStart,
+              questDispEnd,
+              Timer1.s_instance.normTime
+              );
+        }
         if(handleCardPress){
           if(firstPress && allCards[currIndex].answer == unmasteredTerms[correctTermIndex].answer){
-            circGraphic.SendMessage("result", true);
+            background.SendMessage("correct");
             unmasteredTerms[correctTermIndex].mastery++;
             currentState = GameState.ResetCards;
             if(unmasteredTerms[correctTermIndex].mastery == requiredMastery*.75f){
@@ -130,13 +139,13 @@ public class cardManager : MonoBehaviour {
               }
             }
           }else if(allCards[currIndex].answer == unmasteredTerms[correctTermIndex].answer){
+            background.SendMessage("correct");
             unmasteredTerms[correctTermIndex].mastery--;
             currentState = GameState.ResetCards;
           }else{
-            print(currIndex);
             allCards[currIndex].objAssoc.SendMessage("incorrectAnswer");
           }
-          circGraphic.SendMessage("result", false);
+          background.SendMessage("incorrect");
           Timer1.s_instance.Pause();
           firstPress = false;
           handleCardPress = false;
