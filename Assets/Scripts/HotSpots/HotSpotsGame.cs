@@ -25,12 +25,12 @@ public enum HotSpotGameState
 
 public class HotSpotsGame : MonoBehaviour
 {
-
+	public PopUpGraphic redX, greenCheck;
 	public Slider masteryMeter;
 	public Text promptText, promptText2;
 	public static HotSpotsGame s_instance;
 	public GameObject winningSlide;
-	HotSpotPhase curPhase = HotSpotPhase.Typing;
+	HotSpotPhase curPhase = HotSpotPhase.Elements;
 	HotSpotGameState curState = HotSpotGameState.Config;
 	GameObject[] individualElements, groups, elementsShorthand;
 	//unmasterItems is the copy of each of the phaseObjs depending on curPhase
@@ -335,6 +335,7 @@ public class HotSpotsGame : MonoBehaviour
 
 	void AnswerCorrect ()
 	{
+		greenCheck.StartFade (); 
 		ClearGUIObjects ();
 		BackgroundFlash.s_instance.FadeGreen ();
 		AdjustMastery (true);
@@ -343,6 +344,7 @@ public class HotSpotsGame : MonoBehaviour
 
 	void AnswerWrong ()
 	{
+		redX.StartFade (); 
 		ClearGUIObjects ();
 		BackgroundFlash.s_instance.FadeRed ();
 		AdjustMastery (false);
