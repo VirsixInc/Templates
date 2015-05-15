@@ -27,10 +27,10 @@ public class HotSpotsGame : MonoBehaviour
 {
 
 	public Slider masteryMeter;
-	public Text promptText;
+	public Text promptText, promptText2;
 	public static HotSpotsGame s_instance;
 	public GameObject winningSlide;
-	HotSpotPhase curPhase = HotSpotPhase.Groups;
+	HotSpotPhase curPhase = HotSpotPhase.Typing;
 	HotSpotGameState curState = HotSpotGameState.Config;
 	GameObject[] individualElements, groups, elementsShorthand;
 	//unmasterItems is the copy of each of the phaseObjs depending on curPhase
@@ -96,7 +96,7 @@ public class HotSpotsGame : MonoBehaviour
 					curPhase++;
 					curState = HotSpotGameState.SetPhase;
 				}
-				if (curPhase == HotSpotPhase.Groups) {
+				else if (curPhase == HotSpotPhase.Groups) {
 					winningSlide.SetActive(true);
 					curState = HotSpotGameState.Win;
 				}
@@ -214,12 +214,15 @@ public class HotSpotsGame : MonoBehaviour
 		//TYPING
 			
 		case HotSpotPhase.Typing:
+			promptText2.text = "Type the Element Name";
 			currentCorrectAnswer = unmasteredItems [currentIndex].itemGameObject.transform.GetChild (0).name;
 			break;
 
 		//GROUPS
 		
 		case HotSpotPhase.Groups:
+			promptText2.text = "Select the Atomic Group";
+			keyboardText.enabled = false;
 			for (int i = 0; i < phaseThreeObjs.Count; i++) {
 				randIndexList.Add (i);
 			}
