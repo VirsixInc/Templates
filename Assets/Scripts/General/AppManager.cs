@@ -84,7 +84,7 @@ public class AppManager : MonoBehaviour {
         break;
       case AppState.DownloadAssignments :
         if(assignsLoaded == totalAssigns){
-          currentAppState = AppState.AssignmentMenu;
+          currentAppState = AppState.MenuConfig;
         }
         break;
       case AppState.MenuConfig:
@@ -111,17 +111,19 @@ public class AppManager : MonoBehaviour {
 	IEnumerator DownloadListOfURLs(){
 		WWW www = new WWW(serverURL + "/pullData?username=" + username + "&password=" + password);
     urlsDownloaded = false;
+    print("Here");
 		yield return www;
     JSONObject allAssignments = ParseToJSON(www.text);
     totalAssigns = allAssignments.Count;
     for(int i = 0; i<totalAssigns;i++){
       string thisAssign = (string)(allAssignments[i].GetField("assignmentName").ToString());
-      string filePath = Application.persistentDataPath + thisAssign;
-      if(File.Exists(filePath + ".json")){
-        StartCoroutine(saveAssignmentInfo(thisAssign));
-      }
-      if(File.Exists(filePath + ".data")){
+      string filePath = (Application.persistentDataPath + "/" + thisAssign).Replace("\"", "");
+      if(!File.Exists(filePath + ".data")){
+        print("file does not exist!");
         StartCoroutine(saveAssignment(thisAssign));
+      }else{
+        assignsLoaded++;
+        print("file exists!!!");
       }
     }
     urlsDownloaded = true;
@@ -132,7 +134,7 @@ public class AppManager : MonoBehaviour {
 		WWW www = new WWW(serverURL + "/pullAssignment?assign=" + assignmentName);
     yield return www;
     JSONObject thisAssignmentInfo = ParseToJSON(www.text);
-    string filePath = Application.persistentDataPath + assignmentName + ".data";
+    string filePath = Application.persistentDataPath + "/" + assignmentName + ".data";
     List<string> assignmentContent = new List<string>();
     foreach(JSONObject allIndArgs in thisAssignmentInfo.list){
       foreach(JSONObject indArg in allIndArgs.list){
@@ -152,12 +154,13 @@ public class AppManager : MonoBehaviour {
     assignsLoaded++;
     File.WriteAllLines(filePath, assignmentContent.ToArray());
   }
+  /*
 	IEnumerator saveAssignmentInfo(string assignmentName){
     assignmentName = assignmentName.Replace("\"", "");
     string[] assignData = assignmentName.Split('_');
     Assignment newAssign = new Assignment(assignData[0], assignData[1]); 
 
-		WWW www = new WWW(serverURL + "/pullAssignmentInfo?assign=" + assignmentName);
+		WWW www = new WWW(serverURL + "/pullAssignmentInfo?assign=" + assignmentName + "&username=" + username + "&password=" + password);
 		yield return www;
     JSONObject thisAssignmentInfo = ParseToJSON(www.text);
     string filePath = Application.persistentDataPath + assignmentName + ".json";
@@ -165,7 +168,7 @@ public class AppManager : MonoBehaviour {
     BinaryFormatter bf = new BinaryFormatter();
     bf.Serialize (file, www.text);
     file.Close ();
-	}
+	}*/
 
 	JSONObject ParseToJSON (string txt) {
 		JSONObject newJSONObject = JSONObject.Create (txt);
