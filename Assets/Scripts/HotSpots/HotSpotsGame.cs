@@ -29,6 +29,7 @@ public class HotSpotsGame : MonoBehaviour
 	public Slider masteryMeter;
 	public Text promptText;
 	public static HotSpotsGame s_instance;
+	public GameObject winningSlide;
 	HotSpotPhase curPhase = HotSpotPhase.Groups;
 	HotSpotGameState curState = HotSpotGameState.Config;
 	GameObject[] individualElements, groups, elementsShorthand;
@@ -96,11 +97,14 @@ public class HotSpotsGame : MonoBehaviour
 					curState = HotSpotGameState.SetPhase;
 				}
 				if (curPhase == HotSpotPhase.Groups) {
-					//win
+					winningSlide.SetActive(true);
+					curState = HotSpotGameState.Win;
 				}
 			} else {
 				curState = HotSpotGameState.Display;
 			}
+			break;
+		case HotSpotGameState.Win:
 			break;
 		}
 	}

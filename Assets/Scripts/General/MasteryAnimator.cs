@@ -6,7 +6,7 @@ public class MasteryAnimator : MonoBehaviour {
 	Slider thisSlider;
 	// Use this for initialization
 	void Start () {
-		SoundManager.s_instance.PlaySound (SoundManager.s_instance.m_win);
+		if(SoundManager.s_instance!=null)SoundManager.s_instance.PlaySound (SoundManager.s_instance.m_win);
 
 		thisSlider = GetComponent<Slider> ();
 		StartCoroutine ("AnimateSlider");
