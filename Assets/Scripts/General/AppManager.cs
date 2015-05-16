@@ -88,6 +88,9 @@ public class AppManager : MonoBehaviour {
         }
         break;
       case AppState.MenuConfig:
+        foreach(Assignment x in currentAssignments){
+          print(x.assignmentTitle);
+        }
         AssignmentManager.s_instance.LoadAllAssignments(currentAssignments);
         currentAppState = AppState.AssignmentMenu;
         break;
@@ -122,9 +125,12 @@ public class AppManager : MonoBehaviour {
         print("file does not exist!");
         StartCoroutine(saveAssignment(thisAssign));
       }else{
+        //string allText = System.IO.File.ReadAllText(filePath + ".data");
         assignsLoaded++;
-        print("file exists!!!");
       }
+      string[] assign = thisAssign.Split('_');
+      Assignment currAssign = new Assignment(assign[1],assign[0]);
+      currentAssignments.Add(currAssign);
     }
     urlsDownloaded = true;
 	}
@@ -173,6 +179,10 @@ public class AppManager : MonoBehaviour {
 	JSONObject ParseToJSON (string txt) {
 		JSONObject newJSONObject = JSONObject.Create (txt);
 		return newJSONObject;
+	}
+
+	public void ClickHandler (int index) {
+
 	}
 
 }
