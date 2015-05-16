@@ -1,13 +1,14 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.IO;
-using System;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Net;
 using UnityEngine.UI;
 
-public enum AppState {Initialize, GetURLs, DownloadAssignments, MenuConfig, AssignmentMenu, Playing};
+public enum AppState {Initialize, GetURLs, DownloadAssignments, MenuConfig, AssignmentMenu, Playing, LoadContent};
 
 public enum AssignmentType {Cards, Buckets, Sequencing, HotSpots, Undefined};
 
@@ -21,6 +22,7 @@ public class Assignment {
 	public int version = 0;
 	public bool isCompleted = false;
 	public int month = 11, year = 1111, day = 11;
+	public GameObject associatedGUIObject;
   public Assignment(string assignTitle, string templateType){
     assignmentType = getAssign(templateType);
     assignmentTitle = assignTitle;
@@ -45,10 +47,11 @@ public class Assignment {
         break;
     }
   }
-	public GameObject associatedGUIObject;
 }
 
 public class AppManager : MonoBehaviour {
+
+  public bool localDebug;
 	public AppState currentAppState = AppState.Initialize;
 	public static AppManager s_instance;
   public List<Assignment> currentAssignments = new List<Assignment>();
@@ -56,16 +59,18 @@ public class AppManager : MonoBehaviour {
 	string serverURL = "http://192.168.1.8:8080/client", folderName;
   string username = "Alphonse";
   string password = "blargh";
+
+  string masteryFilePath;
+
 	string[] assignmentURLs;
 	List<string> assignmentURLsToDownload;
 	int assignmentsDownloaded = 0;
 
   bool urlsDownloaded;
-
   int assignsLoaded = 0, totalAssigns;
 
 	void Awake() {
-
+    masteryFilePath = Application.persistentDataPath + "mastery.info";
 		if (s_instance == null) {
 			s_instance = this;
 		}
@@ -74,8 +79,12 @@ public class AppManager : MonoBehaviour {
 	void Update () {
 		switch (currentAppState) {
       case AppState.Initialize :
-        StartCoroutine (DownloadListOfURLs());
-        currentAppState = AppState.GetURLs;
+        if(CheckForInternetConnection() && !localDebug){
+          StartCoroutine (DownloadListOfURLs());
+          currentAppState = AppState.GetURLs;
+        }else{
+          currentAppState = AppState.LoadContent;
+        }
         break;
       case AppState.GetURLs :
         if(urlsDownloaded){
@@ -86,6 +95,10 @@ public class AppManager : MonoBehaviour {
         if(assignsLoaded == totalAssigns){
           currentAppState = AppState.MenuConfig;
         }
+        break;
+      case AppState.LoadContent:
+        loadInLocalAssignments();
+        currentAppState = AppState.MenuConfig;
         break;
       case AppState.MenuConfig:
         AssignmentManager.s_instance.LoadAllAssignments(currentAssignments);
@@ -98,7 +111,6 @@ public class AppManager : MonoBehaviour {
 	}
 
   public int countStringOccurrences(string text, string pattern){
-    // Loop through all instances of the string 'text'.
     int count = 0;
     int i = 0;
     while ((i = text.IndexOf(pattern, i)) != -1){
@@ -111,7 +123,6 @@ public class AppManager : MonoBehaviour {
 	IEnumerator DownloadListOfURLs(){
 		WWW www = new WWW(serverURL + "/pullData?username=" + username + "&password=" + password);
     urlsDownloaded = false;
-    print("Here");
 		yield return www;
     JSONObject allAssignments = ParseToJSON(www.text);
     totalAssigns = allAssignments.Count;
@@ -120,20 +131,20 @@ public class AppManager : MonoBehaviour {
       string filePath = (Application.persistentDataPath + "/" + thisAssign).Replace("\"", "");
       if(!File.Exists(filePath + ".data")){
         StartCoroutine(saveAssignment(thisAssign));
-        string[] assign = thisAssign.Split('_');
-        Assignment currAssign = new Assignment(assign[1],assign[0]);
-        currentAssignments.Add(currAssign);
       }else{
-        //string allText = System.IO.File.ReadAllText(filePath + ".data");
+        currentAssignments.Add(generateAssignment(thisAssign));
         assignsLoaded++;
-        string[] assign = thisAssign.Split('_');
-        Assignment currAssign = new Assignment(assign[1],assign[0]);
-        currentAssignments.Add(currAssign);
       }
     }
     urlsDownloaded = true;
 	}
 
+  Assignment generateAssignment(string assignName){
+    Assignment assignToReturn;
+    string[] assign = assignName.Split('_');
+    assignToReturn = new Assignment(assign[1],assign[0]);
+    return assignToReturn;
+  }
   IEnumerator saveAssignment(string assignmentName){
     assignmentName = assignmentName.Replace("\"", "");
 		WWW www = new WWW(serverURL + "/pullAssignment?assign=" + assignmentName);
@@ -156,24 +167,40 @@ public class AppManager : MonoBehaviour {
         }
       }
     }
-    assignsLoaded++;
+    File.AppendAllText(masteryFilePath, assignmentName + ",0\n");
     File.WriteAllLines(filePath, assignmentContent.ToArray());
+    currentAssignments.Add(generateAssignment(assignmentName));
+    assignsLoaded++;
   }
-  /*
-	IEnumerator saveAssignmentInfo(string assignmentName){
-    assignmentName = assignmentName.Replace("\"", "");
-    string[] assignData = assignmentName.Split('_');
-    Assignment newAssign = new Assignment(assignData[0], assignData[1]); 
 
-		WWW www = new WWW(serverURL + "/pullAssignmentInfo?assign=" + assignmentName + "&username=" + username + "&password=" + password);
-		yield return www;
-    JSONObject thisAssignmentInfo = ParseToJSON(www.text);
-    string filePath = Application.persistentDataPath + assignmentName + ".json";
-    FileStream file = File.Create (filePath);
-    BinaryFormatter bf = new BinaryFormatter();
-    bf.Serialize (file, www.text);
-    file.Close ();
-	}*/
+  public static bool CheckForInternetConnection(){
+    try{
+      using (var client = new WebClient())
+      using (var stream = client.OpenRead("http://www.google.com")){
+        return true;
+      }
+    }catch{
+      return false;
+    }
+  }
+
+  void loadInLocalAssignments(){
+    DirectoryInfo localFolder = new DirectoryInfo(Application.persistentDataPath + "/");
+    string[] masteryFile = File.ReadAllLines(masteryFilePath);
+    foreach(FileInfo currFile in localFolder.GetFiles()){
+      print(currFile.ToString());
+      string[] path = currFile.ToString().Split('/');
+      string assignName = path[path.Length];
+      generateAssignment(assignName);
+
+    }
+  }
+
+  public IEnumerator uploadAssignMastery(string assignmentName, int mastery){
+    assignmentName = assignmentName.Replace("\"", "");
+		WWW www = new WWW(serverURL + "/setAssignmentMastery?assignmentName=" + assignmentName + "&student=" + username + "&mastery=" + mastery.ToString());
+    yield return www;
+  }
 
 	JSONObject ParseToJSON (string txt) {
 		JSONObject newJSONObject = JSONObject.Create (txt);
