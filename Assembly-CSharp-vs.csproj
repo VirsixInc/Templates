@@ -46,6 +46,7 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\AnimationSlide.cs" />
      <Compile Include="Assets\Art\StandAlones\CircleTimer\BindCircleForImage.cs" />
      <Compile Include="Assets\Art\StandAlones\CircleTimer\BindCircleForShader.cs" />
      <Compile Include="Assets\BackgroundFlash.cs" />
@@ -71,10 +72,12 @@
      <Compile Include="Assets\JMO Assets\Cartoon FX\Scripts\CFX_LightIntensityFade.cs" />
      <Compile Include="Assets\JMO Assets\Cartoon FX\Scripts\CFX_ShurikenThreadFix.cs" />
      <Compile Include="Assets\JMO Assets\Cartoon FX\Spawn System\CFX_SpawnSystem.cs" />
+     <Compile Include="Assets\MenuButton.cs" />
      <Compile Include="Assets\Prefabs\CircleTimer\Timer1.cs" />
      <Compile Include="Assets\Scripts\General\AppManager.cs" />
      <Compile Include="Assets\Scripts\General\CSVParser.cs" />
      <Compile Include="Assets\Scripts\General\FadeOut.cs" />
+     <Compile Include="Assets\Scripts\General\Fader.cs" />
      <Compile Include="Assets\Scripts\General\ItemToBeMastered.cs" />
      <Compile Include="Assets\Scripts\General\MainMenu\AssignmentGUI.cs" />
      <Compile Include="Assets\Scripts\General\MainMenu\AssignmentManager.cs" />

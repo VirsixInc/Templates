@@ -31,7 +31,7 @@ public class Fader : MonoBehaviour {
 			float fracJourney = timePassed / fadeTime;
 			//fade in
 			if (customColors) {
-				currColor = Color.Lerp (customStartColor, customEndColor);
+				currColor = Color.Lerp (customStartColor, customEndColor, fracJourney);
 			}
 
 			else if (!oneToZeroAlpha) {
