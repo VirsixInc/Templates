@@ -45,6 +45,16 @@ public class HotSpotsGame : MonoBehaviour
 	private bool handleCardPress, firstPress, handleKeyboardSubmit, firstSubmit;
 	public InputField keyboardText;
 
+	//timer
+	public Image CircleMaterial;
+	public Slider mastery;
+	
+	//UI Meters etc...
+	[SerializeField]
+	Color start;
+	[SerializeField]
+	Color end;
+
 	void Awake ()
 	{
 		s_instance = this;
@@ -176,7 +186,7 @@ public class HotSpotsGame : MonoBehaviour
 
 	void DisplayQuestion ()
 	{
-		//TODO add prompts to these sections
+		Timer1.s_instance.Reset(15f);
 		currentCorrectAnswer = unmasteredItems [currentIndex].itemGameObject.name; //correct answer is gameobject name at index in list of items
 		promptText.text = currentCorrectAnswer;
 		List<int> randIndexList = new List<int> (); //to avoid duplicates
@@ -317,7 +327,7 @@ public class HotSpotsGame : MonoBehaviour
 
 	void AdjustMastery (bool isCorrect)
 	{
-		if (isCorrect) {
+		if (isCorrect && !	Timer1.s_instance.timesUp) {
 			unmasteredItems [currentIndex].sequenceMastery += .5f;
 		} else {
 			if (unmasteredItems [currentIndex].sequenceMastery > 0) {
