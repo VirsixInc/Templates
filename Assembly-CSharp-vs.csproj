@@ -49,6 +49,7 @@
      <Compile Include="Assets\Art\StandAlones\CircleTimer\BindCircleForImage.cs" />
      <Compile Include="Assets\Art\StandAlones\CircleTimer\BindCircleForShader.cs" />
      <Compile Include="Assets\BackgroundFlash.cs" />
+     <Compile Include="Assets\BlurLerp.cs" />
      <Compile Include="Assets\ChildHotSpot.cs" />
      <Compile Include="Assets\HotSpotClick.cs" />
      <Compile Include="Assets\IgnoreRaycast.cs" />

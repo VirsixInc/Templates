@@ -32,17 +32,20 @@ public class AssignmentManager : MonoBehaviour {
 
 		//parse associatedGameObjects into either mastered or unmastered
 		for (int i = 0; i < arrayOfAssignments.Count; i++) {
-			arrayOfAssignments[i].associatedGUIObject.transform.parent = masteredHeader.transform;
+      arrayOfAssignments[i].associatedGUIObject = Instantiate(assignmentGUIPrefab) as GameObject;
 			arrayOfAssignments[i].associatedGUIObject.GetComponent<AssignmentGUI>().title.text = arrayOfAssignments[i].assignmentTitle;
 			arrayOfAssignments[i].associatedGUIObject.GetComponent<AssignmentGUI>().assignmentIndex = i;
 
 			if (arrayOfAssignments[i].isCompleted) {
 				completedAssignments.Add(arrayOfAssignments[i].associatedGUIObject);
+        arrayOfAssignments[i].associatedGUIObject.transform.SetParent(masteredHeader.transform);
 			}
 			else {
 				incompleteAssignments.Add(arrayOfAssignments[i].associatedGUIObject);
+        arrayOfAssignments[i].associatedGUIObject.transform.SetParent(unmasteredHeader.transform);
 			}
 		}
+
 		//calculate upper bound based off amount of assignments
 		if (incompleteAssignments.Count%2 == 0 && completedAssignments.Count%2 == 0)
 			upperBound = AppManager.s_instance.userAssignments.Count * (prefabHeight + 2 * spaceBetweenAssignments + dividerHeight) / 2;

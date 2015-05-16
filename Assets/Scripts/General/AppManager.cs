@@ -88,9 +88,6 @@ public class AppManager : MonoBehaviour {
         }
         break;
       case AppState.MenuConfig:
-        foreach(Assignment x in currentAssignments){
-          print(x.assignmentTitle);
-        }
         AssignmentManager.s_instance.LoadAllAssignments(currentAssignments);
         currentAppState = AppState.AssignmentMenu;
         break;
@@ -122,15 +119,17 @@ public class AppManager : MonoBehaviour {
       string thisAssign = (string)(allAssignments[i].GetField("assignmentName").ToString());
       string filePath = (Application.persistentDataPath + "/" + thisAssign).Replace("\"", "");
       if(!File.Exists(filePath + ".data")){
-        print("file does not exist!");
         StartCoroutine(saveAssignment(thisAssign));
+        string[] assign = thisAssign.Split('_');
+        Assignment currAssign = new Assignment(assign[1],assign[0]);
+        currentAssignments.Add(currAssign);
       }else{
         //string allText = System.IO.File.ReadAllText(filePath + ".data");
         assignsLoaded++;
+        string[] assign = thisAssign.Split('_');
+        Assignment currAssign = new Assignment(assign[1],assign[0]);
+        currentAssignments.Add(currAssign);
       }
-      string[] assign = thisAssign.Split('_');
-      Assignment currAssign = new Assignment(assign[1],assign[0]);
-      currentAssignments.Add(currAssign);
     }
     urlsDownloaded = true;
 	}
