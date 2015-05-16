@@ -11,7 +11,7 @@ public class Fader : MonoBehaviour {
 	//a = 1 to a = 0 or otherwise
 	public bool oneToZeroAlpha;
 	public bool customColors = false;
-	public float startTime, fadeTime = 3;
+	public float startTime, fadeTime = 1;
 	SpriteRenderer sprite;
 	Image image;
 	Text text;
@@ -31,7 +31,13 @@ public class Fader : MonoBehaviour {
 			float fracJourney = timePassed / fadeTime;
 			//fade in
 			if (customColors) {
-				currColor = Color.Lerp (customStartColor, customEndColor, fracJourney);
+				if (oneToZeroAlpha){
+					currColor = Color.Lerp (customStartColor, customEndColor, fracJourney);
+				}
+				else {
+					currColor = Color.Lerp (customEndColor, customStartColor, fracJourney);
+				}
+
 			}
 
 			else if (!oneToZeroAlpha) {
@@ -74,13 +80,15 @@ public class Fader : MonoBehaviour {
 		fading = true;
 	}
 
-	public void StartFadeOut(){
+	public void StartFadeOut(float length = 1){
+		fadeTime = length;
 		oneToZeroAlpha = true;
 		startTime = Time.time;
 		fading = true;
 	}
 
-	public void StartFadeIn(){
+	public void StartFadeIn(float length = 1){
+		fadeTime = length;
 		oneToZeroAlpha = false;
 		startTime = Time.time;
 		fading = true;

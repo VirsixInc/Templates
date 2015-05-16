@@ -7,7 +7,7 @@ public class AnimationSlide : MonoBehaviour {
 	//this is for menu GUI items to look extra cool when they pop up
 	public float startTime, fadeTime = 1;
 
-	float moveDistance = 10f;
+	public float moveDistance = 10000f;
 	public SlideDirection thisSlideDirection = SlideDirection.Up;
 	Vector3 startPos, endPos, originalPos, moveDirection;
 	bool isSliding = false;
@@ -34,21 +34,27 @@ public class AnimationSlide : MonoBehaviour {
 		startPos = originalPos;
 		endPos = transform.position + moveDirection * moveDistance;
 	}
-	
-	public void Slide() {
+
+	public void Reset() {
+		isSliding = false;
 		transform.position = originalPos;
+	}
+
+	public void Slide() {
 		isSliding = true;
 		startTime = Time.time;
 	}
 	
 	void Update() {
-		float timePassed = (Time.time - startTime);
-		float fracJourney = timePassed / fadeTime;
-		//increment timer once per frame
+		if (isSliding) {
+			float timePassed = (Time.time - startTime);
+			float fracJourney = timePassed / fadeTime;
+			//increment timer once per frame
 
-		transform.position = Vector3.Lerp(startPos, endPos, fracJourney);
-		if (fracJourney >= 1) {
-			isSliding = false;
+			transform.position = Vector3.Lerp (startPos, endPos, fracJourney);
+			if (fracJourney >= 1) {
+				isSliding = false;
+			}
 		}
 	}
 }

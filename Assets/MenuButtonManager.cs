@@ -18,18 +18,25 @@ public class MenuButtonManager : MonoBehaviour {
 	public void ActivateMenuButtons () {
 		if (faders != null) {
 			foreach (Fader f in faders) {
-				f.StartFadeOut ();
+				f.StartFadeIn ();
 			}
 		}
 		if (animationSlides != null) {
-			//			animationSlide.s ();
+			foreach (AnimationSlide a in animationSlides) {
+				a.Reset ();
+			}
 		}
 	}
 	
 	public void DeActivateMenuButtons () {
 		if (faders != null) {
 			foreach (Fader f in faders) {
-				f.StartFadeIn ();
+				f.StartFadeOut (0.2f);
+			}
+		}
+		if (animationSlides != null) {
+			foreach (AnimationSlide a in animationSlides) {
+				a.Slide ();
 			}
 		}
 	}
