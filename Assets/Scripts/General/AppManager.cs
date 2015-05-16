@@ -53,7 +53,7 @@ public class AppManager : MonoBehaviour {
 	public static AppManager s_instance;
   public List<Assignment> currentAssignments = new List<Assignment>();
 	public List<GameObject> userAssignments; //the main list of assignments which can be updated and sent to and fro the server
-	string serverURL = "http://localhost:8080/client", folderName;
+	string serverURL = "http://192.168.1.8:8080/client", folderName;
   string username = "Alphonse";
   string password = "blargh";
 	string[] assignmentURLs;
