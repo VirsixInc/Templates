@@ -17,7 +17,7 @@ public class AssignmentStartButton : MonoBehaviour {
 		thisEventTrigger.delegates.Add(entry);
 	}
 
-	public void OnClick() {
+	void OnClick() {
 		SoundManager.s_instance.PlaySound (SoundManager.s_instance.m_start);
 		AppManager.s_instance.ClickHandler(transform.parent.gameObject.GetComponent<AssignmentGUI>().assignmentIndex);
 		//AppManager.s_instance.currentAssignment = transform.parent.GetComponent<Assignment> ();

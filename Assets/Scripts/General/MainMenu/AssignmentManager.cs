@@ -9,7 +9,7 @@ public class AssignmentManager : MonoBehaviour {
 	public Assignment assignment;
 	public GameObject masteredHeader, unmasteredHeader;
 	public GameObject assignmentGUIPrefab;
-	float prefabHeight = 200f, initPrefabYPos = -50f, leftPos = -300f, rightPos = 300f, dividerHeight = 225f, spaceBetweenAssignments = 100f;
+	float prefabHeight = 200f, initPrefabYPos = -350f, leftPos = -300f, rightPos = 300f, dividerHeight = 225f, spaceBetweenAssignments = 100f;
 	public float upperBound; //for clamping scroll
 	public static AssignmentManager s_instance;
 
@@ -38,11 +38,11 @@ public class AssignmentManager : MonoBehaviour {
 
 			if (arrayOfAssignments[i].isCompleted) {
 				completedAssignments.Add(arrayOfAssignments[i].associatedGUIObject);
-        arrayOfAssignments[i].associatedGUIObject.transform.SetParent(masteredHeader.transform);
+       			arrayOfAssignments[i].associatedGUIObject.transform.SetParent(masteredHeader.transform, false);
 			}
 			else {
 				incompleteAssignments.Add(arrayOfAssignments[i].associatedGUIObject);
-        arrayOfAssignments[i].associatedGUIObject.transform.SetParent(unmasteredHeader.transform);
+				arrayOfAssignments[i].associatedGUIObject.transform.SetParent(unmasteredHeader.transform, false);
 			}
 		}
 
@@ -67,6 +67,7 @@ public class AssignmentManager : MonoBehaviour {
 			else{
 				assignmentPosition = new Vector3(rightPos, initPrefabYPos - (i - 1) * (spaceBetweenAssignments + prefabHeight), 0);
 			}
+			incompleteAssignments[i].transform.localPosition = assignmentPosition;
 		}
 
 		for (int i = 0; i < completedAssignments.Count; i++) {
@@ -77,6 +78,8 @@ public class AssignmentManager : MonoBehaviour {
 			else{
 				assignmentPosition = new Vector3(rightPos, initPrefabYPos - (i - 1) * (spaceBetweenAssignments + prefabHeight)); //i -1 because we want it to be next to the prefab on the left not below
 			}
+			completedAssignments[i].transform.localPosition = assignmentPosition;
+
 		}
 
 		//Places headers accordingly

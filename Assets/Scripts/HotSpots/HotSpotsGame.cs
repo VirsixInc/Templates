@@ -48,6 +48,7 @@ public class HotSpotsGame : MonoBehaviour
 	//timer
 	public Image CircleMaterial;
 	public Slider mastery;
+	bool isPrexistingData;
 	
 	//UI Meters etc...
 	[SerializeField]
@@ -182,6 +183,11 @@ public class HotSpotsGame : MonoBehaviour
 		phaseThreeObjs = new List<ItemToBeMastered> (tempList3);
 
 		totalTerms = phaseOneObjs.Count + phaseTwoObjs.Count + phaseThreeObjs.Count;
+
+//		if (isPrexistingData) {
+//			float previousMasteryData = .45;
+//
+//		}
 	}
 
 	void DisplayQuestion ()
