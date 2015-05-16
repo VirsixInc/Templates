@@ -2,6 +2,7 @@
 using System.Collections;
 using UnityEngine.EventSystems;
 
+[RequireComponent(typeof(EventTrigger))]
 public class AssignmentStartButton : MonoBehaviour {
 
 	EventTrigger thisEventTrigger;
