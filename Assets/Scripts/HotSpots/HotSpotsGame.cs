@@ -282,10 +282,7 @@ public class HotSpotsGame : MonoBehaviour
 	public void KeyboardSubmitHandler ()
 	{
 		SubmitAnswer (keyboardText.text.ToLower ());
-			
-
 		keyboardText.text = "";
-
 	}
 
 	public void SubmitAnswer (string answer)

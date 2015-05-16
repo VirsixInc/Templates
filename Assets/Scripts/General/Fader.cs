@@ -40,7 +40,7 @@ public class Fader : MonoBehaviour {
 				}
 				//is white
 				else {
-					sprite.color = Color.Lerp (zeroWhite, oneWhite, fracJourney);
+					currColor = Color.Lerp (zeroWhite, oneWhite, fracJourney);
 				}
 			}
 
@@ -51,7 +51,7 @@ public class Fader : MonoBehaviour {
 				}
 				//is white
 				else {
-					sprite.color = Color.Lerp (oneWhite, zeroWhite, fracJourney);
+					currColor = Color.Lerp (oneWhite, zeroWhite, fracJourney);
 				}
 			}
 
@@ -70,6 +70,18 @@ public class Fader : MonoBehaviour {
 		}
 	}
 	public void StartFade() {
+		startTime = Time.time;
+		fading = true;
+	}
+
+	public void StartFadeOut(){
+		oneToZeroAlpha = true;
+		startTime = Time.time;
+		fading = true;
+	}
+
+	public void StartFadeIn(){
+		oneToZeroAlpha = false;
 		startTime = Time.time;
 		fading = true;
 	}
