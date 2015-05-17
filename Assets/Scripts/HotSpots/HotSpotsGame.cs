@@ -184,10 +184,26 @@ public class HotSpotsGame : MonoBehaviour
 
 		totalTerms = phaseOneObjs.Count + phaseTwoObjs.Count + phaseThreeObjs.Count;
 
-//		if (isPrexistingData) {
-//			float previousMasteryData = .45;
-//
-//		}
+		if (isPrexistingData) {
+			float previousMasteryData = .45;
+			//thresholds of data will be totalTerms over 
+			switch (previousMasteryData) {
+			case (previousMasteryData < (phaseOneObjs.Count/totalTerms)) :
+				mastery.value = 0;
+		   	    break;
+			case (previousMasteryData > (phaseOneObjs.Count/totalTerms && (previousMasteryData < (phaseOneObjs.Count + phaseTwoObjs.Count)/totalTerms))) :
+				mastery.value = (float)phaseOneObjs.Count/totalTerms;
+				curPhase = HotSpotPhase.Typing;
+				break;
+
+			case (previousMasteryData > (phaseOneObjs.Count + phaseTwoObjs.Count)/totalTerms) :
+				mastery.value = (float)(phaseOneObjs.Count + phaseTwoObjs.Count)/totalTerms;
+				curPhase = HotSpotPhase.Groups;
+
+				break;
+
+			}
+		}
 	}
 
 	void DisplayQuestion ()
