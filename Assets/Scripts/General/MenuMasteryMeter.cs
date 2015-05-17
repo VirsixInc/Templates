@@ -8,7 +8,7 @@ public class MenuMasteryMeter : MonoBehaviour {
 
 	void Start () {
 		thisSlider = GetComponent<Slider> ();
-		thisSlider.value = transform.parent.GetComponent<Assignment> ().masteryLevel;
+		thisSlider.value = transform.parent.GetComponent<Assignment> ().mastery;
 	}
 
 }

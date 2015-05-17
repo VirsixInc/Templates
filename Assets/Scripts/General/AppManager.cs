@@ -13,17 +13,23 @@ public enum AppState {Initialize, GetURLs, DownloadAssignments, MenuConfig, Assi
 public enum AssignmentType {Cards, Buckets, Sequencing, HotSpots, Undefined};
 
 public class Assignment {
-	public AssignmentType assignmentType;
 	public float timeToComplete = 0f;
 	public string dateCompleted ="";
 	public string dueDate = "11111111";
-	public float masteryLevel = 0f;
-	public string assignmentTitle = "";
 	public int version = 0;
 	public bool isCompleted = false;
 	public int month = 11, year = 1111, day = 11;
 	public GameObject associatedGUIObject;
-  public Assignment(string assignTitle, string templateType){
+
+	public int mastery = 0;
+
+	public string assignmentTitle = "";
+	public AssignmentType assignmentType;
+  public string fullAssignTitle = "";
+
+
+  public Assignment(string assignTitle, string templateType, string fullAssignTit){
+    fullAssignTitle = fullAssignTit;
     assignmentType = getAssign(templateType);
     assignmentTitle = assignTitle;
   }
@@ -93,7 +99,7 @@ public class AppManager : MonoBehaviour {
         break;
       case AppState.DownloadAssignments :
         if(assignsLoaded == totalAssigns){
-          currentAppState = AppState.MenuConfig;
+          currentAppState = AppState.LoadContent;
         }
         break;
       case AppState.LoadContent:
@@ -132,19 +138,12 @@ public class AppManager : MonoBehaviour {
       if(!File.Exists(filePath + ".data")){
         StartCoroutine(saveAssignment(thisAssign));
       }else{
-        currentAssignments.Add(generateAssignment(thisAssign));
         assignsLoaded++;
       }
     }
     urlsDownloaded = true;
 	}
 
-  Assignment generateAssignment(string assignName){
-    Assignment assignToReturn;
-    string[] assign = assignName.Split('_');
-    assignToReturn = new Assignment(assign[1],assign[0]);
-    return assignToReturn;
-  }
   IEnumerator saveAssignment(string assignmentName){
     assignmentName = assignmentName.Replace("\"", "");
 		WWW www = new WWW(serverURL + "/pullAssignment?assign=" + assignmentName);
@@ -169,7 +168,6 @@ public class AppManager : MonoBehaviour {
     }
     File.AppendAllText(masteryFilePath, assignmentName + ",0\n");
     File.WriteAllLines(filePath, assignmentContent.ToArray());
-    currentAssignments.Add(generateAssignment(assignmentName));
     assignsLoaded++;
   }
 
@@ -186,16 +184,46 @@ public class AppManager : MonoBehaviour {
 
   void loadInLocalAssignments(){
     DirectoryInfo localFolder = new DirectoryInfo(Application.persistentDataPath + "/");
-    string[] masteryFile = File.ReadAllLines(masteryFilePath);
+    string[] masteryFile;
+    if(File.Exists(masteryFilePath)){
+      masteryFile = File.ReadAllLines(masteryFilePath);
+    }else{
+      File.WriteAllText(masteryFilePath, "");
+    }
     foreach(FileInfo currFile in localFolder.GetFiles()){
-      print(currFile.ToString());
       string[] path = currFile.ToString().Split('/');
-      string assignName = path[path.Length];
-      generateAssignment(assignName);
-
+      string assignName = path[path.Length-1];
+      Assignment currAssign = generateAssignment(assignName);
+      currAssign.mastery = pullAssignMastery(currAssign);
+      currentAssignments.Add(currAssign);
     }
   }
 
+  Assignment generateAssignment(string assignName){
+    Assignment assignToReturn;
+    string[] assign = assignName.Split('_');
+    string assignWithoutExt = assignName.Split('.')[0];
+    assignToReturn = new Assignment(assign[1],assign[0],assignWithoutExt);
+    return assignToReturn;
+  }
+  int pullAssignMastery(Assignment currAssign){
+    int mastery = 0;
+    string[] masteryFile = File.ReadAllLines(masteryFilePath);
+    bool foundFile = false;
+    if(masteryFile.Length > 0){
+      foreach(string currLine in masteryFile){
+        if(currLine.Contains(currAssign.assignmentTitle)){
+          foundFile = true;
+          string[] operateLine = currLine.Split(',');
+          mastery = int.Parse(operateLine[1]);
+        }
+      }
+    }
+    if(!foundFile){
+      File.AppendAllText(masteryFilePath, currAssign.fullAssignTitle + ",0\n");
+    }
+    return mastery;
+  }
   public IEnumerator uploadAssignMastery(string assignmentName, int mastery){
     assignmentName = assignmentName.Replace("\"", "");
 		WWW www = new WWW(serverURL + "/setAssignmentMastery?assignmentName=" + assignmentName + "&student=" + username + "&mastery=" + mastery.ToString());
