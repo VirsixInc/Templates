@@ -40,6 +40,7 @@ public class AppManager : MonoBehaviour {
 	public static AppManager s_instance;
   public List<Assignment> currentAssignments = new List<Assignment>();
 	public List<GameObject> userAssignments;
+  public int currIndex;
 
 	string[] assignmentURLs;
 	string serverURL = "http://192.168.1.8:8080/client", folderName,
@@ -48,7 +49,7 @@ public class AppManager : MonoBehaviour {
          masteryFilePath,
          filePathToUse;
 
-  int assignsLoaded = 0, assignmentsDownloaded = 0, totalAssigns, currIndex;
+  int assignsLoaded = 0, assignmentsDownloaded = 0, totalAssigns;
 
 	List<string> assignmentURLsToDownload;
 
@@ -97,7 +98,6 @@ public class AppManager : MonoBehaviour {
         }
         break;
     }
-    print(currentAppState);
 	}
 
   public int countStringOccurrences(string text, string pattern){
@@ -197,7 +197,7 @@ public class AppManager : MonoBehaviour {
     bool foundFile = false;
     if(masteryFile.Length > 0){
       foreach(string currLine in masteryFile){
-        if(currLine.Contains(currAssign.assignmentTitle)){
+        if(currLine.Contains(currAssign.fullAssignTitle)){
           foundFile = true;
           string[] operateLine = currLine.Split(',');
           mastery = int.Parse(operateLine[1]);
@@ -208,6 +208,22 @@ public class AppManager : MonoBehaviour {
       File.AppendAllText(masteryFilePath, currAssign.fullAssignTitle + ",0\n");
     }
     return mastery;
+  }
+
+  public void saveAssignmentMastery(Assignment assignToSave, int mastery){
+    string[] masteryFile = File.ReadAllLines(masteryFilePath);
+    bool foundFile = false;
+
+    for(int i = 0; i<masteryFile.Length; i++){
+      if(masteryFile[i].Contains(assignToSave.fullAssignTitle)){
+        foundFile = true;
+        masteryFile[i] = assignToSave.fullAssignTitle + "," + mastery.ToString();
+        print(masteryFile[i]);
+        break;
+      }
+    }
+    File.WriteAllText(masteryFilePath, String.Empty);
+    File.WriteAllLines(masteryFilePath, masteryFile);
   }
 
   public IEnumerator uploadAssignMastery(string assignmentName, int mastery){
