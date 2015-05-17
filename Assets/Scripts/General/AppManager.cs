@@ -8,7 +8,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Net;
 using UnityEngine.UI;
 
-public enum AppState {Initialize, GetURLs, DownloadAssignments, MenuConfig, AssignmentMenu, Playing, LoadContent};
+public enum AppState {Login, Initialize, GetURLs, DownloadAssignments, MenuConfig, AssignmentMenu, Playing, LoadContent};
 
 public class Assignment {
 	public float timeToComplete = 0f;
@@ -36,7 +36,7 @@ public class Assignment {
 public class AppManager : MonoBehaviour {
 
   public bool localDebug;
-	public AppState currentAppState = AppState.Initialize;
+	public AppState currentAppState = AppState.Login;
 	public static AppManager s_instance;
   public List<Assignment> currentAssignments = new List<Assignment>();
 	public List<GameObject> userAssignments;
@@ -53,9 +53,10 @@ public class AppManager : MonoBehaviour {
 
 	List<string> assignmentURLsToDownload;
 
-  bool urlsDownloaded, clicked;
+  bool urlsDownloaded, clicked, userExists;
 
 	void Awake() {
+    StartCoroutine(loginAcct("Alphonse","blargh"));
     masteryFilePath = Application.persistentDataPath + "mastery.info";
 		if (s_instance == null) {
 			s_instance = this;
@@ -64,6 +65,11 @@ public class AppManager : MonoBehaviour {
 
 	void Update () {
 		switch (currentAppState) {
+      case AppState.Login :
+        if(userExists){
+          currentAppState = AppState.Initialize;
+        }
+        break;
       case AppState.Initialize :
         if(CheckForInternetConnection() && !localDebug){
           StartCoroutine (DownloadListOfURLs());
@@ -99,6 +105,17 @@ public class AppManager : MonoBehaviour {
         break;
     }
 	}
+
+  public IEnumerator loginAcct(string username, string password){
+    WWW www = new WWW(serverURL + "/logStudentIn?username=" + username + "&password=" + password);
+    yield return www;
+    print(www.text);
+    if(www.text == "true"){
+      userExists = true;
+    }else{
+      userExists = false;
+    }
+  }
 
   public int countStringOccurrences(string text, string pattern){
     int count = 0;
@@ -191,7 +208,7 @@ public class AppManager : MonoBehaviour {
     return assignToReturn;
   }
 
-  int pullAssignMastery(Assignment currAssign){
+  public int pullAssignMastery(Assignment currAssign){
     int mastery = 0;
     string[] masteryFile = File.ReadAllLines(masteryFilePath);
     bool foundFile = false;

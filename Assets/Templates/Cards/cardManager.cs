@@ -7,16 +7,22 @@ using System.Collections.Generic;
 public class Card{
   public GameObject objAssoc;
   public Text objText;
+  public Image objImg;
   public string answer;
   public string question;
   public indiCard thisIndiCard;
-  public Card(GameObject objRef, Text objTxtRef){
+  public Card(GameObject objRef, Text objTxtRef, Image objImageRef){
     objAssoc = objRef;
+    objImg = objImageRef;
     objText = objTxtRef;
   }
-  public void setCard(Term termToUse){
-    answer = termToUse.answer;
-    question = termToUse.question;
+  public void setCard(Term termToUse, bool useImage){
+    if(!useImage){
+      answer = termToUse.answer;
+      question = termToUse.question;
+    }else{
+      objImg.sprite = termToUse.imgAssoc; 
+    }
     objText.text = answer;
     objAssoc.SetActive(true);
   }
@@ -25,6 +31,7 @@ public class Card{
 public class Term{
   public string answer;
   public string question;
+  public Sprite imgAssoc;
   public int mastery = 0;
   public bool mastered = false;
   public Term(string newQuestion, string newAnswer){
@@ -57,7 +64,7 @@ public class cardManager : MonoBehaviour {
   public List<Card> allCards = new List<Card>();
   public List<Term> allTerms = new List<Term>();
   public List<Term> unmasteredTerms = new List<Term>();
-  private bool handleCardPress, firstPress, handleKeyboardSubmit, firstSubmit;
+  private bool handleCardPress, firstPress, handleKeyboardSubmit, firstSubmit, useImages = true;
 
   private int currentDifficulty;
 
@@ -86,7 +93,7 @@ public class cardManager : MonoBehaviour {
         questDispEnd = circGraphic.transform.localPosition;
         questDispEnd.y = questDispEnd.y*-1;
         foreach(GameObject card in cardObjs){
-          Card newCard = new Card(card, card.transform.GetChild(0).GetComponent<Text>());
+          Card newCard = new Card(card, card.transform.Find("Text").GetComponent<Text>(), card.transform.Find("Image").GetComponent<Image>());
           newCard.thisIndiCard = card.GetComponent<indiCard>();
           allCards.Add(newCard);
         }
@@ -107,7 +114,11 @@ public class cardManager : MonoBehaviour {
         amtOfCards = (int)(3*currentDifficulty);
         List<int> uniqueIndexes = generateUniqueRandomNum(amtOfCards, unmasteredTerms.Count, correctTermIndex);
         for(int i = 0; i<uniqueIndexes.Count;i++){
-          allCards[i].setCard(unmasteredTerms[uniqueIndexes[i]]);
+          if(!useImages){
+            allCards[i].setCard(unmasteredTerms[uniqueIndexes[i]], false);
+          }else{
+            allCards[i].setCard(unmasteredTerms[uniqueIndexes[i]], true);
+          }
           //Instantiate(instPartFab, allCards[i].objAssoc.transform.position+new Vector3(0f,0f,-10f), Quaternion.identity); 
 
         }
