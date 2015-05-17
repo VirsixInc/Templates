@@ -11,7 +11,7 @@ public class MenuButtonManager : MonoBehaviour {
 		animationSlides = GetComponentsInChildren<AnimationSlide> ();
 	}
 	
-	void OnEnable() {
+	public void EnableMenu() {
 		ActivateMenuButtons ();
 	}
 	

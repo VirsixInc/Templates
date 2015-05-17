@@ -9,11 +9,10 @@ public class AnimationSlide : MonoBehaviour {
 
 	public float moveDistance = 10000f;
 	public SlideDirection thisSlideDirection = SlideDirection.Up;
-	Vector3 startPos, endPos, originalPos, moveDirection;
+	Vector3 startPos, endPos, moveDirection;
 	bool isSliding = false;
 
 	void Awake () {
-		originalPos = transform.position;
 		switch (thisSlideDirection) {
 		case SlideDirection.Down :
 			moveDirection = -transform.up;
@@ -31,13 +30,17 @@ public class AnimationSlide : MonoBehaviour {
 			moveDirection = transform.right;
 			break;
 		}
-		startPos = originalPos;
 		endPos = transform.position + moveDirection * moveDistance;
+	}
+
+	void Start () {
+		startPos = transform.position;
+
 	}
 
 	public void Reset() {
 		isSliding = false;
-		transform.position = originalPos;
+		transform.position = startPos;
 	}
 
 	public void Slide() {
