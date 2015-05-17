@@ -10,8 +10,6 @@ using UnityEngine.UI;
 
 public enum AppState {Initialize, GetURLs, DownloadAssignments, MenuConfig, AssignmentMenu, Playing, LoadContent};
 
-public enum AssignmentType {Cards, Buckets, Sequencing, HotSpots, Undefined};
-
 public class Assignment {
 	public float timeToComplete = 0f;
 	public string dateCompleted ="";
@@ -24,34 +22,14 @@ public class Assignment {
 	public int mastery = 0;
 
 	public string assignmentTitle = "";
-	public AssignmentType assignmentType;
   public string fullAssignTitle = "";
+  public string type = "";
 
 
   public Assignment(string assignTitle, string templateType, string fullAssignTit){
     fullAssignTitle = fullAssignTit;
-    assignmentType = getAssign(templateType);
+    type = templateType;
     assignmentTitle = assignTitle;
-  }
-
-  AssignmentType getAssign(string tempType){
-    switch(tempType){
-      case "cards":
-        return AssignmentType.Cards;
-        break;
-      case "hotspots":
-        return AssignmentType.HotSpots;
-        break;
-      case "sequences":
-        return AssignmentType.Sequencing;
-        break;
-      case "buckets":
-        return AssignmentType.Buckets;
-        break;
-      default:
-        return AssignmentType.Undefined;
-        break;
-    }
   }
 }
 
@@ -61,19 +39,20 @@ public class AppManager : MonoBehaviour {
 	public AppState currentAppState = AppState.Initialize;
 	public static AppManager s_instance;
   public List<Assignment> currentAssignments = new List<Assignment>();
-	public List<GameObject> userAssignments; //the main list of assignments which can be updated and sent to and fro the server
-	string serverURL = "http://192.168.1.8:8080/client", folderName;
-  string username = "Alphonse";
-  string password = "blargh";
-
-  string masteryFilePath;
+	public List<GameObject> userAssignments;
 
 	string[] assignmentURLs;
-	List<string> assignmentURLsToDownload;
-	int assignmentsDownloaded = 0;
+	string serverURL = "http://192.168.1.8:8080/client", folderName,
+         username = "Alphonse",
+         password = "blargh",
+         masteryFilePath,
+         filePathToUse;
 
-  bool urlsDownloaded;
-  int assignsLoaded = 0, totalAssigns;
+  int assignsLoaded = 0, assignmentsDownloaded = 0, totalAssigns, currIndex;
+
+	List<string> assignmentURLsToDownload;
+
+  bool urlsDownloaded, clicked;
 
 	void Awake() {
     masteryFilePath = Application.persistentDataPath + "mastery.info";
@@ -111,6 +90,11 @@ public class AppManager : MonoBehaviour {
         currentAppState = AppState.AssignmentMenu;
         break;
       case AppState.AssignmentMenu :
+        if(clicked){
+          filePathToUse = Application.persistentDataPath + "/" + currentAssignments[currIndex].fullAssignTitle;
+          Application.LoadLevel(currentAssignments[currIndex].type);
+          clicked = false;
+        }
         break;
     }
     print(currentAppState);
@@ -206,6 +190,7 @@ public class AppManager : MonoBehaviour {
     assignToReturn = new Assignment(assign[1],assign[0],assignWithoutExt);
     return assignToReturn;
   }
+
   int pullAssignMastery(Assignment currAssign){
     int mastery = 0;
     string[] masteryFile = File.ReadAllLines(masteryFilePath);
@@ -224,6 +209,7 @@ public class AppManager : MonoBehaviour {
     }
     return mastery;
   }
+
   public IEnumerator uploadAssignMastery(string assignmentName, int mastery){
     assignmentName = assignmentName.Replace("\"", "");
 		WWW www = new WWW(serverURL + "/setAssignmentMastery?assignmentName=" + assignmentName + "&student=" + username + "&mastery=" + mastery.ToString());
@@ -236,7 +222,8 @@ public class AppManager : MonoBehaviour {
 	}
 
 	public void ClickHandler (int index) {
-
+    clicked = true;
+    currIndex = index;
 	}
 
 }
