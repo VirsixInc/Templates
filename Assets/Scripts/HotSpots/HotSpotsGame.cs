@@ -188,20 +188,20 @@ public class HotSpotsGame : MonoBehaviour
 		totalTerms = phaseOneObjs.Count + phaseTwoObjs.Count + phaseThreeObjs.Count;
 
 
-		//float previousMasteryData = AppManager.s_instance.currentAssignments[currentIndex]
-		//thresholds of data will be totalTerms over 
-//		if (previousMasteryData < (phaseOneObjs.Count/totalTerms)) {
-//			mastery.value = 0;
-//		}		
-//		else if (previousMasteryData > (phaseOneObjs.Count/totalTerms) && (previousMasteryData < (phaseOneObjs.Count + phaseTwoObjs.Count)/totalTerms)) {
-//			mastery.value = (float)phaseOneObjs.Count/totalTerms;
-//			curPhase = HotSpotPhase.Typing;
-//		}
-//
-//		else if (previousMasteryData > (phaseOneObjs.Count + phaseTwoObjs.Count)/totalTerms) {
-//			mastery.value = (float)(phaseOneObjs.Count + phaseTwoObjs.Count)/totalTerms;
-//			curPhase = HotSpotPhase.Groups;
-//		}
+		float previousMasteryData = AppManager.s_instance.pullAssignMastery (AppManager.s_instance.currentAssignments [AppManager.s_instance.currIndex])/100;
+//		thresholds of data will be objs.count over totalTerms 
+		if (previousMasteryData < (phaseOneObjs.Count/totalTerms)) {
+			mastery.value = 0;
+		}		
+		else if (previousMasteryData > (phaseOneObjs.Count/totalTerms) && (previousMasteryData < (phaseOneObjs.Count + phaseTwoObjs.Count)/totalTerms)) {
+			mastery.value = (float)phaseOneObjs.Count/totalTerms;
+			curPhase = HotSpotPhase.Typing;
+		}
+
+		else if (previousMasteryData > (phaseOneObjs.Count + phaseTwoObjs.Count)/totalTerms) {
+			mastery.value = (float)(phaseOneObjs.Count + phaseTwoObjs.Count)/totalTerms;
+			curPhase = HotSpotPhase.Groups;
+		}
 		
 	}
 
