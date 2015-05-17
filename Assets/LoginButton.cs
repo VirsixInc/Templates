@@ -8,7 +8,7 @@ public class LoginButton : MonoBehaviour {
 
 	public void SendUserData () {
 		if (username.text != "" && password.text != "") {
-			AppManager.s_instance.StartCoroutine("loginAcct", username.text, password.text);
+			AppManager.s_instance.StartCoroutine(AppManager.s_instance.loginAcct(username.text, password.text));
 			Application.LoadLevel("AssignmentMenu");
 		}
 	}
