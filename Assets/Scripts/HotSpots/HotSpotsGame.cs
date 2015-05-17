@@ -42,7 +42,7 @@ public class HotSpotsGame : MonoBehaviour
 	bool hasAnsweredCorrect = false, masteryChecked = false;
 	float totalTerms, completedTerms;
 	//Keyboard members
-	private bool handleCardPress, firstPress, handleKeyboardSubmit, firstSubmit;
+	private bool handleCardPress, firstPress, handleKeyboardSubmit, firstSubmit, isLoadingMainMenu;
 	public InputField keyboardText;
 
 	//timer
@@ -116,7 +116,10 @@ public class HotSpotsGame : MonoBehaviour
 			}
 			break;
 		case HotSpotGameState.Win:
+			int masteryOutput = Mathf.CeilToInt(mastery.value*100);
+			AppManager.s_instance.saveAssignmentMastery(AppManager.s_instance.currentAssignments [AppManager.s_instance.currIndex], masteryOutput);
 			break;
+
 		}
 	}
 
@@ -184,22 +187,22 @@ public class HotSpotsGame : MonoBehaviour
 
 		totalTerms = phaseOneObjs.Count + phaseTwoObjs.Count + phaseThreeObjs.Count;
 
-		if (isPrexistingData) {
-			float previousMasteryData = .45f;
-			//thresholds of data will be totalTerms over 
-			if (previousMasteryData < (phaseOneObjs.Count/totalTerms)) {
-				mastery.value = 0;
-			}		
-			else if (previousMasteryData > (phaseOneObjs.Count/totalTerms) && (previousMasteryData < (phaseOneObjs.Count + phaseTwoObjs.Count)/totalTerms)) {
-				mastery.value = (float)phaseOneObjs.Count/totalTerms;
-				curPhase = HotSpotPhase.Typing;
-			}
 
-			else if (previousMasteryData > (phaseOneObjs.Count + phaseTwoObjs.Count)/totalTerms) {
-				mastery.value = (float)(phaseOneObjs.Count + phaseTwoObjs.Count)/totalTerms;
-				curPhase = HotSpotPhase.Groups;
-			}
-		}
+		//float previousMasteryData = AppManager.s_instance.currentAssignments[currentIndex]
+		//thresholds of data will be totalTerms over 
+//		if (previousMasteryData < (phaseOneObjs.Count/totalTerms)) {
+//			mastery.value = 0;
+//		}		
+//		else if (previousMasteryData > (phaseOneObjs.Count/totalTerms) && (previousMasteryData < (phaseOneObjs.Count + phaseTwoObjs.Count)/totalTerms)) {
+//			mastery.value = (float)phaseOneObjs.Count/totalTerms;
+//			curPhase = HotSpotPhase.Typing;
+//		}
+//
+//		else if (previousMasteryData > (phaseOneObjs.Count + phaseTwoObjs.Count)/totalTerms) {
+//			mastery.value = (float)(phaseOneObjs.Count + phaseTwoObjs.Count)/totalTerms;
+//			curPhase = HotSpotPhase.Groups;
+//		}
+		
 	}
 
 	void DisplayQuestion ()
