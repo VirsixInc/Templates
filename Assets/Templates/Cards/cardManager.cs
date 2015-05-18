@@ -70,7 +70,8 @@ public class cardManager : MonoBehaviour {
   public List<Term> allTerms = new List<Term>();
   public List<Term> unmasteredTerms = new List<Term>();
 
-  private bool handleCardPress, firstPress, handleKeyboardSubmit, firstSubmit, useImages;
+  public bool useImages;
+  private bool handleCardPress, firstPress, handleKeyboardSubmit, firstSubmit;
 
   private int currentDifficulty;
 
@@ -90,7 +91,7 @@ public class cardManager : MonoBehaviour {
   public AppManager manager;
 	
   void Awake(){
-    manager = GameObject.FindGameObjectWithTag("appManager").GetComponent<AppManager>();
+//    manager = GameObject.FindGameObjectWithTag("appManager").GetComponent<AppManager>();
   }
 	void Update () {
     switch(currentState){
@@ -112,7 +113,7 @@ public class cardManager : MonoBehaviour {
         unmasteredTerms = allTerms.ToList();
 
         totalMastery = unmasteredTerms.Count*requiredMastery;
-        baseImagePath = baseImagePath + manager.currentAssignments[manager.currIndex];
+//        baseImagePath = baseImagePath + manager.currentAssignments[manager.currIndex];
         currentState = GameState.ResetCards;
         break;
       case GameState.ResetCards:
@@ -122,7 +123,6 @@ public class cardManager : MonoBehaviour {
         }
         correctTermIndex = Random.Range(0,unmasteredTerms.Count);
         currentDifficulty = Mathf.Clamp(currentDifficulty, unmasteredTerms[correctTermIndex].mastery,  3); 
-        print(currentDifficulty);
         amtOfCards = (int)(3*currentDifficulty);
         List<int> uniqueIndexes = generateUniqueRandomNum(amtOfCards, unmasteredTerms.Count, correctTermIndex);
         for(int i = 0; i<uniqueIndexes.Count;i++){
@@ -303,7 +303,7 @@ public class cardManager : MonoBehaviour {
       if(thisLine.Length > 1){
         Term termToAdd;
         if(useImages){
-          termToAdd = new Term(thisLine[0], thisLine[1], baseImagePath + thisLine[2]);
+          termToAdd = new Term(thisLine[0], thisLine[1], baseImagePath + "/" + thisLine[1]);
         }else{
           termToAdd = new Term(thisLine[0], thisLine[1]);
         }

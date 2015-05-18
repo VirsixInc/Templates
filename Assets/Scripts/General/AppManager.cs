@@ -38,16 +38,16 @@ public class Assignment {
 public class AppManager : MonoBehaviour {
 
   public bool localDebug;
-	public AppState currentAppState = AppState.Login;
+	private AppState currentAppState;
 	public static AppManager s_instance;
   public List<Assignment> currentAssignments = new List<Assignment>();
 	public List<GameObject> userAssignments;
   public int currIndex;
 
 	string[] assignmentURLs;
-	string serverURL = "http://192.168.1.8:8080/client", folderName,
-         username = "Alphonse",
-         password = "blargh",
+	string serverURL = "http://localhost:8080/client", folderName,
+         username,
+         password,
          masteryFilePath,
          filePathToUse;
 
@@ -58,18 +58,23 @@ public class AppManager : MonoBehaviour {
   bool urlsDownloaded, clicked, userExists;
 
 	void Awake() {
-    StartCoroutine(loginAcct("Alphonse","blargh"));
     masteryFilePath = Application.persistentDataPath + "mastery.info";
+    DontDestroyOnLoad(transform.gameObject);
 		if (s_instance == null) {
 			s_instance = this;
 		}
 	}
 
 	void Update () {
+    print(currentAppState);
+
 		switch (currentAppState) {
       case AppState.Login :
         if(userExists){
           currentAppState = AppState.Initialize;
+          if(currentAppState == AppState.Initialize){
+            Application.LoadLevel("AssignmentMenu");
+          }
         }
         break;
       case AppState.Initialize :
@@ -86,6 +91,7 @@ public class AppManager : MonoBehaviour {
         }
         break;
       case AppState.DownloadAssignments :
+        print(assignsLoaded + "   " + totalAssigns);
         if(assignsLoaded == totalAssigns){
           currentAppState = AppState.LoadContent;
         }
@@ -111,12 +117,13 @@ public class AppManager : MonoBehaviour {
     }
 	}
 
-  public IEnumerator loginAcct(string username, string password){
-    WWW www = new WWW(serverURL + "/logStudentIn?username=" + username + "&password=" + password);
+  public IEnumerator loginAcct(string name, string wrd){
+    WWW www = new WWW(serverURL + "/logStudentIn?username=" + name + "&password=" + wrd);
     yield return www;
-    print(www.text);
     if(www.text == "true"){
       userExists = true;
+      username = name;
+      password = wrd;
     }else{
       userExists = false;
     }
@@ -140,6 +147,7 @@ public class AppManager : MonoBehaviour {
 		WWW www = new WWW(serverURL + "/pullData?username=" + username + "&password=" + password);
     urlsDownloaded = false;
 		yield return www;
+    print(www.text);
     JSONObject allAssignments = ParseToJSON(www.text);
     totalAssigns = allAssignments.Count;
     for(int i = 0; i<totalAssigns;i++){
