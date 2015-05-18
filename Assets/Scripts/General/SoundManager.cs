@@ -13,7 +13,7 @@ public class SoundManager : MonoBehaviour {
 	}
 
 	void Start () {
-		m_start.Play ();
+		m_win.Play ();
 	}
 
 	public void PlaySound (AudioSource source) {
