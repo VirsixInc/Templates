@@ -72,7 +72,7 @@
      <Compile Include="Assets\JMO Assets\Cartoon FX\Scripts\CFX_LightIntensityFade.cs" />
      <Compile Include="Assets\JMO Assets\Cartoon FX\Scripts\CFX_ShurikenThreadFix.cs" />
      <Compile Include="Assets\JMO Assets\Cartoon FX\Spawn System\CFX_SpawnSystem.cs" />
-     <Compile Include="Assets\MenuButton.cs" />
+     <Compile Include="Assets\MenuButtonManager.cs" />
      <Compile Include="Assets\Prefabs\CircleTimer\Timer1.cs" />
      <Compile Include="Assets\Scripts\General\AppManager.cs" />
      <Compile Include="Assets\Scripts\General\CSVParser.cs" />

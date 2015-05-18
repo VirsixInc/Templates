@@ -24,6 +24,8 @@ public class Assignment {
 	public string assignmentTitle = "";
   public string fullAssignTitle = "";
   public string type = "";
+  public float secondsOnAssignment;
+  public float timeAtLoad;
 
 
   public Assignment(string assignTitle, string templateType, string fullAssignTit){
@@ -100,8 +102,11 @@ public class AppManager : MonoBehaviour {
         if(clicked){
           filePathToUse = Application.persistentDataPath + "/" + currentAssignments[currIndex].fullAssignTitle;
           Application.LoadLevel(currentAssignments[currIndex].type);
+          currentAssignments[currIndex].timeAtLoad = Time.time;
           clicked = false;
         }
+        break;
+      case AppState.Playing:
         break;
     }
 	}
@@ -115,6 +120,10 @@ public class AppManager : MonoBehaviour {
     }else{
       userExists = false;
     }
+  }
+
+  public void quitTemp(){
+    currentAssignments[currIndex].secondsOnAssignment = currentAssignments[currIndex].timeAtLoad-Time.time;
   }
 
   public int countStringOccurrences(string text, string pattern){

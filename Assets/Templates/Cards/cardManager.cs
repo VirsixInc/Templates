@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Linq;
+using System.IO;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -17,13 +18,14 @@ public class Card{
     objText = objTxtRef;
   }
   public void setCard(Term termToUse, bool useImage){
-    if(!useImage){
-      answer = termToUse.answer;
-      question = termToUse.question;
-    }else{
+    if(useImage){
       objImg.sprite = termToUse.imgAssoc; 
+      objText.text = "";
+    }else{
+      objText.text = answer;
     }
-    objText.text = answer;
+    answer = termToUse.answer;
+    question = termToUse.question;
     objAssoc.SetActive(true);
   }
 };
@@ -34,7 +36,10 @@ public class Term{
   public Sprite imgAssoc;
   public int mastery = 0;
   public bool mastered = false;
-  public Term(string newQuestion, string newAnswer){
+  public Term(string newQuestion, string newAnswer, string filePathForImg = null){
+    if(filePathForImg != null){
+      imgAssoc = Resources.Load<Sprite>(filePathForImg);
+    }
     question = newQuestion;
     answer = newAnswer;
   }
@@ -64,7 +69,8 @@ public class cardManager : MonoBehaviour {
   public List<Card> allCards = new List<Card>();
   public List<Term> allTerms = new List<Term>();
   public List<Term> unmasteredTerms = new List<Term>();
-  private bool handleCardPress, firstPress, handleKeyboardSubmit, firstSubmit, useImages = true;
+
+  private bool handleCardPress, firstPress, handleKeyboardSubmit, firstSubmit, useImages;
 
   private int currentDifficulty;
 
@@ -73,14 +79,19 @@ public class cardManager : MonoBehaviour {
   private int currIndex;
   private int amtOfCards;
   private int correctTermIndex;
-
   private int totalMastery;
   private int requiredMastery = 4;
-
   private int currentPhase;
 
+  public string baseImagePath;
+
   private Vector3 questDispStart, questDispEnd;
+
+  public AppManager manager;
 	
+  void Awake(){
+    manager = GameObject.FindGameObjectWithTag("appManager").GetComponent<AppManager>();
+  }
 	void Update () {
     switch(currentState){
       case GameState.ConfigCards:
@@ -99,9 +110,10 @@ public class cardManager : MonoBehaviour {
         }
         allTerms = convertCSV(parseCSV(csvToUse));
         unmasteredTerms = allTerms.ToList();
-        currentState = GameState.ResetCards;
 
         totalMastery = unmasteredTerms.Count*requiredMastery;
+        baseImagePath = baseImagePath + manager.currentAssignments[manager.currIndex];
+        currentState = GameState.ResetCards;
         break;
       case GameState.ResetCards:
         Timer1.s_instance.Reset(15f);
@@ -208,8 +220,7 @@ public class cardManager : MonoBehaviour {
       case GameState.End:
         break;
     }
-	
-	}
+  }
 
   public void cardHandler (int cardIndex) {
     handleCardPress = true;
@@ -289,8 +300,15 @@ public class cardManager : MonoBehaviour {
   List<Term> convertCSV(List<string[]> inputString){
     List<Term> listToReturn = new List<Term>();
     foreach(string[] thisLine in inputString){
-      Term termToAdd = new Term(thisLine[0], thisLine[1]);
-      listToReturn.Add(termToAdd);
+      if(thisLine.Length > 1){
+        Term termToAdd;
+        if(useImages){
+          termToAdd = new Term(thisLine[0], thisLine[1], baseImagePath + thisLine[2]);
+        }else{
+          termToAdd = new Term(thisLine[0], thisLine[1]);
+        }
+        listToReturn.Add(termToAdd);
+      }
     }
     return listToReturn;
   }
