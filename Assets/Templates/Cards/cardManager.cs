@@ -6,6 +6,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class Card{
+
   public GameObject objAssoc;
   public Text objText;
   public Image objImg;
@@ -85,6 +86,9 @@ public class cardManager : MonoBehaviour {
   private int currentPhase;
 
   public string baseImagePath;
+	public GameObject winningSlide;
+	
+  public Slider masteryMeter;
 
   private Vector3 questDispStart, questDispEnd;
 
@@ -94,6 +98,7 @@ public class cardManager : MonoBehaviour {
 //    manager = GameObject.FindGameObjectWithTag("appManager").GetComponent<AppManager>();
   }
 	void Update () {
+
     switch(currentState){
       case GameState.ConfigCards:
         keyboardView.SetActive(false);
@@ -172,6 +177,9 @@ public class cardManager : MonoBehaviour {
           Timer1.s_instance.Pause();
           firstPress = false;
           handleCardPress = false;
+				masteryMeter.value = getMastery();
+
+
         }
         if(Timer1.s_instance.timesUp && !Timer1.s_instance.pause){
           Timer1.s_instance.Pause();
@@ -211,6 +219,7 @@ public class cardManager : MonoBehaviour {
           firstSubmit = false;
           handleKeyboardSubmit = false;
           keyboardText.text = "";
+				masteryMeter.value = getMastery();
         }
         if(Timer1.s_instance.timesUp && !Timer1.s_instance.pause){
           Timer1.s_instance.Pause();
@@ -218,6 +227,7 @@ public class cardManager : MonoBehaviour {
         }
         break;
       case GameState.End:
+			winningSlide.SetActive(true);
         break;
     }
   }
@@ -244,8 +254,7 @@ public class cardManager : MonoBehaviour {
     foreach(Term currTerm in unmasteredTerms){
       currentMastery += currTerm.mastery;
     }
-    print(totalMastery/2);
-    print(currentMastery);
+	
     if(currentMastery >= totalMastery/2){
       newPhase = true;
       print("NEW PHASE IS TRUE!");
@@ -253,6 +262,17 @@ public class cardManager : MonoBehaviour {
     return newPhase;
   }
 
+	float getMastery(){
+		float floatToReturn;
+		int amtOfMasteredTerms = allTerms.Count-unmasteredTerms.Count;
+		int currentMastery = amtOfMasteredTerms*requiredMastery; 
+		foreach(Term currTerm in unmasteredTerms){
+			currentMastery += currTerm.mastery;
+		}
+		floatToReturn = currentMastery / allTerms.Count;
+		print (floatToReturn);
+		return floatToReturn;
+	}
   List<int> generateUniqueRandomNum(int amt, int randRange, int noThisNum = -1){
     List<int> listToReturn = new List<int>();
     if(noThisNum != -1){
