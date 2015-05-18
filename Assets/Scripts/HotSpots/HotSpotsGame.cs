@@ -27,7 +27,7 @@ public class HotSpotsGame : MonoBehaviour
 {
 	public PopUpGraphic redX, greenCheck;
 	public Slider masteryMeter;
-	public Text promptText, promptText2;
+	public Text promptText, promptText2, correctSpellingText;
 	public static HotSpotsGame s_instance;
 	public GameObject winningSlide;
 	HotSpotPhase curPhase = HotSpotPhase.Elements;
@@ -105,6 +105,9 @@ public class HotSpotsGame : MonoBehaviour
 			if (CheckForMastery ()) {
 				if (curPhase != HotSpotPhase.Groups) {
 					print ("next phase");
+					if (curPhase == HotSpotPhase.Typing) {
+						keyboardText.enabled = false;
+					}
 					curPhase++;
 					curState = HotSpotGameState.SetPhase;
 				}
@@ -209,7 +212,6 @@ public class HotSpotsGame : MonoBehaviour
 				curPhase = HotSpotPhase.Groups;
 			}
 		}
-		
 	}
 
 	void DisplayQuestion ()
@@ -353,7 +355,12 @@ public class HotSpotsGame : MonoBehaviour
 	void AdjustMastery (bool isCorrect)
 	{
 		if (isCorrect && !	Timer1.s_instance.timesUp) {
-			unmasteredItems [currentIndex].sequenceMastery += .5f;
+			if (curPhase == HotSpotPhase.Typing) {
+				unmasteredItems [currentIndex].sequenceMastery += 1.0f;
+			}
+			else {
+				unmasteredItems [currentIndex].sequenceMastery += .5f;
+			}
 		} else {
 			if (unmasteredItems [currentIndex].sequenceMastery > 0) {
 				unmasteredItems [currentIndex].sequenceMastery -= .5f;
@@ -379,6 +386,10 @@ public class HotSpotsGame : MonoBehaviour
 
 	void AnswerWrong ()
 	{
+		if (curPhase == HotSpotPhase.Typing) {
+			correctSpellingText.text = currentCorrectAnswer;
+			correctSpellingText.gameObject.GetComponent<Fader>().StartFadeOut();
+		}
 		redX.StartFade (); 
 		ClearGUIObjects ();
 		BackgroundFlash.s_instance.FadeRed ();
