@@ -72,8 +72,13 @@
      <Compile Include="Assets\JMO Assets\Cartoon FX\Scripts\CFX_LightIntensityFade.cs" />
      <Compile Include="Assets\JMO Assets\Cartoon FX\Scripts\CFX_ShurikenThreadFix.cs" />
      <Compile Include="Assets\JMO Assets\Cartoon FX\Spawn System\CFX_SpawnSystem.cs" />
+<<<<<<< HEAD
+=======
+     <Compile Include="Assets\LoginButton.cs" />
+>>>>>>> aa598db42c1b53f989e7155519b9c127e91b2efe
      <Compile Include="Assets\MenuButtonManager.cs" />
      <Compile Include="Assets\Prefabs\CircleTimer\Timer1.cs" />
+     <Compile Include="Assets\Quitbutton.cs" />
      <Compile Include="Assets\Scripts\General\AppManager.cs" />
      <Compile Include="Assets\Scripts\General\CSVParser.cs" />
      <Compile Include="Assets\Scripts\General\FadeOut.cs" />
