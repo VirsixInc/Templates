@@ -90,6 +90,8 @@ public class cardManager : MonoBehaviour {
 	
   public Slider masteryMeter;
 
+	bool soundHasPlayed = false;
+
   private Vector3 questDispStart, questDispEnd;
 
   public AppManager manager;
@@ -158,6 +160,7 @@ public class cardManager : MonoBehaviour {
         if(handleCardPress){
           if(firstPress && allCards[currIndex].answer == unmasteredTerms[correctTermIndex].answer){
             background.SendMessage("correct");
+					if(SoundManager.s_instance!=null)SoundManager.s_instance.PlaySound(SoundManager.s_instance.m_correct);
             unmasteredTerms[correctTermIndex].mastery++;
             currentState = GameState.ResetCards;
             if(unmasteredTerms[correctTermIndex].mastery == requiredMastery*.75f){
@@ -172,6 +175,8 @@ public class cardManager : MonoBehaviour {
             currentState = GameState.ResetCards;
           }else{
             allCards[currIndex].objAssoc.SendMessage("incorrectAnswer");
+					if(SoundManager.s_instance!=null)SoundManager.s_instance.PlaySound(SoundManager.s_instance.m_wrong);
+
           }
           background.SendMessage("incorrect");
           Timer1.s_instance.Pause();
@@ -228,6 +233,11 @@ public class cardManager : MonoBehaviour {
         break;
       case GameState.End:
 			winningSlide.SetActive(true);
+			if (soundHasPlayed == false) {
+				if(SoundManager.s_instance!=null)SoundManager.s_instance.PlaySound(SoundManager.s_instance.m_correct);
+				soundHasPlayed = true;
+			}
+
         break;
     }
   }

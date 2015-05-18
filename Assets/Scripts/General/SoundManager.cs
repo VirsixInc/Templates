@@ -12,6 +12,10 @@ public class SoundManager : MonoBehaviour {
 		DontDestroyOnLoad (gameObject);
 	}
 
+	void Start () {
+		m_start.Play ();
+	}
+
 	public void PlaySound (AudioSource source) {
 		source.Play ();
 	}

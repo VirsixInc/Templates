@@ -124,6 +124,9 @@ public class HotSpotsGame : MonoBehaviour
 			AppManager.s_instance.saveAssignmentMastery(AppManager.s_instance.currentAssignments [AppManager.s_instance.currIndex], masteryOutput);
 			if (isExiting == false){
 				StartCoroutine("LoadMain");
+				if(SoundManager.s_instance!=null)SoundManager.s_instance.PlaySound(SoundManager.s_instance.m_win);
+				isExiting = true;
+
 			}
 			break;
 
@@ -377,6 +380,7 @@ public class HotSpotsGame : MonoBehaviour
 
 	void AnswerCorrect ()
 	{
+		if(SoundManager.s_instance!=null)SoundManager.s_instance.PlaySound(SoundManager.s_instance.m_correct);
 		greenCheck.StartFade (); 
 		ClearGUIObjects ();
 		BackgroundFlash.s_instance.FadeGreen ();
@@ -386,6 +390,8 @@ public class HotSpotsGame : MonoBehaviour
 
 	void AnswerWrong ()
 	{
+		if(SoundManager.s_instance!=null)SoundManager.s_instance.PlaySound(SoundManager.s_instance.m_wrong);
+
 		if (curPhase == HotSpotPhase.Typing) {
 			correctSpellingText.text = currentCorrectAnswer;
 			correctSpellingText.gameObject.GetComponent<Fader>().StartFadeOut();

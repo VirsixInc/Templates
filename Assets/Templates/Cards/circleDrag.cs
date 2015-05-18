@@ -26,9 +26,13 @@ public class circleDrag : MonoBehaviour {
 	}
   void OnMouseDown(){
     tapped = true;
+		if(SoundManager.s_instance!=null)SoundManager.s_instance.PlaySound(SoundManager.s_instance.m_snap);
+
   }
   void OnMouseUp(){
     tapped = false;
+		if(SoundManager.s_instance!=null)SoundManager.s_instance.PlaySound(SoundManager.s_instance.m_snap);
+
   }
 
   void OnTriggerEnter2D(Collider2D coll){

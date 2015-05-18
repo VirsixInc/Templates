@@ -20,6 +20,7 @@ public class ChildHotSpot : MonoBehaviour {
 	
 	//HotSpotsGame.s_instance.SubmitAnswer(gameObject.name)
 	void CallGameManager () {
+		if(SoundManager.s_instance!=null)SoundManager.s_instance.PlaySound(SoundManager.s_instance.m_snap);
 		HotSpotsGame.s_instance.SubmitAnswer(transform.parent.gameObject.name);
 	}
 }
