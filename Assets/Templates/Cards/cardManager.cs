@@ -21,12 +21,10 @@ public class Card{
   public void setCard(Term termToUse, bool useImage){
     if(useImage){
       objImg.sprite = termToUse.imgAssoc; 
-      objText.text = "";
-    }else{
-      objText.text = answer;
     }
     answer = termToUse.answer;
     question = termToUse.question;
+    objText.text = answer;
     objAssoc.SetActive(true);
   }
 };
@@ -61,7 +59,6 @@ public class cardManager : MonoBehaviour {
   public GameObject circGraphic;
   public GameObject background;
 
-  public TextAsset csvToUse;
   public Text questDisplay;
   public InputField keyboardText;
   public GameObject cardsView;
@@ -84,6 +81,7 @@ public class cardManager : MonoBehaviour {
   private int totalMastery;
   private int requiredMastery = 4;
   private int currentPhase;
+  public TextAsset csvToUse;
 
   public string baseImagePath;
 	public GameObject winningSlide;
@@ -103,6 +101,7 @@ public class cardManager : MonoBehaviour {
 
     switch(currentState){
       case GameState.ConfigCards:
+        csvToUse = Resources.Load<TextAsset>("cardstxt");
         keyboardView.SetActive(false);
         cardsView.SetActive(true);
         currentDifficulty = 1;
