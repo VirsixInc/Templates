@@ -17,7 +17,6 @@ public class BlurLerp : MonoBehaviour {
 	}
 
 	IEnumerator BlurIn () {
-		print ("blur in");
 		while (GetComponent<Blur> ().iterations < 12) {
 			GetComponent<Blur> ().iterations += 1;
 			yield return new WaitForSeconds(0.03f);

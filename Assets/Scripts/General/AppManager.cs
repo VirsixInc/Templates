@@ -28,8 +28,10 @@ public class Assignment {
   public float timeAtLoad;
 
 
-  public Assignment(string assignTitle, string templateType, string fullAssignTit){
-    fullAssignTitle = fullAssignTit;
+  public Assignment(string assignTitle, string templateType, string fullAssignTit=null){
+    if(fullAssignTit != null){
+      fullAssignTitle = fullAssignTit;
+    }
     type = templateType;
     assignmentTitle = assignTitle;
   }
@@ -45,7 +47,7 @@ public class AppManager : MonoBehaviour {
   public int currIndex;
 
 	string[] assignmentURLs;
-	string serverURL = "http://localhost:8080/client", folderName,
+	string serverURL = "http://96.126.100.208:8080/client", folderName,
          username,
          password,
          masteryFilePath,
@@ -55,50 +57,67 @@ public class AppManager : MonoBehaviour {
 
 	List<string> assignmentURLsToDownload;
 
-  bool urlsDownloaded, clicked, userExists;
+  bool urlsDownloaded, clicked, userExists, hardcoded = true;
 
 	void Awake() {
+    s_instance = this;
     masteryFilePath = Application.persistentDataPath + "mastery.info";
     DontDestroyOnLoad(transform.gameObject);
-		if (s_instance == null) {
-			s_instance = this;
-		}
 	}
 
 	void Update () {
     print(currentAppState);
-
 		switch (currentAppState) {
       case AppState.Login :
         if(userExists){
           currentAppState = AppState.Initialize;
           if(currentAppState == AppState.Initialize){
+            if(hardcoded){
+              currentAssignments.Add(new Assignment("hotspots_periodic","hotspots"));
+              currentAssignments.Add(new Assignment("cards_Chemistry","cards"));
+              currentAppState = AppState.MenuConfig;
+            }
             Application.LoadLevel("AssignmentMenu");
           }
         }
         break;
       case AppState.Initialize :
-        if(CheckForInternetConnection() && !localDebug){
-          StartCoroutine (DownloadListOfURLs());
-          currentAppState = AppState.GetURLs;
+        if(hardcoded){
+          currentAppState = AppState.MenuConfig;
         }else{
-          currentAppState = AppState.LoadContent;
+          if(CheckForInternetConnection() && !localDebug){
+            StartCoroutine (DownloadListOfURLs());
+            currentAppState = AppState.GetURLs;
+          }else{
+            currentAppState = AppState.MenuConfig;
+          }
         }
         break;
       case AppState.GetURLs :
-        if(urlsDownloaded){
-          currentAppState = AppState.DownloadAssignments;
+        if(hardcoded){
+          currentAppState = AppState.MenuConfig;
+        }else{
+          if(urlsDownloaded){
+            currentAppState = AppState.DownloadAssignments;
+          }
         }
         break;
       case AppState.DownloadAssignments :
-        print(assignsLoaded + "   " + totalAssigns);
-        if(assignsLoaded == totalAssigns){
-          currentAppState = AppState.LoadContent;
+        if(hardcoded){
+          currentAppState = AppState.MenuConfig;
+        }else{
+          if(assignsLoaded == totalAssigns){
+            currentAppState = AppState.LoadContent;
+          }
         }
         break;
       case AppState.LoadContent:
-        loadInLocalAssignments();
-        currentAppState = AppState.MenuConfig;
+        if(hardcoded){
+          currentAppState = AppState.MenuConfig;
+        }else{
+          loadInLocalAssignments();
+          currentAppState = AppState.MenuConfig;
+        }
         break;
       case AppState.MenuConfig:
         AssignmentManager.s_instance.LoadAllAssignments(currentAssignments);
@@ -116,6 +135,12 @@ public class AppManager : MonoBehaviour {
         break;
     }
 	}
+
+  void OnLevelWasLoaded(int level){
+    if(level == 2){
+      currentAppState = AppState.MenuConfig;
+    }
+  }
 
   public IEnumerator loginAcct(string name, string wrd){
     WWW www = new WWW(serverURL + "/logStudentIn?username=" + name + "&password=" + wrd);
@@ -147,7 +172,6 @@ public class AppManager : MonoBehaviour {
 		WWW www = new WWW(serverURL + "/pullData?username=" + username + "&password=" + password);
     urlsDownloaded = false;
 		yield return www;
-    print(www.text);
     JSONObject allAssignments = ParseToJSON(www.text);
     totalAssigns = allAssignments.Count;
     for(int i = 0; i<totalAssigns;i++){
@@ -252,7 +276,6 @@ public class AppManager : MonoBehaviour {
       if(masteryFile[i].Contains(assignToSave.fullAssignTitle)){
         foundFile = true;
         masteryFile[i] = assignToSave.fullAssignTitle + "," + mastery.ToString();
-        print(masteryFile[i]);
         break;
       }
     }
