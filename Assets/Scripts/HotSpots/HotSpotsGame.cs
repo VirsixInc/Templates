@@ -320,7 +320,6 @@ public class HotSpotsGame : MonoBehaviour
 
 	public void SubmitAnswer (string answer)
 	{
-		print (answer + " vs " + currentCorrectAnswer);
 		if (answer.ToLower () == currentCorrectAnswer.ToLower ()) {
 			AnswerCorrect ();
 		} else {
