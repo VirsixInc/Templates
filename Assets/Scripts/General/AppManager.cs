@@ -125,7 +125,7 @@ public class AppManager : MonoBehaviour {
         break;
       case AppState.AssignmentMenu :
         if(clicked){
-          filePathToUse = Application.persistentDataPath + "/" + currentAssignments[currIndex].fullAssignTitle;
+//          filePathToUse = Application.persistentDataPath + "/" + currentAssignments[currIndex].fullAssignTitle;
           Application.LoadLevel(currentAssignments[currIndex].type);
           currentAssignments[currIndex].timeAtLoad = Time.time;
           clicked = false;
