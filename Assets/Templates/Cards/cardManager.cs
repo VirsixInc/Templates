@@ -207,6 +207,9 @@ public class cardManager : MonoBehaviour {
             currentState = GameState.ResetKeyboard;
             if(unmasteredTerms[correctTermIndex].mastery == requiredMastery*.25f){
               unmasteredTerms.RemoveAt(correctTermIndex);
+              if(unmasteredTerms.Count < 1){
+                currentState = GameState.End;
+              }
             }
           }else if(firstSubmit){
             unmasteredTerms[correctTermIndex].mastery -= 2;
@@ -223,7 +226,7 @@ public class cardManager : MonoBehaviour {
         }
         break;
       case GameState.End:
-			winningSlide.SetActive(true);
+        winningSlide.SetActive(true);
         break;
     }
   }
