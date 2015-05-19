@@ -101,7 +101,6 @@ public class cardManager : MonoBehaviour {
 
     switch(currentState){
       case GameState.ConfigCards:
-        csvToUse = Resources.Load<TextAsset>("cardstxt");
         keyboardView.SetActive(false);
         cardsView.SetActive(true);
         currentDifficulty = 1;
