@@ -19,14 +19,10 @@ public class Card{
     objText = objTxtRef;
   }
   public void setCard(Term termToUse, bool useImage){
-    if(useImage){
-      objImg.sprite = termToUse.imgAssoc; 
-      objText.text = "";
-    }else{
-      objText.text = answer;
-    }
     answer = termToUse.answer;
     question = termToUse.question;
+    objImg.sprite = termToUse.imgAssoc; 
+    objText.text = answer;
     objAssoc.SetActive(true);
   }
 };
@@ -177,7 +173,7 @@ public class cardManager : MonoBehaviour {
           Timer1.s_instance.Pause();
           firstPress = false;
           handleCardPress = false;
-				masteryMeter.value = getMastery();
+          masteryMeter.value = getMastery();
 
 
         }
@@ -264,13 +260,12 @@ public class cardManager : MonoBehaviour {
 
 	float getMastery(){
 		float floatToReturn;
-		int amtOfMasteredTerms = allTerms.Count-unmasteredTerms.Count;
-		int currentMastery = amtOfMasteredTerms*requiredMastery; 
+		float amtOfMasteredTerms = allTerms.Count-unmasteredTerms.Count;
+		float currentMastery = amtOfMasteredTerms*requiredMastery; 
 		foreach(Term currTerm in unmasteredTerms){
 			currentMastery += currTerm.mastery;
 		}
-		floatToReturn = currentMastery / allTerms.Count;
-		print (floatToReturn);
+		floatToReturn = (float)(currentMastery / (allTerms.Count*requiredMastery));
 		return floatToReturn;
 	}
   List<int> generateUniqueRandomNum(int amt, int randRange, int noThisNum = -1){
