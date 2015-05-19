@@ -135,7 +135,7 @@ public class HotSpotsGame : MonoBehaviour
 
 	IEnumerator LoadMain() {
 		yield return new WaitForSeconds (5f);
-		Application.LoadLevel ("AassignmentMenu");
+		Application.LoadLevel ("AssignmentMenu");
 	}
 
 	void SetPhase ()
