@@ -67,6 +67,8 @@ public class cardManager : MonoBehaviour {
   public List<Card> allCards = new List<Card>();
   public List<Term> allTerms = new List<Term>();
   public List<Term> unmasteredTerms = new List<Term>();
+  
+  public DirectoryInfo direct;
 
   public bool useImages;
   private bool handleCardPress, firstPress, handleKeyboardSubmit, firstSubmit;
@@ -136,8 +138,6 @@ public class cardManager : MonoBehaviour {
           }else{
             allCards[i].setCard(unmasteredTerms[uniqueIndexes[i]], true);
           }
-          //Instantiate(instPartFab, allCards[i].objAssoc.transform.position+new Vector3(0f,0f,-10f), Quaternion.identity); 
-
         }
         questDisplay.text = unmasteredTerms[correctTermIndex].question;
         firstPress = true;
@@ -180,7 +180,7 @@ public class cardManager : MonoBehaviour {
           Timer1.s_instance.Pause();
           firstPress = false;
           handleCardPress = false;
-				masteryMeter.value = getMastery();
+          masteryMeter.value = getMastery();
 
 
         }
@@ -272,20 +272,28 @@ public class cardManager : MonoBehaviour {
 
 	float getMastery(){
 		float floatToReturn;
-		int amtOfMasteredTerms = allTerms.Count-unmasteredTerms.Count;
-		int currentMastery = amtOfMasteredTerms*requiredMastery; 
+		float amtOfMasteredTerms = allTerms.Count-unmasteredTerms.Count;
+		float currentMastery = amtOfMasteredTerms*requiredMastery; 
 		foreach(Term currTerm in unmasteredTerms){
 			currentMastery += currTerm.mastery;
 		}
-		floatToReturn = currentMastery / allTerms.Count;
+		floatToReturn = currentMastery / (allTerms.Count*requiredMastery);
 		print (floatToReturn);
 		return floatToReturn;
 	}
   List<int> generateUniqueRandomNum(int amt, int randRange, int noThisNum = -1){
     List<int> listToReturn = new List<int>();
-    if(noThisNum != -1){
-      listToReturn.Add(noThisNum);
+    for(int i = 0; i<amt;i++){
+      int x = Random.Range(0,randRange);
+      if(!(listToReturn.Contains(x))){
+        listToReturn.Add(x);
+      }
     }
+
+    if(noThisNum != -1 && !listToReturn.Contains(noThisNum)){
+      listToReturn[Random.Range(0,listToReturn.Count)] = noThisNum;
+    }
+    /*
     if(amt > randRange){
       amt = randRange;
       print("RANGE CANNOT BE MORE THAN AMT");
@@ -297,7 +305,8 @@ public class cardManager : MonoBehaviour {
       }while(listToReturn.Contains(newVal));
       listToReturn.Add(newVal);
     }
-    listToReturn = listToReturn.OrderBy(x=>Random.Range(0,listToReturn.Count)).ToList();
+    */
+    //listToReturn = listToReturn.OrderBy(x=>Random.Range(0,listToReturn.Count)).ToList();
     return listToReturn;
   }
 
