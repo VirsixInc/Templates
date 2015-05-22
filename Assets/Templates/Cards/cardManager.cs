@@ -76,6 +76,7 @@ public class cardManager : MonoBehaviour {
   private int currentDifficulty;
 
   private float timeBetweenCorrAnswers;
+  private float timeAtEnd;
 
   private int currIndex;
   private int amtOfCards;
@@ -83,6 +84,7 @@ public class cardManager : MonoBehaviour {
   private int totalMastery;
   private int requiredMastery = 4;
   private int currentPhase;
+  private int levenThresh = 3;
   public TextAsset csvToUse;
 
   public string baseImagePath;
@@ -163,9 +165,6 @@ public class cardManager : MonoBehaviour {
             currentState = GameState.ResetCards;
             if(unmasteredTerms[correctTermIndex].mastery == requiredMastery*.75f){
               unmasteredTerms.RemoveAt(correctTermIndex);
-              if(unmasteredTerms.Count == 0){//checkForNewPhase()){
-                currentState = GameState.ConfigKeyboard;
-              }
             }
           }else if(allCards[currIndex].answer == unmasteredTerms[correctTermIndex].answer){
             background.SendMessage("correct");
@@ -181,6 +180,9 @@ public class cardManager : MonoBehaviour {
           firstPress = false;
           handleCardPress = false;
           masteryMeter.value = getMastery();
+          if(getMastery() >= 1f){
+            currentState = GameState.ConfigKeyboard;
+          }
 
 
         }
@@ -195,6 +197,7 @@ public class cardManager : MonoBehaviour {
 
         unmasteredTerms = allTerms.ToList();
         currentState = GameState.ResetKeyboard;
+        masteryMeter.value = 0f;
         break;
       case GameState.ResetKeyboard:
         Timer1.s_instance.Reset(15f);
@@ -207,7 +210,7 @@ public class cardManager : MonoBehaviour {
         break;
       case GameState.PlayingKeyboard:
         if(handleKeyboardSubmit){
-          if(keyboardText.text.ToLower() == unmasteredTerms[correctTermIndex].answer){
+          if(levenThresh > levenDist(keyboardText.text.ToLower(),unmasteredTerms[correctTermIndex].answer)){
             if(firstSubmit){
               unmasteredTerms[correctTermIndex].mastery++;
             }
@@ -216,13 +219,18 @@ public class cardManager : MonoBehaviour {
               unmasteredTerms.RemoveAt(correctTermIndex);
             }
           }else if(firstSubmit){
+            keyboardText.text = unmasteredTerms[correctTermIndex].answer;
             unmasteredTerms[correctTermIndex].mastery -= 2;
           }
           Timer1.s_instance.Pause();
           firstSubmit = false;
           handleKeyboardSubmit = false;
           keyboardText.text = "";
-				masteryMeter.value = getMastery();
+          masteryMeter.value = getMastery();
+          if(getMastery() >= 1f){
+            currentState = GameState.End;
+            timeAtEnd = Time.time;
+          }
         }
         if(Timer1.s_instance.timesUp && !Timer1.s_instance.pause){
           Timer1.s_instance.Pause();
@@ -230,12 +238,20 @@ public class cardManager : MonoBehaviour {
         }
         break;
       case GameState.End:
-			winningSlide.SetActive(true);
-			if (soundHasPlayed == false) {
-				if(SoundManager.s_instance!=null)SoundManager.s_instance.PlaySound(SoundManager.s_instance.m_correct);
-				soundHasPlayed = true;
-			}
+        winningSlide.SetActive(true);
+        if (soundHasPlayed == false) {
+          if(SoundManager.s_instance!=null)SoundManager.s_instance.PlaySound(SoundManager.s_instance.m_correct);
+          soundHasPlayed = true;
+        }
 
+        if(timeAtEnd + 5f < Time.time){
+          Application.LoadLevel("AssignmentMenu");
+          AppManager.s_instance.uploadAssignMastery(
+              AppManager.s_instance.currentAssignments[currIndex].assignmentTitle,
+              100);
+          AppManager.s_instance.currentAssignments[currIndex].mastery = 100;
+        }
+        
         break;
     }
   }
@@ -247,12 +263,36 @@ public class cardManager : MonoBehaviour {
   }
 
   public void keyboardHandler(){
-    print("HERE");
     handleKeyboardSubmit = true;
   }
 
   public void switchState(int newState){
     currentState = (GameState)newState;
+  }
+
+  public int levenDist(string s, string t){
+    int n = s.Length;
+    int m = t.Length;
+    int[,] d = new int[n + 1, m + 1];
+
+    // Step 1
+    if (n == 0){
+      return m;
+    }
+
+    if (m == 0){
+      return n;
+    }
+    for (int i = 1; i <= n; i++){
+      for (int j = 1; j <= m; j++){
+        int cost = (t[j - 1] == s[i - 1]) ? 0 : 1;
+
+        d[i, j] = Mathf.Min(
+            Mathf.Min(d[i - 1, j] + 1, d[i, j - 1] + 1),
+            d[i - 1, j - 1] + cost);
+      }
+    }
+    return d[n, m];
   }
 
   bool checkForNewPhase(){
@@ -278,7 +318,6 @@ public class cardManager : MonoBehaviour {
 			currentMastery += currTerm.mastery;
 		}
 		floatToReturn = currentMastery / (allTerms.Count*requiredMastery);
-		print (floatToReturn);
 		return floatToReturn;
 	}
   List<int> generateUniqueRandomNum(int amt, int randRange, int noThisNum = -1){
@@ -293,20 +332,6 @@ public class cardManager : MonoBehaviour {
     if(noThisNum != -1 && !listToReturn.Contains(noThisNum)){
       listToReturn[Random.Range(0,listToReturn.Count)] = noThisNum;
     }
-    /*
-    if(amt > randRange){
-      amt = randRange;
-      print("RANGE CANNOT BE MORE THAN AMT");
-    }
-    while(listToReturn.Count < amt){
-      int newVal;
-      do{
-        newVal = Random.Range(0,randRange);
-      }while(listToReturn.Contains(newVal));
-      listToReturn.Add(newVal);
-    }
-    */
-    //listToReturn = listToReturn.OrderBy(x=>Random.Range(0,listToReturn.Count)).ToList();
     return listToReturn;
   }
 
