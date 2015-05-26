@@ -61,6 +61,7 @@ public class cardManager : MonoBehaviour {
 
   public Text questDisplay;
   public InputField keyboardText;
+  public Text keyboardDispText;
   public GameObject cardsView;
   public GameObject keyboardView;
 
@@ -82,7 +83,7 @@ public class cardManager : MonoBehaviour {
   private int amtOfCards;
   private int correctTermIndex;
   private int totalMastery;
-  private int requiredMastery = 4;
+  private int requiredMastery = 1;
   private int currentPhase;
   private int levenThresh = 3;
   public TextAsset csvToUse;
@@ -204,6 +205,7 @@ public class cardManager : MonoBehaviour {
         firstSubmit = true;
         correctTermIndex = Random.Range(0,unmasteredTerms.Count);
         questDisplay.text = unmasteredTerms[correctTermIndex].question;
+        keyboardDispText.text = "Enter text...";
 
         
         currentState = GameState.PlayingKeyboard;
@@ -219,7 +221,7 @@ public class cardManager : MonoBehaviour {
               unmasteredTerms.RemoveAt(correctTermIndex);
             }
           }else if(firstSubmit){
-            keyboardText.text = unmasteredTerms[correctTermIndex].answer;
+            keyboardDispText.text = unmasteredTerms[correctTermIndex].answer;
             unmasteredTerms[correctTermIndex].mastery -= 2;
           }
           Timer1.s_instance.Pause();
