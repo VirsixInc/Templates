@@ -30,7 +30,7 @@ public class HotSpotsGame : MonoBehaviour
 	public Text promptText, promptText2, correctSpellingText;
 	public static HotSpotsGame s_instance;
 	public GameObject winningSlide;
-	HotSpotPhase curPhase = HotSpotPhase.Elements;
+	HotSpotPhase curPhase = HotSpotPhase.Typing;
 	HotSpotGameState curState = HotSpotGameState.Config;
 	GameObject[] individualElements, groups, elementsShorthand;
 	//unmasterItems is the copy of each of the phaseObjs depending on curPhase
@@ -394,29 +394,26 @@ public class HotSpotsGame : MonoBehaviour
 		
 		if (curPhase == HotSpotPhase.Typing) {
 			correctSpellingText.text = currentCorrectAnswer;
-			correctSpellingText.gameObject.GetComponent<Fader>().StartFadeOut();
+			correctSpellingText.gameObject.GetComponent<Fader>().StartFadeOut(4f);
 		}
 		redX.StartFade (); 
 		BackgroundFlash.s_instance.FadeRed ();
 		AdjustMastery (false);
+		Timer1.s_instance.timesUp = true;
+
 		if (curPhase == HotSpotPhase.Elements || curPhase== HotSpotPhase.Groups) {
 			if (x.transform.childCount == 0) {
 				x.GetComponent<Image>().enabled = false;
 			}
-
+		
 			else {
 				foreach (Image im in x.GetComponentsInChildren<Image>()){
 					im.enabled = false;
 				}
 			}
-			Timer1.s_instance.timesUp = true;
-			
-		} else {
-			print("ITERATE");
-			IterateToNextItem ();
-			ClearGUIObjects ();
-			curState = HotSpotGameState.Display;
-		}
+
+	
+		} 
 	}
 	
 	void ClearGUIObjects ()
