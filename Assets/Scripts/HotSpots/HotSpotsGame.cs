@@ -30,7 +30,7 @@ public class HotSpotsGame : MonoBehaviour
 	public Text promptText, promptText2, correctSpellingText;
 	public static HotSpotsGame s_instance;
 	public GameObject winningSlide;
-	HotSpotPhase curPhase = HotSpotPhase.Elements;
+	HotSpotPhase curPhase = HotSpotPhase.Groups;
 	HotSpotGameState curState = HotSpotGameState.Config;
 	GameObject[] individualElements, groups, elementsShorthand;
 	//unmasterItems is the copy of each of the phaseObjs depending on curPhase
@@ -44,29 +44,29 @@ public class HotSpotsGame : MonoBehaviour
 	//Keyboard members
 	private bool handleCardPress, firstPress, handleKeyboardSubmit, firstSubmit, isLoadingMainMenu;
 	public InputField keyboardText;
-
+	
 	//timer
 	public Image CircleMaterial;
-	public Slider mastery;
 	bool isPrexistingData;
 	bool isExiting = false;
-
+	
 	//UI Meters etc...
 	[SerializeField]
 	Color start;
 	[SerializeField]
 	Color end;
-
+	
 	void Awake ()
 	{
 		s_instance = this;
 	}	
-
+	
 	//state machine
 	void Update ()
 	{
-//		print (curPhase);
-//		print (curState);
+		//		print (curPhase);
+		//		print (curState);
+		print (curState);
 		switch (curState) {
 		case HotSpotGameState.Config: 
 			ConfigGameData ();
@@ -80,13 +80,13 @@ public class HotSpotsGame : MonoBehaviour
 				curState = HotSpotGameState.Display;
 			}
 			break;
-
+			
 		case HotSpotGameState.ConfigKeyboard: 
 			ConfigKeyboard ();
 			curState = HotSpotGameState.Display;
 			break;
-
-
+			
+			
 		case HotSpotGameState.Display: 
 			print (unmasteredItems.Count);
 			DisplayQuestion ();
@@ -97,11 +97,11 @@ public class HotSpotsGame : MonoBehaviour
 				hasAnsweredCorrect = false;
 				curState = HotSpotGameState.CheckMastery;
 			}
-
+			
 			break;
 		case HotSpotGameState.CheckMastery:
 			//if CheckForM returns true, 
-
+			
 			if (CheckForMastery ()) {
 				if (curPhase != HotSpotPhase.Groups) {
 					print ("next phase");
@@ -120,24 +120,25 @@ public class HotSpotsGame : MonoBehaviour
 			}
 			break;
 		case HotSpotGameState.Win:
-			int masteryOutput = Mathf.CeilToInt(mastery.value*100);
-//			AppManager.s_instance.saveAssignmentMastery(AppManager.s_instance.currentAssignments [AppManager.s_instance.currIndex], masteryOutput);
+			int masteryOutput = Mathf.CeilToInt(masteryMeter.value*100);
+			AppManager.s_instance.uploadAssignMastery(AppManager.s_instance.currentAssignments[AppManager.s_instance.currIndex].assignmentTitle, masteryOutput);
 			if (isExiting == false){
 				StartCoroutine("LoadMain");
 				if(SoundManager.s_instance!=null)SoundManager.s_instance.PlaySound(SoundManager.s_instance.m_win);
 				isExiting = true;
-
+				
 			}
 			break;
-
+			
 		}
 	}
-
+	
 	IEnumerator LoadMain() {
+		print ("LOAD MAIN GETS CALLED");
 		yield return new WaitForSeconds (5f);
 		Application.LoadLevel ("AssignmentMenu");
 	}
-
+	
 	void SetPhase ()
 	{
 		switch (curPhase) {
@@ -149,19 +150,19 @@ public class HotSpotsGame : MonoBehaviour
 			unmasteredItems.Clear ();
 			unmasteredItems = new List<ItemToBeMastered> (phaseTwoObjs);
 			break;
-
+			
 		case HotSpotPhase.Groups:
 			unmasteredItems.Clear ();
 			unmasteredItems = new List<ItemToBeMastered> (phaseThreeObjs);
 			print (phaseThreeObjs.Count);
 			break;
-
+			
 		}
 		//clear curList
 		//copy other list
-
+		
 	}
-
+	
 	void ConfigGameData ()
 	{
 		phaseOneObjs = new List<ItemToBeMastered> ();
@@ -182,7 +183,7 @@ public class HotSpotsGame : MonoBehaviour
 			ItemToBeMastered item = new ItemToBeMastered (0f, go);
 			phaseTwoObjs.Add (item);
 		}
-
+		
 		foreach (GameObject go in groups) {
 			ItemToBeMastered item = new ItemToBeMastered (0f, go);
 			phaseThreeObjs.Add (item);
@@ -199,40 +200,40 @@ public class HotSpotsGame : MonoBehaviour
 		List<ItemToBeMastered> tempList3 = new List<ItemToBeMastered> ();
 		tempList3 = phaseThreeObjs.OrderBy (item => item.itemGameObject.name).ToList ();
 		phaseThreeObjs = new List<ItemToBeMastered> (tempList3);
-
+		
 		totalTerms = phaseOneObjs.Count + phaseTwoObjs.Count + phaseThreeObjs.Count;
-
-//		if (AppManager.s_instance != null) {
-//			float previousMasteryData = AppManager.s_instance.pullAssignMastery (AppManager.s_instance.currentAssignments [AppManager.s_instance.currIndex]) / 100;
-////			thresholds of data will be objs.count over totalTerms 
-//			if (previousMasteryData < (phaseOneObjs.Count / totalTerms)) {
-//				mastery.value = 0;
-//			} else if (previousMasteryData > (phaseOneObjs.Count / totalTerms) && (previousMasteryData < (phaseOneObjs.Count + phaseTwoObjs.Count) / totalTerms)) {
-//				mastery.value = (float)phaseOneObjs.Count / totalTerms;
-//				curPhase = HotSpotPhase.Typing;
-//			} else if (previousMasteryData > (phaseOneObjs.Count + phaseTwoObjs.Count) / totalTerms) {
-//				mastery.value = (float)(phaseOneObjs.Count + phaseTwoObjs.Count) / totalTerms;
-//				curPhase = HotSpotPhase.Groups;
-//			}
-//		}
+		
+		//		if (AppManager.s_instance != null) {
+		//			float previousMasteryData = AppManager.s_instance.pullAssignMastery (AppManager.s_instance.currentAssignments [AppManager.s_instance.currIndex]) / 100;
+		////			thresholds of data will be objs.count over totalTerms 
+		//			if (previousMasteryData < (phaseOneObjs.Count / totalTerms)) {
+		//				mastery.value = 0;
+		//			} else if (previousMasteryData > (phaseOneObjs.Count / totalTerms) && (previousMasteryData < (phaseOneObjs.Count + phaseTwoObjs.Count) / totalTerms)) {
+		//				mastery.value = (float)phaseOneObjs.Count / totalTerms;
+		//				curPhase = HotSpotPhase.Typing;
+		//			} else if (previousMasteryData > (phaseOneObjs.Count + phaseTwoObjs.Count) / totalTerms) {
+		//				mastery.value = (float)(phaseOneObjs.Count + phaseTwoObjs.Count) / totalTerms;
+		//				curPhase = HotSpotPhase.Groups;
+		//			}
+		//		}
 	}
-
+	
 	void DisplayQuestion ()
 	{
 		Timer1.s_instance.Reset(15f);
 		currentCorrectAnswer = unmasteredItems [currentIndex].itemGameObject.name; //correct answer is gameobject name at index in list of items
 		promptText.text = currentCorrectAnswer;
 		List<int> randIndexList = new List<int> (); //to avoid duplicates
-
+		
 		switch (curPhase) {
 		case HotSpotPhase.Elements:
 			currentlyActivatedImages.Add (unmasteredItems [currentIndex].itemGameObject.GetComponent<Image> ()); // add correct answer image to list
-
+			
 			for (int i = 0; i < phaseOneObjs.Count; i++) {
 				randIndexList.Add (i); //generate a list of numbers
 			}
 			randIndexList.Remove (currentIndex);//remove that int so it cant be chosen again
-
+			
 			if (unmasteredItems [currentIndex].sequenceMastery < 0.5f) {
 				for (int i = 0; i < 2; i++) { //choose 2 additional items to be displayed as wrong answers
 					int randomInt = Random.Range (0, randIndexList.Count);
@@ -246,23 +247,23 @@ public class HotSpotsGame : MonoBehaviour
 					randIndexList.Remove (randIndexList [randomInt]); //make sure it doesnt get added twice
 				}
 			}
-
+			
 			//display elements that can be clicked on
 			foreach (Image image in currentlyActivatedImages) {
 				image.enabled = true;
 			}
-
+			
 			break;
-		
-		//TYPING
+			
+			//TYPING
 			
 		case HotSpotPhase.Typing:
 			promptText2.text = "Type the Element Name";
 			currentCorrectAnswer = unmasteredItems [currentIndex].itemGameObject.transform.GetChild (0).name;
 			break;
-
-		//GROUPS
-		
+			
+			//GROUPS
+			
 		case HotSpotPhase.Groups:
 			promptText2.text = "Select the Atomic Group";
 			keyboardText.enabled = false;
@@ -271,7 +272,7 @@ public class HotSpotsGame : MonoBehaviour
 			}
 			randIndexList.Remove (currentIndex);
 			currentlyActivatedGameObjects.Add (unmasteredItems [currentIndex].itemGameObject); // add correct answer image to list
-
+			
 			if (unmasteredItems [currentIndex].sequenceMastery < 0.5f) {
 				for (int i = 0; i < 2; i++) { //choose 2 additional items to be displayed as wrong answers
 					int randomInt = Random.Range (0, randIndexList.Count);
@@ -297,37 +298,37 @@ public class HotSpotsGame : MonoBehaviour
 					go.GetComponent<Image>().enabled = true;
 				}
 			}
-
+			
 			break;
-		
-		
-
-		
+			
+			
+			
+			
 		}
 	}
-
+	
 	void ConfigKeyboard ()
 	{
 		print ("SET KEYBOARD");
 		keyboardText.gameObject.SetActive (true);
 	}
-
+	
 	public void KeyboardSubmitHandler ()
 	{
 		SubmitAnswer (keyboardText.text.ToLower ());
 		keyboardText.text = "";
 	}
-
-	public void SubmitAnswer (string answer)
+	
+	public void SubmitAnswer (string answer, GameObject obj = null)
 	{
 		if (answer.ToLower () == currentCorrectAnswer.ToLower ()) {
 			AnswerCorrect ();
 		} else {
-			AnswerWrong ();
+			AnswerWrong (obj);
 		}
-
+		
 	}
-
+	
 	bool CheckForMastery ()
 	{ //triggered when hasAnsweredCorrect is called
 		while (unmasteredItems[currentIndex].sequenceMastery==1f && unmasteredItems.Count != 0) { //skip over completed 
@@ -344,7 +345,7 @@ public class HotSpotsGame : MonoBehaviour
 		IterateToNextItem ();
 		return false;	
 	}
-
+	
 	void IterateToNextItem ()
 	{
 		if (currentIndex >= unmasteredItems.Count - 1) {
@@ -353,7 +354,7 @@ public class HotSpotsGame : MonoBehaviour
 			currentIndex++;
 		}
 	}
-
+	
 	void AdjustMastery (bool isCorrect)
 	{
 		if (isCorrect && !	Timer1.s_instance.timesUp) {
@@ -373,10 +374,10 @@ public class HotSpotsGame : MonoBehaviour
 			totalMastery += x.sequenceMastery;
 		}
 		totalMastery += completedTerms;
-
+		
 		masteryMeter.value = totalMastery / totalTerms;
 	}
-
+	
 	void AnswerCorrect ()
 	{
 		if(SoundManager.s_instance!=null)SoundManager.s_instance.PlaySound(SoundManager.s_instance.m_correct);
@@ -386,24 +387,38 @@ public class HotSpotsGame : MonoBehaviour
 		AdjustMastery (true);
 		hasAnsweredCorrect = true;
 	}
-
-	void AnswerWrong ()
+	
+	void AnswerWrong (GameObject x = null)
 	{
 		if(SoundManager.s_instance!=null)SoundManager.s_instance.PlaySound(SoundManager.s_instance.m_wrong);
-
+		
 		if (curPhase == HotSpotPhase.Typing) {
 			correctSpellingText.text = currentCorrectAnswer;
 			correctSpellingText.gameObject.GetComponent<Fader>().StartFadeOut();
 		}
 		redX.StartFade (); 
-		ClearGUIObjects ();
 		BackgroundFlash.s_instance.FadeRed ();
 		AdjustMastery (false);
-		IterateToNextItem ();
-		ClearGUIObjects ();
-		curState = HotSpotGameState.Display;
-	}
+		if (curPhase == HotSpotPhase.Elements || curPhase== HotSpotPhase.Groups) {
+			if (x.transform.childCount == 0) {
+				x.GetComponent<Image>().enabled = false;
+			}
 
+			else {
+				foreach (Image im in x.GetComponentsInChildren<Image>()){
+					im.enabled = false;
+				}
+			}
+			Timer1.s_instance.timesUp = true;
+			
+		} else {
+			print("ITERATE");
+			IterateToNextItem ();
+			ClearGUIObjects ();
+			curState = HotSpotGameState.Display;
+		}
+	}
+	
 	void ClearGUIObjects ()
 	{
 		if (currentlyActivatedImages.Count != 0) {
@@ -422,7 +437,7 @@ public class HotSpotsGame : MonoBehaviour
 				}
 			}
 			currentlyActivatedGameObjects.Clear ();
-
+			
 		}
 	}
 }
