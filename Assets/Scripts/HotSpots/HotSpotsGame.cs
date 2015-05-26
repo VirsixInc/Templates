@@ -394,29 +394,26 @@ public class HotSpotsGame : MonoBehaviour
 		
 		if (curPhase == HotSpotPhase.Typing) {
 			correctSpellingText.text = currentCorrectAnswer;
-			correctSpellingText.gameObject.GetComponent<Fader>().StartFadeOut();
+			correctSpellingText.gameObject.GetComponent<Fader>().StartFadeOut(4f);
 		}
 		redX.StartFade (); 
 		BackgroundFlash.s_instance.FadeRed ();
 		AdjustMastery (false);
+		Timer1.s_instance.timesUp = true;
+
 		if (curPhase == HotSpotPhase.Elements || curPhase== HotSpotPhase.Groups) {
 			if (x.transform.childCount == 0) {
 				x.GetComponent<Image>().enabled = false;
 			}
-
+		
 			else {
 				foreach (Image im in x.GetComponentsInChildren<Image>()){
 					im.enabled = false;
 				}
 			}
-			Timer1.s_instance.timesUp = true;
-			
-		} else {
-			print("ITERATE");
-			IterateToNextItem ();
-			ClearGUIObjects ();
-			curState = HotSpotGameState.Display;
-		}
+
+	
+		} 
 	}
 	
 	void ClearGUIObjects ()
