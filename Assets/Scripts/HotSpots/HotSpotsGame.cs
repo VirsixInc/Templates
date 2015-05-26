@@ -30,7 +30,7 @@ public class HotSpotsGame : MonoBehaviour
 	public Text promptText, promptText2, correctSpellingText;
 	public static HotSpotsGame s_instance;
 	public GameObject winningSlide;
-	HotSpotPhase curPhase = HotSpotPhase.Groups;
+	HotSpotPhase curPhase = HotSpotPhase.Elements;
 	HotSpotGameState curState = HotSpotGameState.Config;
 	GameObject[] individualElements, groups, elementsShorthand;
 	//unmasterItems is the copy of each of the phaseObjs depending on curPhase
