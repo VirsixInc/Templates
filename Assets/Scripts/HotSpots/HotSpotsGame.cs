@@ -312,12 +312,7 @@ public class HotSpotsGame : MonoBehaviour
 		print ("SET KEYBOARD");
 		keyboardText.gameObject.SetActive (true);
 	}
-	
-	public void KeyboardSubmitHandler ()
-	{
-		SubmitAnswer (keyboardText.text.ToLower ());
-		keyboardText.text = "";
-	}
+
 	
 	public void SubmitAnswer (string answer, GameObject obj = null)
 	{
@@ -436,5 +431,42 @@ public class HotSpotsGame : MonoBehaviour
 			currentlyActivatedGameObjects.Clear ();
 			
 		}
+	}
+	public int levenDist(string s, string t){
+		int n = s.Length;
+		int m = t.Length;
+		int[,] d = new int[n + 1, m + 1];
+		
+		// Step 1
+		if (n == 0){
+			return m;
+		}
+		
+		if (m == 0){
+			return n;
+		}
+		for (int i = 1; i <= n; i++){
+			for (int j = 1; j <= m; j++){
+				int cost = (t[j - 1] == s[i - 1]) ? 0 : 1;
+				
+				d[i, j] = Mathf.Min(
+					Mathf.Min(d[i - 1, j] + 1, d[i, j - 1] + 1),
+					d[i - 1, j - 1] + cost);
+			}
+		}
+		return d[n, m];
+	}
+	int levenThresh = 3;
+	
+	public void KeyboardSubmitHandler ()
+	{
+		//submit correct answer if it is fucked up by autocorrect or only 2 char off
+		if (levenThresh > levenDist (keyboardText.text.ToLower (), currentCorrectAnswer.ToLower ())) {
+			SubmitAnswer (currentCorrectAnswer.ToLower ());
+		} else {
+			SubmitAnswer(keyboardText.text.ToLower());
+		}
+		keyboardText.text = "";
+		
 	}
 }
